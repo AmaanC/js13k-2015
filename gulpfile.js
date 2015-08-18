@@ -21,6 +21,17 @@ var uglify = require('gulp-uglify');
 var zip = require('gulp-zip');
 var source = require('vinyl-source-stream');
 
+var jsFolder = 'src/js/';
+var fileList = [
+  '*'
+  // 'input.js',
+  // 'loops.js',
+  // 'player.js'
+];
+fileList = fileList.map(function(fileName) {
+  return jsFolder + fileName;
+});
+
 program.on('--help', function(){
   console.log('  Tasks:');
   console.log();
@@ -55,7 +66,7 @@ gulp.task('build_source', function() {
   //   .pipe(buffer())
   //   .pipe(gulpif(prod, uglify()))
   //   .pipe(gulp.dest('build'));
-  return gulp.src(['src/js/*'])
+  return gulp.src(fileList)
     .pipe(concat('all.js'))
     .pipe(gulp.dest('build'))
     .pipe(gulpif(prod, uglify()))
