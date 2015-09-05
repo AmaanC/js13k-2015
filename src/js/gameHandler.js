@@ -96,7 +96,9 @@
                 break;
             case 'attacking':
                 animateEnemies(50, function() {
-                    console.log(enemyPositions.indexOf(exports.player.pos) == -1);
+                    if (enemyPositions.indexOf(exports.player.pos) != -1) {
+                        exports.shakeScreen(4);
+                    }
                     currentState = 'complete';
                     enemies = [];
                 });
