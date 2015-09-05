@@ -23,13 +23,14 @@ var source = require('vinyl-source-stream');
 
 var jsFolder = 'src/js/';
 var fileList = [
-  '*'
-  // 'input.js',
-  // 'loops.js',
-  // 'player.js'
+  'input',
+  'loops',
+  'player',
+  'gameHandler',
+  'effects'
 ];
 fileList = fileList.map(function(fileName) {
-  return jsFolder + fileName;
+  return jsFolder + fileName + '.js';
 });
 
 program.on('--help', function(){

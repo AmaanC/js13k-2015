@@ -57,13 +57,27 @@
             }
         };
 
-        var addParticle = function(x, y, color, angle, range) {
+        var addParticle = function(x, y, color, angle) {
             var obj = {};
             obj.x = x;
             obj.y = y;
             obj.color = color || 'black';
             obj.angle = angle || 0;
-            obj.range = range || Math.PI / 4;
+
+            var ctx = exports.ctx;
+            obj.draw = function() {
+                ctx.save();
+                ctx.globalAlpha = this.opacity;
+                ctx.globalCompositeOperation = 'lighter';
+                ctx.translate(this.x, this.y);
+                ctx.fillStyle = this.color || 'red';
+                ctx.fillRect(0, 0, W, H);
+                ctx.restore();
+            };
+            
+            obj.logic = function() {
+
+            };
             
             particles.push(obj);
         };
