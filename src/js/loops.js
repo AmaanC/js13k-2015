@@ -15,6 +15,7 @@
 
     var logicLoop = function() {
         exports.playerLogic();
+        exports.particleLogic();
         exports.enemyLogic();
 
         setTimeout(logicLoop, 100 / 6);

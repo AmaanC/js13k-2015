@@ -31,6 +31,7 @@
 
     var logicLoop = function() {
         exports.playerLogic();
+        exports.particleLogic();
         exports.enemyLogic();
 
         setTimeout(logicLoop, 100 / 6);
@@ -256,17 +257,29 @@
         };
 
         exports.particleLogic = function() {
-            for (var i = 0; i < particles.length; i++) {
+            var garbageIndices = [];
+            var i = particles.length;
+            while (i--) {
                 particles[i].logic();
+                if (particles[i].alive === false) {
+                    particles.splice(i, 1);
+                }
             }
         };
 
-        var addParticle = function(x, y, color, angle) {
+        var addParticle = function(x, y, speed, color, angle) {
             var obj = {};
             obj.x = x;
             obj.y = y;
+            obj.speed = speed || 5;
             obj.color = color || 'black';
             obj.angle = angle || 0;
+
+            obj.opacity = 1;
+            obj.decRate = 0.05;
+            obj.dx = Math.sin(obj.angle) * obj.speed;
+            obj.dy = Math.cos(obj.angle) * obj.speed;
+            console.log(obj.dy);
 
             var ctx = exports.ctx;
             obj.draw = function() {
@@ -275,19 +288,27 @@
                 ctx.globalCompositeOperation = 'lighter';
                 ctx.translate(this.x, this.y);
                 ctx.fillStyle = this.color || 'red';
-                ctx.fillRect(0, 0, W, H);
+                ctx.fillRect(0, 0, 10, 10);
                 ctx.restore();
             };
             
             obj.logic = function() {
-
+                this.x += this.dx;
+                this.y += this.dy;
+                this.opacity -= this.decRate;
+                if (this.opacity <= 0) {
+                    this.opacity = 0;
+                    this.alive = false;
+                }
             };
             
             particles.push(obj);
         };
 
-        return function(num, color, x, y, angle, range) {
-            
+        return function(num, x, y, colorList, speed, angle, range) {
+            for (var i = 0; i < num; i++) {
+                addParticle(x, y, speed, colorList[Math.floor(Math.random() * colorList.length)], angle - range + (Math.random() * 2 * range));
+            }
         };
     })();
 })(window.game);
