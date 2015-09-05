@@ -98,6 +98,10 @@
                 animateEnemies(50, 5, function() {
                     if (enemyPositions.indexOf(exports.player.pos) != -1) {
                         currentState = 'crushing';
+                        exports.player.color = 'pink';
+                        setTimeout(function() {
+                            exports.player.color = 'black';
+                        }, 100);
                         exports.createParticles(
                             Math.random() * 3 + 1,
                             exports.cx,

@@ -56,6 +56,7 @@
     player.halfHeight = 10;
     player.angle = 0;
     player.pos = 0; // This indicates which multiple of turnStep it is. For example, with 4 sides, player would point down when pos is 1
+    player.color = 'black';
 
     exports.playerDraw = function() {
         var cx = player.cx;
@@ -73,6 +74,7 @@
         ctx.moveTo(-hh, -hb);
         ctx.lineTo(-hh, hb);
         ctx.lineTo(hh, 0);
+        ctx.fillStyle = player.color;
         ctx.fill();
         ctx.closePath();
 
@@ -194,6 +196,10 @@
                 animateEnemies(50, 5, function() {
                     if (enemyPositions.indexOf(exports.player.pos) != -1) {
                         currentState = 'crushing';
+                        exports.player.color = 'pink';
+                        setTimeout(function() {
+                            exports.player.color = 'black';
+                        }, 100);
                         exports.createParticles(
                             Math.random() * 3 + 1,
                             exports.cx,
