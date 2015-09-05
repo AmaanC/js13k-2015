@@ -2,13 +2,13 @@
     var ctx = exports.ctx;
 
     var player = {};
-    exports.player = player;
-    player.cx = 30;
-    player.cy = 50;
+    player.cx = exports.canvas.width / 2;
+    player.cy = exports.canvas.height / 2;
     player.dist = 10;
     player.halfBase = 10;
     player.halfHeight = 10;
-    player.angle = Math.PI * 0;
+    player.turnStep = Math.PI / 2;
+    player.angle = 0;
 
     exports.playerDraw = function() {
         var cx = player.cx;
@@ -30,6 +30,10 @@
         ctx.closePath();
 
         ctx.restore();
+    };
+
+    exports.turnPlayer = function(dir) {
+        player.angle += player.turnStep * dir;
     };
 
     exports.playerLogic = function() {
