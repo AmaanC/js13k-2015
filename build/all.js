@@ -1,5 +1,6 @@
+// This file contains most of the visual effects used in the game. I've tried to make every function self contained so that copying just that
+// function itself is enough to get that effect.
 (function(exports) {
-    // Hurray for self-contained functions!
     exports.shakeScreen = (function() {    
         var polarity = function() {
             return Math.random() > 0.5 ? 1 : -1;
@@ -35,6 +36,40 @@
             setTimeout(function() {
                 exports.shakeScreen(intensity - 0.1);
             }, 5);
+        };
+    })();
+
+    
+    exports.createParticles = (function() {
+        var particles = [];
+        var W = 7, H = 7;
+        var DEC_RATE = 0.1; // Default decrease rate. Higher rate -> particles go faster
+
+        exports.particleDraw = function() {
+            for (var i = 0; i < particles.length; i++) {
+                particles[i].draw();
+            }
+        };
+
+        exports.particleLogic = function() {
+            for (var i = 0; i < particles.length; i++) {
+                particles[i].logic();
+            }
+        };
+
+        var addParticle = function(x, y, color, angle, range) {
+            var obj = {};
+            obj.x = x;
+            obj.y = y;
+            obj.color = color || 'black';
+            obj.angle = angle || 0;
+            obj.range = range || Math.PI / 4;
+            
+            particles.push(obj);
+        };
+
+        return function(num, color, x, y, angle, range) {
+            
         };
     })();
 })(window.game);
@@ -172,6 +207,7 @@
     var drawLoop = function() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         exports.playerDraw();
+        exports.particleDraw();
         exports.enemyDraw();
 
         requestAnimationFrame(drawLoop);
