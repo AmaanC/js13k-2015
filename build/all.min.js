@@ -19,7 +19,7 @@
     var ctx = exports.ctx = canvas.getContext('2d');
     exports.cx = canvas.width / 2;
     exports.cy = canvas.height / 2;
-    
+
     var drawLoop = function() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         exports.playerDraw();
@@ -56,7 +56,7 @@
     player.halfHeight = 10;
     player.angle = 0;
     player.pos = 0; // This indicates which multiple of turnStep it is. For example, with 4 sides, player would point down when pos is 1
-    player.color = 'black';
+    player.color = '13,213,252';
 
     exports.playerDraw = function() {
         var cx = player.cx;
@@ -70,15 +70,29 @@
 
         // The triangle points to the right by default
         ctx.translate(player.dist + hh, 0);
+
+        // Draw path
         ctx.beginPath();
         ctx.moveTo(-hh, -hb);
         ctx.lineTo(-hh, hb);
         ctx.lineTo(hh, 0);
-        ctx.fillStyle = player.color;
-        ctx.fill();
         ctx.closePath();
-
         ctx.restore();
+
+        // Stroke
+        ctx.lineWidth = 5;
+        ctx.lineJoin = 'round';
+        ctx.strokeStyle = 'rgba('+player.color+', 1)';
+        ctx.stroke();
+
+        // Shadow
+        ctx.shadowBlur = 5;
+        ctx.shadowColor = 'rgba('+player.color+', 0.25)';
+
+        // Fill
+        ctx.fillStyle = 'rgba('+player.color+', 0)';
+        ctx.fill();
+
     };
 
     exports.turnPlayer = function(dir) {
@@ -93,7 +107,7 @@
     };
 
     exports.playerLogic = function() {
-        
+
     };
 })(window.game);
 // (function(exports) {

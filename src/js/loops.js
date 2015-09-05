@@ -3,7 +3,7 @@
     var ctx = exports.ctx = canvas.getContext('2d');
     exports.cx = canvas.width / 2;
     exports.cy = canvas.height / 2;
-    
+
     var drawLoop = function() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         exports.playerDraw();
