@@ -228,9 +228,13 @@
                 });
                 break;
             case 'crushing':
-                animateEnemies(20, 1, function() {
-                    currentState = 'complete';
-                    enemies = [];
+                animateEnemies(30, 1, function() {
+                    exports.player.color = 'white';
+                    setTimeout(function() {
+                        exports.player.color = 'black';
+                        currentState = 'complete';
+                        enemies = [];
+                    }, 1000);
                 });
                 break;
         }
