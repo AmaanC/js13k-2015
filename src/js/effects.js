@@ -43,7 +43,7 @@
     exports.createParticles = (function() {
         var particles = [];
         var W = 7, H = 7;
-        var DEC_RATE = 0.1; // Default decrease rate. Higher rate -> particles go faster
+        var DEC_RATE = 0.02; // Default decrease rate. Higher rate -> particles go faster
 
         exports.particleDraw = function() {
             for (var i = 0; i < particles.length; i++) {
@@ -71,10 +71,9 @@
             obj.angle = angle || 0;
 
             obj.opacity = 1;
-            obj.decRate = 0.05;
-            obj.dx = Math.sin(obj.angle) * obj.speed;
-            obj.dy = Math.cos(obj.angle) * obj.speed;
-            console.log(obj.dy);
+            obj.decRate = DEC_RATE;
+            obj.dx = Math.cos(obj.angle) * obj.speed;
+            obj.dy = Math.sin(obj.angle) * obj.speed;
 
             var ctx = exports.ctx;
             obj.draw = function() {
@@ -82,8 +81,11 @@
                 ctx.globalAlpha = this.opacity;
                 ctx.globalCompositeOperation = 'lighter';
                 ctx.translate(this.x, this.y);
+
+                ctx.rotate(exports.player.angle); // Custom for this game
+
                 ctx.fillStyle = this.color || 'red';
-                ctx.fillRect(0, 0, 10, 10);
+                ctx.fillRect(exports.player.dist, 0, W, H); // Customized too
                 ctx.restore();
             };
             

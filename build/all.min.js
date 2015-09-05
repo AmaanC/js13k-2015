@@ -113,7 +113,7 @@
     // Complete: an attack was just completed and new enemies need to slide in
     // Moving In: enemies are moving to position from outside the screen
     // Waiting: enemies are in position, and we're waiting to give the player time
-    // Attacking: animate enemies moving in
+    // Attacking: 5, animate enemies moving in
     var currentState = 'complete';
 
 
@@ -162,10 +162,10 @@
         return possible;
     };
 
-    var animateEnemies = function(min, cb) {
+    var animateEnemies = function(min, speed, cb) {
         for (var i = 0; i < enemies.length; i++) {
             enemy = enemies[i];
-            enemy.centerDist -= 5;
+            enemy.centerDist -= speed || 5;
             if (enemy.centerDist < min) {
                 enemy.centerDist = min;
                 cb();
@@ -179,7 +179,7 @@
                 enemyPositions = makeEnemyWave();
                 break;
             case 'movingIn':
-                animateEnemies(200, function() {
+                animateEnemies(200, 5, function() {
                     currentState = 'waiting';
                 });
                 break;
@@ -191,10 +191,38 @@
                 }
                 break;
             case 'attacking':
-                animateEnemies(50, function() {
+                animateEnemies(50, 5, function() {
                     if (enemyPositions.indexOf(exports.player.pos) != -1) {
+                        currentState = 'crushing';
+                        exports.createParticles(
+                            Math.random() * 3 + 1,
+                            exports.cx,
+                            exports.cy,
+                            ['red'],
+                            1,
+                            exports.player.angle + Math.PI / 2,
+                            0.2
+                        );
+                        exports.createParticles(
+                            Math.random() * 3 + 1,
+                            exports.cx,
+                            exports.cy,
+                            ['red'],
+                            1,
+                            exports.player.angle - Math.PI / 2,
+                            0.2
+                        );
+
                         exports.shakeScreen(4);
                     }
+                    else {
+                        currentState = 'complete';
+                        enemies = [];
+                    }
+                });
+                break;
+            case 'crushing':
+                animateEnemies(20, 1, function() {
                     currentState = 'complete';
                     enemies = [];
                 });
@@ -248,7 +276,7 @@
     exports.createParticles = (function() {
         var particles = [];
         var W = 7, H = 7;
-        var DEC_RATE = 0.1; // Default decrease rate. Higher rate -> particles go faster
+        var DEC_RATE = 0.02; // Default decrease rate. Higher rate -> particles go faster
 
         exports.particleDraw = function() {
             for (var i = 0; i < particles.length; i++) {
@@ -276,10 +304,9 @@
             obj.angle = angle || 0;
 
             obj.opacity = 1;
-            obj.decRate = 0.05;
-            obj.dx = Math.sin(obj.angle) * obj.speed;
-            obj.dy = Math.cos(obj.angle) * obj.speed;
-            console.log(obj.dy);
+            obj.decRate = DEC_RATE;
+            obj.dx = Math.cos(obj.angle) * obj.speed;
+            obj.dy = Math.sin(obj.angle) * obj.speed;
 
             var ctx = exports.ctx;
             obj.draw = function() {
@@ -287,8 +314,11 @@
                 ctx.globalAlpha = this.opacity;
                 ctx.globalCompositeOperation = 'lighter';
                 ctx.translate(this.x, this.y);
+
+                ctx.rotate(exports.player.angle); // Custom for this game
+
                 ctx.fillStyle = this.color || 'red';
-                ctx.fillRect(0, 0, 10, 10);
+                ctx.fillRect(exports.player.dist, 0, W, H); // Customized too
                 ctx.restore();
             };
             
