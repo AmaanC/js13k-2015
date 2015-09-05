@@ -3,14 +3,15 @@
 
 
 
-    var sides = 4; // The number of sides that the player can turn
+    exports.sides = 4; // The number of sides that the player can turn
     var ticks = 0;
     var maxWait = 100;
 
     var enemies = [];
+    var enemyPositions = [];
     var ENEMY_HEIGHT = 50;
     var ENEMY_WIDTH = 20;
-    exports.turnStep = 2 * Math.PI / sides;
+    exports.turnStep = 2 * Math.PI / exports.sides;
 
     // Possible states: complete, movingIn, waiting, attacking
     // Complete: an attack was just completed and new enemies need to slide in
@@ -50,8 +51,8 @@
     };
 
     var makeEnemyWave = function() {
-        var possible = range(0, sides);
-        var numToRemove = 1 + Math.floor(Math.random() * (sides - 2));
+        var possible = range(0, exports.sides);
+        var numToRemove = 1 + Math.floor(Math.random() * (exports.sides - 2));
 
         for (var i = 0; i < numToRemove; i++) {
             possible.splice(Math.floor(Math.random() * possible.length), 1);
@@ -62,10 +63,10 @@
         }
 
         currentState = 'movingIn';
+        return possible;
     };
 
     var animateEnemies = function(min, cb) {
-        console.log(min);
         for (var i = 0; i < enemies.length; i++) {
             enemy = enemies[i];
             enemy.centerDist -= 5;
@@ -79,7 +80,7 @@
     exports.enemyLogic = function() {
         switch(currentState) {
             case 'complete':
-                makeEnemyWave();
+                enemyPositions = makeEnemyWave();
                 break;
             case 'movingIn':
                 animateEnemies(200, function() {
@@ -94,10 +95,12 @@
                 }
                 break;
             case 'attacking':
-                animateEnemies(0, function() {
+                animateEnemies(50, function() {
+                    console.log(enemyPositions.indexOf(exports.player.pos) == -1);
                     currentState = 'complete';
                     enemies = [];
                 });
+                break;
         }
     };
 
