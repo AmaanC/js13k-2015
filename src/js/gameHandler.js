@@ -112,18 +112,19 @@
                 if (ticks > maxWait) {
                     ticks = 0;
                 }
-                exports.triggerSpin(1);
+                exports.triggerSpin(2);
                 exports.currentState = 'spinning';
 
                 for (i = 0; i < enemyPositions.length; i++) {
                     enemyPositions[i] += exports.steps;
                     if (enemyPositions[i] >= exports.sides) {
-                        enemyPositions[i] = 0;
+                        enemyPositions[i] %= exports.sides;
                     }
                     else if (enemyPositions[i] < 0) {
-                        enemyPositions[i] = exports.sides - 1;
+                        enemyPositions[i] = exports.sides - exports.steps;
                     }
                 }
+                    console.log(exports.steps, enemyPositions);
                 break;
             case 'spinning':
                 if (exports.spinning) {
