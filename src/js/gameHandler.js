@@ -124,7 +124,6 @@
                         enemyPositions[i] = exports.sides - exports.steps;
                     }
                 }
-                    console.log(exports.steps, enemyPositions);
                 break;
             case 'spinning':
                 if (exports.spinning) {
