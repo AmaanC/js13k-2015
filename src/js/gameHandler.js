@@ -1,3 +1,14 @@
+// Here's how level progression will work
+// 1) Plain old dodging. You move left/right and dodge.
+// 2) Faster enemies
+// 3) Player spins X degrees just before the enemies attack. Player has to start accounting for this
+// 4) Player still spins, but now so do the enemy blocks.
+// 5) Number of sides increases (i.e. a square becomes a pentagon)
+// 6) You cut the player's arm off to make the game harder still
+// 7) You kidnap their children to test their committment
+// 8) PROFIT
+// 9) goto 1
+
 // (function(exports) {
     var exports = window.game;
 
@@ -5,7 +16,7 @@
 
     exports.sides = 5; // The number of sides that the player can turn
     var ticks = 0;
-    var maxWait = 100;
+    var maxWait = 20;
 
     var enemies = [];
     var enemyPositions = [];
