@@ -385,17 +385,21 @@
     var MIN_SIZE = 35;
     var DIST_BETWEEN = 30;
 
+    var steps = 1;
+
     // t = current time
     // b = start value
     // c = change in value
     // d = duration
     // Taken from http://gizma.com/easing/
-    var easeInOutCirc = function (t, b, c, d) {
+    var easeInOutQuad = function (t, b, c, d) {
         t /= d/2;
-        if (t < 1) return -c/2 * (Math.sqrt(1 - t*t) - 1) + b;
-        t -= 2;
-        return c/2 * (Math.sqrt(1 - t*t) + 1) + b;
+        if (t < 1) return c/2*t*t + b;
+        t--;
+        return -c/2 * (t*(t-2) - 1) + b;
     };
+
+
 
     // x, y are the center co-ordinates of the shape
     var drawShape = function(x, y, side, angle, color) {
@@ -411,7 +415,7 @@
         ctx.fill();
     };
 
-    var duration = 90 / 1.5;
+    var duration = 70;
     var createShape = function(x, y, side, color) {
         var obj = {};
         obj.x = x;
@@ -427,8 +431,8 @@
         obj.logic = function() {
             obj.time++;
             if (obj.spinning) {
-                obj.angle = easeInOutCirc(obj.time, obj.restAngle, exports.turnStep, duration);
-                if (obj.time > duration) {
+                obj.angle = easeInOutQuad(obj.time, obj.restAngle, steps * exports.turnStep, steps * duration);
+                if (obj.time > duration * steps) {
                     obj.angle = obj.restAngle;
                     obj.time = 0;
                     obj.spinning = false;
@@ -446,12 +450,13 @@
         };
     };
 
-    exports.triggerSpin = function() {
+    exports.triggerSpin = function(step) {
         var obj;
+        steps = step;
         for (var i = 0; i < shapes.length; i++) {
             obj = shapes[i];
             obj.spinning = true;
-            obj.time = 2 * i;
+            obj.time = i;
         }
     };
 
