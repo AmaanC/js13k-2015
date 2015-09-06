@@ -240,13 +240,11 @@
                         enemyPositions[i] = exports.sides - 1;
                     }
                 }
-                console.log(enemyPositions);
                 break;
             case 'spinning':
                 if (exports.spinning) {
                     for (var i = 0; i < enemies.length; i++) {
                         exports.spinAnimate(enemies[i], function() {
-                            console.log(enemies[i].angle / exports.turnStep);
                             exports.spinning = false;
                             exports.currentState = 'attacking';
                         });
