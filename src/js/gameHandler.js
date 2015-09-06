@@ -55,6 +55,8 @@
         obj.angle = angle || 0;
         obj.centerDist = 500;
 
+        obj.time = 0;
+
         enemies.push(obj);
     };
 
@@ -82,6 +84,7 @@
         return possible;
     };
 
+    // Animate enemies to a certain position and call cb when it reaches it
     var animateEnemies = function(min, speed, cb) {
         for (var i = 0; i < enemies.length; i++) {
             enemy = enemies[i];
@@ -108,7 +111,30 @@
                 ticks++;
                 if (ticks > maxWait) {
                     ticks = 0;
-                    exports.currentState = 'attacking';
+                }
+                exports.triggerSpin(1);
+                exports.currentState = 'spinning';
+
+                for (i = 0; i < enemyPositions.length; i++) {
+                    enemyPositions[i] += exports.steps;
+                    if (enemyPositions[i] >= exports.sides) {
+                        enemyPositions[i] = 0;
+                    }
+                    else if (enemyPositions[i] < 0) {
+                        enemyPositions[i] = exports.sides - 1;
+                    }
+                }
+                console.log(enemyPositions);
+                break;
+            case 'spinning':
+                if (exports.spinning) {
+                    for (var i = 0; i < enemies.length; i++) {
+                        exports.spinAnimate(enemies[i], function() {
+                            console.log(enemies[i].angle / exports.turnStep);
+                            exports.spinning = false;
+                            exports.currentState = 'attacking';
+                        });
+                    }
                 }
                 break;
             case 'attacking':

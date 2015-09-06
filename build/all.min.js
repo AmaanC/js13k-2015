@@ -171,6 +171,8 @@
         obj.angle = angle || 0;
         obj.centerDist = 500;
 
+        obj.time = 0;
+
         enemies.push(obj);
     };
 
@@ -198,6 +200,7 @@
         return possible;
     };
 
+    // Animate enemies to a certain position and call cb when it reaches it
     var animateEnemies = function(min, speed, cb) {
         for (var i = 0; i < enemies.length; i++) {
             enemy = enemies[i];
@@ -224,7 +227,30 @@
                 ticks++;
                 if (ticks > maxWait) {
                     ticks = 0;
-                    exports.currentState = 'attacking';
+                }
+                exports.triggerSpin(1);
+                exports.currentState = 'spinning';
+
+                for (i = 0; i < enemyPositions.length; i++) {
+                    enemyPositions[i] += exports.steps;
+                    if (enemyPositions[i] >= exports.sides) {
+                        enemyPositions[i] = 0;
+                    }
+                    else if (enemyPositions[i] < 0) {
+                        enemyPositions[i] = exports.sides - 1;
+                    }
+                }
+                console.log(enemyPositions);
+                break;
+            case 'spinning':
+                if (exports.spinning) {
+                    for (var i = 0; i < enemies.length; i++) {
+                        exports.spinAnimate(enemies[i], function() {
+                            console.log(enemies[i].angle / exports.turnStep);
+                            exports.spinning = false;
+                            exports.currentState = 'attacking';
+                        });
+                    }
                 }
                 break;
             case 'attacking':
@@ -397,7 +423,7 @@
     var MIN_SIZE = 40;
     var DIST_BETWEEN = 30;
 
-    var steps = 1;
+    exports.steps = 1;
 
     // t = current time
     // b = start value
@@ -428,6 +454,23 @@
     };
 
     var duration = 70;
+    exports.spinAnimate = function(obj, cb) {
+        obj.time++;
+        if (typeof obj.restAngle === 'undefined') {
+            obj.restAngle = obj.angle;
+        }
+        obj.angle = easeInOutQuad(obj.time, obj.restAngle, exports.steps * exports.turnStep, exports.steps * duration);
+        if (obj.time > duration * exports.steps) {
+            obj.angle = (obj.restAngle + exports.turnStep * exports.steps) % (2 * Math.PI);
+            obj.time = 0;
+            obj.spinning = false;
+
+            if (cb) {
+                cb();
+            }
+        }
+    };
+
     var createShape = function(x, y, side, color) {
         var obj = {};
         obj.x = x;
@@ -441,15 +484,7 @@
             drawShape(obj.x, obj.y, obj.side, obj.angle, obj.color);
         };
         obj.logic = function() {
-            obj.time++;
-            if (obj.spinning) {
-                obj.angle = easeInOutQuad(obj.time, obj.restAngle, steps * exports.turnStep, steps * duration);
-                if (obj.time > duration * steps) {
-                    obj.angle = obj.restAngle;
-                    obj.time = 0;
-                    obj.spinning = false;
-                }
-            }
+            exports.spinAnimate(obj);
         };
         return obj;
     };
@@ -464,7 +499,9 @@
 
     exports.triggerSpin = function(step) {
         var obj;
-        steps = step;
+        exports.steps = step;
+        exports.spinning = true;
+        
         for (var i = 0; i < shapes.length; i++) {
             obj = shapes[i];
             obj.spinning = true;
@@ -480,7 +517,9 @@
 
     exports.backgroundLogic = function() {
         for (var i = 0; i < shapes.length; i++) {
-            shapes[i].logic();
+            if (shapes[i].spinning) {
+                shapes[i].logic();
+            }
         };
     };
 
