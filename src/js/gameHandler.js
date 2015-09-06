@@ -11,6 +11,9 @@
     var enemyPositions = [];
     var ENEMY_HEIGHT = 50;
     var ENEMY_WIDTH = 20;
+
+    var prevColor = ''; // Temp variable to store player's color
+
     exports.turnStep = 2 * Math.PI / exports.sides;
 
     // Possible states: complete, movingIn, waiting, attacking
@@ -24,6 +27,7 @@
     exports.enemyDraw = function() {
         var enemy;
         var ctx = exports.ctx;
+        ctx.fillStyle = 'black';
         for (var i = 0; i < enemies.length; i++) {
             enemy = enemies[i];
             ctx.save();
@@ -73,6 +77,7 @@
             if (enemy.centerDist < min) {
                 enemy.centerDist = min;
                 cb();
+                break;
             }
         }
     };
@@ -98,9 +103,10 @@
                 animateEnemies(50, 5, function() {
                     if (enemyPositions.indexOf(exports.player.pos) != -1) {
                         currentState = 'crushing';
-                        exports.player.color = 'pink';
+                        prevColor = exports.player.color;
+                        exports.player.color = '255, 184, 253';
                         setTimeout(function() {
-                            exports.player.color = 'black';
+                            exports.player.color = prevColor;
                         }, 100);
                         exports.createParticles(
                             Math.random() * 3 + 1,
@@ -131,9 +137,9 @@
                 break;
             case 'crushing':
                 animateEnemies(30, 1, function() {
-                    exports.player.color = 'white';
+                    exports.player.color = '255, 255, 255';
                     setTimeout(function() {
-                        exports.player.color = 'black';
+                        exports.player.color = prevColor;
                         currentState = 'complete';
                         enemies = [];
                     }, 1000);
