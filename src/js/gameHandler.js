@@ -3,7 +3,7 @@
 
 
 
-    exports.sides = 4; // The number of sides that the player can turn
+    exports.sides = 5; // The number of sides that the player can turn
     var ticks = 0;
     var maxWait = 100;
 
@@ -41,7 +41,7 @@
     var addEnemy = function(angle) {
         var obj = {};
         obj.angle = angle || 0;
-        obj.centerDist = 450;
+        obj.centerDist = 500;
 
         enemies.push(obj);
     };
@@ -137,9 +137,10 @@
                 break;
             case 'crushing':
                 animateEnemies(30, 1, function() {
-                    exports.player.color = '0, 0, 0';
+                    exports.player.alpha = 0;
                     setTimeout(function() {
                         exports.player.color = prevColor;
+                        exports.player.alpha = 1;
                         currentState = 'complete';
                         enemies = [];
                     }, 1000);

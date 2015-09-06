@@ -27,7 +27,8 @@ var fileList = [
   'loops',
   'player',
   'gameHandler',
-  'effects'
+  'effects',
+  'background'
 ];
 fileList = fileList.map(function(fileName) {
   return jsFolder + fileName + '.js';
