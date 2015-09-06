@@ -14,7 +14,7 @@
 
 
 
-    exports.sides = 5; // The number of sides that the player can turn
+    exports.sides = 4; // The number of sides that the player can turn
     var ticks = 0;
     var maxWait = 20;
 
