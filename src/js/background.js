@@ -72,7 +72,7 @@
         return obj;
     };
 
-    var init = function() {
+    exports.initBackground = function() {
         shapes = [];
         var colors = '#BF0C43,#F9BA15,#8EAC00,#127A97,#452B72'.split(',');
         for (var i = 14 - 1; i >= 0; i--) {
@@ -106,6 +106,6 @@
         };
     };
 
-    init();
+    exports.initBackground();
 
 })(window.game);

@@ -154,10 +154,17 @@
     // Complete: an attack was just completed and new enemies need to slide in
     // Moving In: enemies are moving to position from outside the screen
     // Waiting: enemies are in position, and we're waiting to give the player time
+    // Spinning: enemies are spinning with the background (step will be skipped on easier levels)
     // Attacking: Animate enemies moving in
     // Crushing: The player didn't dodge, so the crushing animation is playing right now
     exports.currentState = 'complete';
 
+
+    exports.changeSides = function(n) {
+        exports.sides = n;
+        exports.turnStep = 2 * Math.PI / exports.sides;
+        exports.initBackground();
+    };
 
     exports.enemyDraw = function() {
         var enemy;
@@ -259,7 +266,7 @@
                 }
                 break;
             case 'attacking':
-                animateEnemies(50, 5, function() {
+                animateEnemies(50, 10, function() {
                     if (enemyPositions.indexOf(exports.player.pos) != -1) {
                         exports.currentState = 'crushing';
                         prevColor = exports.player.color;
@@ -494,7 +501,7 @@
         return obj;
     };
 
-    var init = function() {
+    exports.initBackground = function() {
         shapes = [];
         var colors = '#BF0C43,#F9BA15,#8EAC00,#127A97,#452B72'.split(',');
         for (var i = 14 - 1; i >= 0; i--) {
@@ -528,6 +535,6 @@
         };
     };
 
-    init();
+    exports.initBackground();
 
 })(window.game);
