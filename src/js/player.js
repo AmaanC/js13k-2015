@@ -40,13 +40,10 @@
         ctx.strokeStyle = 'rgba('+player.color+', ' + player.alpha + ')';
         ctx.stroke();
 
-        // Shadow
-        ctx.shadowBlur = 5;
-        ctx.shadowColor = 'rgba('+player.color+', 0.25)';
-
         // Fill
         ctx.fillStyle = 'rgba('+player.color+', 0)';
         ctx.fill();
+        ctx.shadowBlur = 0;
 
     };
 

@@ -33,6 +33,7 @@
     };
 
     var logicLoop = function() {
+        exports.backgroundLogic();
         exports.playerLogic();
         exports.particleLogic();
         exports.enemyLogic();
@@ -89,13 +90,10 @@
         ctx.strokeStyle = 'rgba('+player.color+', ' + player.alpha + ')';
         ctx.stroke();
 
-        // Shadow
-        ctx.shadowBlur = 5;
-        ctx.shadowColor = 'rgba('+player.color+', 0.25)';
-
         // Fill
         ctx.fillStyle = 'rgba('+player.color+', 0)';
         ctx.fill();
+        ctx.shadowBlur = 0;
 
     };
 
@@ -252,7 +250,7 @@
                 });
                 break;
             case 'crushing':
-                animateEnemies(30, 1, function() {
+                animateEnemies(29, 1, function() {
                     exports.player.alpha = 0;
                     setTimeout(function() {
                         exports.player.color = prevColor;
@@ -384,8 +382,8 @@
     var centerY = exports.canvas.height / 2;
     var ctx = exports.ctx;
 
-    var MIN_SIZE = 30;
-    var DIST_BETWEEN = 20;
+    var MIN_SIZE = 35;
+    var DIST_BETWEEN = 30;
 
     // t = current time
     // b = start value
@@ -399,13 +397,8 @@
         return c/2 * (Math.sqrt(1 - t*t) + 1) + b;
     };
 
-    // x, y are the center co-ordinates of the hexagon
+    // x, y are the center co-ordinates of the shape
     var drawShape = function(x, y, side, angle, color) {
-        // How to draw a hexagon:
-        // Find the point you start it, and move to it
-        // To do this, you have to realize that a hexagon is basically 6 equilateral triangles
-        // After that, it's trivial, using trig, and figuring the rest out is left
-        // as an exercise to the reader.
 
         ctx.beginPath();
         ctx.moveTo(x + side * Math.cos(angle), y + side * Math.sin(angle));
@@ -418,8 +411,8 @@
         ctx.fill();
     };
 
-    var duration = 90 / 2;
-    var createHex = function(x, y, side, color) {
+    var duration = 90 / 1.5;
+    var createShape = function(x, y, side, color) {
         var obj = {};
         obj.x = x;
         obj.y = y;
@@ -429,8 +422,10 @@
         obj.color = color;
         obj.time = 0;
         obj.draw = function() {
-            obj.time++;
             drawShape(obj.x, obj.y, obj.side, obj.angle, obj.color);
+        };
+        obj.logic = function() {
+            obj.time++;
             if (obj.spinning) {
                 obj.angle = easeInOutCirc(obj.time, obj.restAngle, exports.turnStep, duration);
                 if (obj.time > duration) {
@@ -446,8 +441,8 @@
     var init = function() {
         shapes = [];
         var colors = '#BF0C43,#F9BA15,#8EAC00,#127A97,#452B72'.split(',');
-        for (var i = 10 - 1; i >= 0; i--) {
-            shapes.push(createHex(centerX, centerY, MIN_SIZE + i * DIST_BETWEEN, colors[i % colors.length]));
+        for (var i = 14 - 1; i >= 0; i--) {
+            shapes.push(createShape(centerX, centerY, MIN_SIZE + i * DIST_BETWEEN, colors[i % colors.length]));
         };
     };
 
@@ -465,6 +460,13 @@
             shapes[i].draw();
         };
     };
+
+    exports.backgroundLogic = function() {
+        for (var i = 0; i < shapes.length; i++) {
+            shapes[i].logic();
+        };
+    };
+
     init();
 
 })(window.game);
