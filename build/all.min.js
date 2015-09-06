@@ -21,7 +21,9 @@
     exports.cy = canvas.height / 2;
 
     var drawLoop = function() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
         exports.playerDraw();
         exports.particleDraw();
         exports.enemyDraw();
@@ -139,7 +141,7 @@
     exports.enemyDraw = function() {
         var enemy;
         var ctx = exports.ctx;
-        ctx.fillStyle = 'black';
+        ctx.fillStyle = 'white';
         for (var i = 0; i < enemies.length; i++) {
             enemy = enemies[i];
             ctx.save();
@@ -249,7 +251,7 @@
                 break;
             case 'crushing':
                 animateEnemies(30, 1, function() {
-                    exports.player.color = '255, 255, 255';
+                    exports.player.color = '0, 0, 0';
                     setTimeout(function() {
                         exports.player.color = prevColor;
                         currentState = 'complete';
