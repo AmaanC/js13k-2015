@@ -3,11 +3,13 @@
 
     document.body.addEventListener('keydown', function(e) {
         exports.keys[e.keyCode] = true;
-        if (e.keyCode === 39) {
-            exports.turnPlayer(1);
-        }
-        else if (e.keyCode === 37) {
-            exports.turnPlayer(-1);
+        if (exports.currentState !== 'crushing') {
+            if (e.keyCode === 39) {
+                exports.turnPlayer(1);
+            }
+            else if (e.keyCode === 37) {
+                exports.turnPlayer(-1);
+            }
         }
     });
     document.body.addEventListener('keyup', function(e) {
@@ -112,6 +114,17 @@
 
     };
 })(window.game);
+// Here's how level progression will work
+// 1) Plain old dodging. You move left/right and dodge.
+// 2) Faster enemies
+// 3) Player spins X degrees just before the enemies attack. Player has to start accounting for this
+// 4) Player still spins, but now so do the enemy blocks.
+// 5) Number of sides increases (i.e. a square becomes a pentagon)
+// 6) You cut the player's arm off to make the game harder still
+// 7) You kidnap their children to test their committment
+// 8) PROFIT
+// 9) goto 1
+
 // (function(exports) {
     var exports = window.game;
 
@@ -119,7 +132,7 @@
 
     exports.sides = 5; // The number of sides that the player can turn
     var ticks = 0;
-    var maxWait = 100;
+    var maxWait = 20;
 
     var enemies = [];
     var enemyPositions = [];
@@ -134,8 +147,9 @@
     // Complete: an attack was just completed and new enemies need to slide in
     // Moving In: enemies are moving to position from outside the screen
     // Waiting: enemies are in position, and we're waiting to give the player time
-    // Attacking: 5, animate enemies moving in
-    var currentState = 'complete';
+    // Attacking: Animate enemies moving in
+    // Crushing: The player didn't dodge, so the crushing animation is playing right now
+    exports.currentState = 'complete';
 
 
     exports.enemyDraw = function() {
@@ -180,7 +194,7 @@
             addEnemy(exports.turnStep * possible[i]);
         }
 
-        currentState = 'movingIn';
+        exports.currentState = 'movingIn';
         return possible;
     };
 
@@ -197,26 +211,26 @@
     };
 
     exports.enemyLogic = function() {
-        switch(currentState) {
+        switch(exports.currentState) {
             case 'complete':
                 enemyPositions = makeEnemyWave();
                 break;
             case 'movingIn':
                 animateEnemies(200, 5, function() {
-                    currentState = 'waiting';
+                    exports.currentState = 'waiting';
                 });
                 break;
             case 'waiting':
                 ticks++;
                 if (ticks > maxWait) {
                     ticks = 0;
-                    currentState = 'attacking';
+                    exports.currentState = 'attacking';
                 }
                 break;
             case 'attacking':
                 animateEnemies(50, 5, function() {
                     if (enemyPositions.indexOf(exports.player.pos) != -1) {
-                        currentState = 'crushing';
+                        exports.currentState = 'crushing';
                         prevColor = exports.player.color;
                         exports.player.color = '255, 184, 253';
                         setTimeout(function() {
@@ -244,7 +258,7 @@
                         exports.shakeScreen(4);
                     }
                     else {
-                        currentState = 'complete';
+                        exports.currentState = 'complete';
                         enemies = [];
                     }
                 });
@@ -255,7 +269,7 @@
                     setTimeout(function() {
                         exports.player.color = prevColor;
                         exports.player.alpha = 1;
-                        currentState = 'complete';
+                        exports.currentState = 'complete';
                         enemies = [];
                     }, 1000);
                 });

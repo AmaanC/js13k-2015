@@ -31,8 +31,9 @@
     // Complete: an attack was just completed and new enemies need to slide in
     // Moving In: enemies are moving to position from outside the screen
     // Waiting: enemies are in position, and we're waiting to give the player time
-    // Attacking: 5, animate enemies moving in
-    var currentState = 'complete';
+    // Attacking: Animate enemies moving in
+    // Crushing: The player didn't dodge, so the crushing animation is playing right now
+    exports.currentState = 'complete';
 
 
     exports.enemyDraw = function() {
@@ -77,7 +78,7 @@
             addEnemy(exports.turnStep * possible[i]);
         }
 
-        currentState = 'movingIn';
+        exports.currentState = 'movingIn';
         return possible;
     };
 
@@ -94,26 +95,26 @@
     };
 
     exports.enemyLogic = function() {
-        switch(currentState) {
+        switch(exports.currentState) {
             case 'complete':
                 enemyPositions = makeEnemyWave();
                 break;
             case 'movingIn':
                 animateEnemies(200, 5, function() {
-                    currentState = 'waiting';
+                    exports.currentState = 'waiting';
                 });
                 break;
             case 'waiting':
                 ticks++;
                 if (ticks > maxWait) {
                     ticks = 0;
-                    currentState = 'attacking';
+                    exports.currentState = 'attacking';
                 }
                 break;
             case 'attacking':
                 animateEnemies(50, 5, function() {
                     if (enemyPositions.indexOf(exports.player.pos) != -1) {
-                        currentState = 'crushing';
+                        exports.currentState = 'crushing';
                         prevColor = exports.player.color;
                         exports.player.color = '255, 184, 253';
                         setTimeout(function() {
@@ -141,7 +142,7 @@
                         exports.shakeScreen(4);
                     }
                     else {
-                        currentState = 'complete';
+                        exports.currentState = 'complete';
                         enemies = [];
                     }
                 });
@@ -152,7 +153,7 @@
                     setTimeout(function() {
                         exports.player.color = prevColor;
                         exports.player.alpha = 1;
-                        currentState = 'complete';
+                        exports.currentState = 'complete';
                         enemies = [];
                     }, 1000);
                 });
