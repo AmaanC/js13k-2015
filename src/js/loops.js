@@ -18,7 +18,6 @@
 
     var logicLoop = function() {
         exports.backgroundLogic();
-        exports.playerLogic();
         exports.particleLogic();
         exports.enemyLogic();
 

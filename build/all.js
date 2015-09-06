@@ -1,14 +1,15 @@
 (function(exports) {
     exports.keys = {};
+    exports.playerDirection = 1; // Becomes -1 when things should be reversed
 
     document.body.addEventListener('keydown', function(e) {
         exports.keys[e.keyCode] = true;
         if (exports.currentState !== 'crushing') {
             if (e.keyCode === 39) {
-                exports.turnPlayer(1);
+                exports.turnPlayer(exports.playerDirection);
             }
             else if (e.keyCode === 37) {
-                exports.turnPlayer(-1);
+                exports.turnPlayer(-exports.playerDirection);
             }
         }
     });
@@ -36,7 +37,6 @@
 
     var logicLoop = function() {
         exports.backgroundLogic();
-        exports.playerLogic();
         exports.particleLogic();
         exports.enemyLogic();
 
@@ -110,9 +110,16 @@
         player.angle = exports.turnStep * player.pos;
     };
 
-    exports.playerLogic = function() {
-
+    exports.reversePlayerControls = function() {
+        exports.playerDirection *= -1;
+        if (exports.playerDirection > 0) {
+            exports.ctx.globalCompositeOperation = 'source-over';
+        }
+        else {
+            exports.ctx.globalCompositeOperation = 'difference';
+        }
     };
+
 })(window.game);
 // Here's how level progression will work
 // 1) Plain old dodging. You move left/right and dodge.

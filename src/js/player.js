@@ -58,7 +58,14 @@
         player.angle = exports.turnStep * player.pos;
     };
 
-    exports.playerLogic = function() {
-
+    exports.reversePlayerControls = function() {
+        exports.playerDirection *= -1;
+        if (exports.playerDirection > 0) {
+            exports.ctx.globalCompositeOperation = 'source-over';
+        }
+        else {
+            exports.ctx.globalCompositeOperation = 'difference';
+        }
     };
+
 })(window.game);
