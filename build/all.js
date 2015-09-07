@@ -572,7 +572,7 @@
     exports.initBackground = function() {
         shapes = [];
         var colors = '#BF0C43,#F9BA15,#8EAC00,#127A97,#452B72'.split(',');
-        for (var i = 14 - 1; i >= 0; i--) {
+        for (var i = 20 - 1; i >= 0; i--) {
             shapes.push(createShape(exports.cx, exports.cy, MIN_SIZE + i * DIST_BETWEEN, colors[i % colors.length]));
         };
     };
