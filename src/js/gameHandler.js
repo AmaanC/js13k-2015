@@ -115,9 +115,39 @@
         }
     };
 
+    var playerHit = function() {
+        exports.currentState = 'crushing';
+        prevColor = exports.player.color;
+        exports.player.color = '255, 184, 253';
+        setTimeout(function() {
+            exports.player.color = prevColor;
+        }, 100);
+        exports.createParticles(
+            Math.random() * 3 + 1,
+            exports.cx,
+            exports.cy,
+            ['red'],
+            1,
+            exports.player.angle + Math.PI / 2,
+            0.2
+        );
+        exports.createParticles(
+            Math.random() * 3 + 1,
+            exports.cx,
+            exports.cy,
+            ['red'],
+            1,
+            exports.player.angle - Math.PI / 2,
+            0.2
+        );
+
+        exports.shakeScreen(4);
+    };
+    
     exports.enemyLogic = function() {
         switch(exports.currentState) {
             case 'complete':
+                enemies = [];
                 enemyPositions = makeEnemyWave();
                 break;
             case 'movingIn':
@@ -156,36 +186,10 @@
             case 'attacking':
                 animateEnemies(50, enemySpeed, function() {
                     if (enemyPositions.indexOf(exports.player.pos) != -1) {
-                        exports.currentState = 'crushing';
-                        prevColor = exports.player.color;
-                        exports.player.color = '255, 184, 253';
-                        setTimeout(function() {
-                            exports.player.color = prevColor;
-                        }, 100);
-                        exports.createParticles(
-                            Math.random() * 3 + 1,
-                            exports.cx,
-                            exports.cy,
-                            ['red'],
-                            1,
-                            exports.player.angle + Math.PI / 2,
-                            0.2
-                        );
-                        exports.createParticles(
-                            Math.random() * 3 + 1,
-                            exports.cx,
-                            exports.cy,
-                            ['red'],
-                            1,
-                            exports.player.angle - Math.PI / 2,
-                            0.2
-                        );
-
-                        exports.shakeScreen(4);
+                        playerHit();
                     }
                     else {
                         exports.currentState = 'complete';
-                        enemies = [];
                     }
                 });
                 break;
@@ -196,7 +200,6 @@
                         exports.player.color = prevColor;
                         exports.player.alpha = 1;
                         exports.currentState = 'complete';
-                        enemies = [];
                     }, 1000);
                 });
                 break;
