@@ -146,6 +146,8 @@
     var ENEMY_HEIGHT = 50;
     var ENEMY_WIDTH = 20;
 
+    var enemySpeed = 20;
+
     var prevColor = ''; // Temp variable to store player's color
 
     exports.turnStep = 2 * Math.PI / exports.sides;
@@ -187,7 +189,7 @@
     var addEnemy = function(angle) {
         var obj = {};
         obj.angle = angle || 0;
-        obj.centerDist = 500;
+        obj.centerDist = 450;
 
         obj.time = 0;
 
@@ -220,14 +222,19 @@
 
     // Animate enemies to a certain position and call cb when it reaches it
     var animateEnemies = function(min, speed, cb) {
+        var allReached = true;
         for (var i = 0; i < enemies.length; i++) {
             enemy = enemies[i];
             enemy.centerDist -= speed || 5;
-            if (enemy.centerDist < min) {
+            if (enemy.centerDist <= min) {
                 enemy.centerDist = min;
-                cb();
-                break;
             }
+            else {
+                allReached = false;
+            }
+        }
+        if (allReached) {
+            cb();
         }
     };
 
@@ -270,7 +277,7 @@
                 }
                 break;
             case 'attacking':
-                animateEnemies(50, 10, function() {
+                animateEnemies(50, enemySpeed, function() {
                     if (enemyPositions.indexOf(exports.player.pos) != -1) {
                         exports.currentState = 'crushing';
                         prevColor = exports.player.color;
