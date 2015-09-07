@@ -161,8 +161,12 @@
 
 
     exports.changeSides = function(n) {
+        enemies = [];
+        exports.currentState = 'complete';
         exports.sides = n;
         exports.turnStep = 2 * Math.PI / exports.sides;
+        exports.player.pos = 0;
+        exports.player.angle = 0;
         exports.initBackground();
     };
 
