@@ -145,8 +145,15 @@
     var enemyPositions = [];
     var ENEMY_HEIGHT = 50;
     var ENEMY_WIDTH = 20;
+    var DEFAULT_ENEMY_SPEED = 10;
+    var SPEED_LIMIT = 40;
 
-    var enemySpeed = 20;
+    var difficultyLevel = 1; // This follows the level progression description at the top of the file
+    var numCrossed = 0; // How many "stages" has the player already dodged? When they cross X stages, we increase the difficulty level
+    var enemySpeed = DEFAULT_ENEMY_SPEED; // Changed for level 2
+    var spinEnemies = false;
+    var spinPlayer = false;
+    var STEPS_TO_NEXT_LEVEL = 2;
 
     var prevColor = ''; // Temp variable to store player's color
 
@@ -189,7 +196,7 @@
     var addEnemy = function(angle) {
         var obj = {};
         obj.angle = angle || 0;
-        obj.centerDist = 450;
+        obj.centerDist = 500;
 
         obj.time = 0;
 
@@ -238,9 +245,69 @@
         }
     };
 
+    var playerHit = function() {
+        // Here's what happens when the player is hit
+        numCrossed = 0;
+        exports.currentState = 'crushing';
+        prevColor = exports.player.color;
+        exports.player.color = '255, 184, 253';
+        setTimeout(function() {
+            exports.player.color = prevColor;
+        }, 100);
+        exports.createParticles(
+            Math.random() * 3 + 1,
+            exports.cx,
+            exports.cy,
+            ['red'],
+            1,
+            exports.player.angle + Math.PI / 2,
+            0.2
+        );
+        exports.createParticles(
+            Math.random() * 3 + 1,
+            exports.cx,
+            exports.cy,
+            ['red'],
+            1,
+            exports.player.angle - Math.PI / 2,
+            0.2
+        );
+
+        exports.shakeScreen(4);
+    };
+
+    var increaseDifficulty = function() {
+        numCrossed++;
+        if (numCrossed > STEPS_TO_NEXT_LEVEL) {
+            numCrossed = 0;
+            difficultyLevel++;
+            console.log(difficultyLevel);
+        }
+
+        switch(difficultyLevel) {
+            case 2:
+                enemySpeed += (SPEED_LIMIT - DEFAULT_ENEMY_SPEED) / STEPS_TO_NEXT_LEVEL;
+                break;
+            case 3:
+                spinPlayer = true;
+                break;
+            case 4:
+                spinEnemies = true;
+                break;
+            case 5:
+                exports.changeSides(exports.sides + 1);
+                difficultyLevel = 1;
+                enemySpeed = DEFAULT_ENEMY_SPEED;
+                spinPlayer = false;
+                spinEnemies = false;
+                break;
+        }
+    };
+
     exports.enemyLogic = function() {
         switch(exports.currentState) {
             case 'complete':
+                enemies = [];
                 enemyPositions = makeEnemyWave();
                 break;
             case 'movingIn':
@@ -250,20 +317,23 @@
                 break;
             case 'waiting':
                 ticks++;
-                if (ticks > maxWait) {
-                    ticks = 0;
-                }
-                exports.triggerSpin(2);
-                exports.currentState = 'spinning';
+                if (spinEnemies) {
+                    exports.triggerSpin(2);
+                    exports.currentState = 'spinning';
 
-                for (i = 0; i < enemyPositions.length; i++) {
-                    enemyPositions[i] += exports.steps;
-                    if (enemyPositions[i] >= exports.sides) {
-                        enemyPositions[i] %= exports.sides;
+                    for (i = 0; i < enemyPositions.length; i++) {
+                        enemyPositions[i] += exports.steps;
+                        if (enemyPositions[i] >= exports.sides) {
+                            enemyPositions[i] %= exports.sides;
+                        }
+                        else if (enemyPositions[i] < 0) {
+                            enemyPositions[i] = exports.sides - exports.steps;
+                        }
                     }
-                    else if (enemyPositions[i] < 0) {
-                        enemyPositions[i] = exports.sides - exports.steps;
-                    }
+                }
+                else if (ticks > maxWait) {
+                    ticks = 0;
+                    exports.currentState = 'attacking';
                 }
                 break;
             case 'spinning':
@@ -279,36 +349,11 @@
             case 'attacking':
                 animateEnemies(50, enemySpeed, function() {
                     if (enemyPositions.indexOf(exports.player.pos) != -1) {
-                        exports.currentState = 'crushing';
-                        prevColor = exports.player.color;
-                        exports.player.color = '255, 184, 253';
-                        setTimeout(function() {
-                            exports.player.color = prevColor;
-                        }, 100);
-                        exports.createParticles(
-                            Math.random() * 3 + 1,
-                            exports.cx,
-                            exports.cy,
-                            ['red'],
-                            1,
-                            exports.player.angle + Math.PI / 2,
-                            0.2
-                        );
-                        exports.createParticles(
-                            Math.random() * 3 + 1,
-                            exports.cx,
-                            exports.cy,
-                            ['red'],
-                            1,
-                            exports.player.angle - Math.PI / 2,
-                            0.2
-                        );
-
-                        exports.shakeScreen(4);
+                        playerHit();
                     }
                     else {
+                        increaseDifficulty();
                         exports.currentState = 'complete';
-                        enemies = [];
                     }
                 });
                 break;
@@ -319,7 +364,6 @@
                         exports.player.color = prevColor;
                         exports.player.alpha = 1;
                         exports.currentState = 'complete';
-                        enemies = [];
                     }, 1000);
                 });
                 break;
