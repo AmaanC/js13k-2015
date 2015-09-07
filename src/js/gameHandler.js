@@ -23,13 +23,14 @@
     var ENEMY_HEIGHT = 50;
     var ENEMY_WIDTH = 20;
     var DEFAULT_ENEMY_SPEED = 10;
-    var SPEED_LIMIT = 40;
+    var SPEED_LIMIT = 30;
 
     var difficultyLevel = 1; // This follows the level progression description at the top of the file
     var numCrossed = 0; // How many "stages" has the player already dodged? When they cross X stages, we increase the difficulty level
     var enemySpeed = DEFAULT_ENEMY_SPEED; // Changed for level 2
     var spinEnemies = false;
     var spinPlayer = false;
+    var alreadySpunPlayer = false;
     var STEPS_TO_NEXT_LEVEL = 2;
 
     var prevColor = ''; // Temp variable to store player's color
@@ -153,6 +154,13 @@
         exports.shakeScreen(4);
     };
 
+    var makePlayerSpin = function() {
+        if (spinPlayer && alreadySpunPlayer === false) {
+            exports.turnPlayer(1);
+            alreadySpunPlayer = true;
+        }
+    };
+
     var increaseDifficulty = function() {
         numCrossed++;
         if (numCrossed > STEPS_TO_NEXT_LEVEL) {
@@ -184,6 +192,7 @@
     exports.enemyLogic = function() {
         switch(exports.currentState) {
             case 'complete':
+                alreadySpunPlayer = false;
                 enemies = [];
                 enemyPositions = makeEnemyWave();
                 break;
@@ -194,6 +203,9 @@
                 break;
             case 'waiting':
                 ticks++;
+                if (difficultyLevel <= 3) {
+                    makePlayerSpin();
+                }
                 if (spinEnemies) {
                     exports.triggerSpin(2);
                     exports.currentState = 'spinning';
@@ -219,6 +231,7 @@
                         exports.spinAnimate(enemies[i], function() {
                             exports.spinning = false;
                             exports.currentState = 'attacking';
+                            makePlayerSpin();
                         });
                     }
                 }
