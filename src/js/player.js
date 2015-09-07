@@ -5,7 +5,7 @@
     exports.player = player;
     player.cx = exports.cx;
     player.cy = exports.cy;
-    player.dist = 30;
+    player.dist = 40;
     player.halfBase = 10;
     player.halfHeight = 10;
     player.angle = 0;

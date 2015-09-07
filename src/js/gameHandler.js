@@ -248,7 +248,7 @@
                 });
                 break;
             case 'crushing':
-                animateEnemies(29, 1, function() {
+                animateEnemies(exports.player.dist, 1, function() {
                     exports.player.alpha = 0;
                     setTimeout(function() {
                         exports.player.color = prevColor;

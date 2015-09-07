@@ -57,7 +57,7 @@
     exports.player = player;
     player.cx = exports.cx;
     player.cy = exports.cy;
-    player.dist = 30;
+    player.dist = 40;
     player.halfBase = 10;
     player.halfHeight = 10;
     player.angle = 0;
@@ -371,7 +371,7 @@
                 });
                 break;
             case 'crushing':
-                animateEnemies(29, 1, function() {
+                animateEnemies(exports.player.dist, 1, function() {
                     exports.player.alpha = 0;
                     setTimeout(function() {
                         exports.player.color = prevColor;
@@ -500,8 +500,9 @@
     var shapes = [];
     var ctx = exports.ctx;
 
-    var MIN_SIZE = 40;
-    var DIST_BETWEEN = 30;
+    var minSize = exports.player.dist * 2;
+    var DIST_BETWEEN = 50;
+    var NUM_SHAPES = 20;
 
     exports.steps = 1;
 
@@ -520,8 +521,8 @@
 
 
     // x, y are the center co-ordinates of the shape
-    var drawShape = function(x, y, side, angle, color) {
-
+    var drawShape = function(x, y, centerDist, angle, color) {
+        var side = centerDist / (2 * Math.cos(exports.turnStep / 2));
         ctx.beginPath();
         ctx.moveTo(x + side * Math.cos(angle), y + side * Math.sin(angle));
         for (var i = 1; i <= exports.sides; i++) {
@@ -572,8 +573,8 @@
     exports.initBackground = function() {
         shapes = [];
         var colors = '#BF0C43,#F9BA15,#8EAC00,#127A97,#452B72'.split(',');
-        for (var i = 20 - 1; i >= 0; i--) {
-            shapes.push(createShape(exports.cx, exports.cy, MIN_SIZE + i * DIST_BETWEEN, colors[i % colors.length]));
+        for (var i = NUM_SHAPES - 1; i >= 0; i--) {
+            shapes.push(createShape(exports.cx, exports.cy, minSize + i * DIST_BETWEEN, colors[i % colors.length]));
         };
     };
 
