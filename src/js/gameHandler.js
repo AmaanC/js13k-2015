@@ -33,6 +33,9 @@
     var alreadySpunPlayer = false;
     var STEPS_TO_NEXT_LEVEL = 2;
 
+    var immuneNumCrossed = 0;
+    var MAX_IMMUNE = 2;
+
     var prevColor = ''; // Temp variable to store player's color
 
     exports.turnStep = 2 * Math.PI / exports.sides;
@@ -164,6 +167,9 @@
     var increaseDifficulty = function() {
         numCrossed++;
         if (numCrossed > STEPS_TO_NEXT_LEVEL) {
+            // New level!
+            exports.player.immune = true;
+            immuneNumCrossed = 0;
             numCrossed = 0;
             difficultyLevel++;
             exports.triggerSpin(exports.sides);
@@ -243,6 +249,14 @@
                 break;
             case 'attacking':
                 animateEnemies(50, enemySpeed, function() {
+                    if (exports.player.immune) {
+                        immuneNumCrossed++;
+                        if (immuneNumCrossed > MAX_IMMUNE) {
+                            exports.player.immune = false;
+                        }
+                        exports.currentState = 'complete';
+                        return;
+                    }
                     if (enemyPositions.indexOf(exports.player.pos) != -1) {
                         playerHit();
                     }

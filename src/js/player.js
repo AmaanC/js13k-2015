@@ -1,6 +1,10 @@
 (function(exports) {
     var ctx = exports.ctx;
 
+    var ticks = 0;
+    var ticksTillBlink = 15;
+    var immuneAlpha = 0.5;
+
     var player = {};
     exports.player = player;
     player.cx = exports.cx;
@@ -12,12 +16,28 @@
     player.pos = 0; // This indicates which multiple of turnStep it is. For example, with 4 sides, player would point down when pos is 1
     player.color = '13,213,252';
     player.alpha = 1;
+    player.immune = true; // The player is immune in the beginning so he can observe the pattern
 
     exports.playerDraw = function() {
         var cx = player.cx;
         var cy = player.cy;
         var hb = player.halfBase;
         var hh = player.halfHeight;
+        var alpha = player.immune ? immuneAlpha : player.alpha;
+
+        ticks++;
+        if (ticks > ticksTillBlink) {
+            ticks = 0;
+            if (player.immune) {
+                if (immuneAlpha === 0.5) {
+                    immuneAlpha = 1;
+                }
+                else {
+                    immuneAlpha = 0.5;
+                }
+            }
+        }
+
         ctx.save();
 
         ctx.translate(cx, cy);
@@ -37,13 +57,8 @@
         // Stroke
         ctx.lineWidth = 5;
         ctx.lineJoin = 'round';
-        ctx.strokeStyle = 'rgba('+player.color+', ' + player.alpha + ')';
+        ctx.strokeStyle = 'rgba(' + player.color + ', ' + alpha + ')';
         ctx.stroke();
-
-        // Fill
-        ctx.fillStyle = 'rgba('+player.color+', 0)';
-        ctx.fill();
-        ctx.shadowBlur = 0;
 
     };
 
