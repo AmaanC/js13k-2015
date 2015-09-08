@@ -3,6 +3,8 @@
     var shapes = [];
     var ctx = exports.ctx;
 
+    var DEFAULT_COLORS = ['#BF0C43', '#F9BA15', '#8EAC00', '#127A97', '#452B72'];
+
     var minSize = exports.player.dist * 2;
     var DIST_BETWEEN = 50;
 
@@ -76,7 +78,7 @@
 
     exports.initBackground = function() {
         shapes = [];
-        var colors = '#BF0C43,#F9BA15,#8EAC00,#127A97,#452B72'.split(',');
+        var colors = DEFAULT_COLORS;
         for (var i = exports.NUM_SHAPES - 1; i >= 0; i--) {
             shapes.push(createShape(exports.cx, exports.cy, minSize + i * DIST_BETWEEN, colors[i % colors.length]));
         };

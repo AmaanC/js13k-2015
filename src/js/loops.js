@@ -5,9 +5,6 @@
     exports.cy = canvas.height / 2;
 
     var drawLoop = function() {
-        ctx.fillStyle = 'black';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
         exports.backgroundDraw();
         exports.playerDraw();
         exports.particleDraw();
