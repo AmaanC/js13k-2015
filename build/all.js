@@ -381,6 +381,7 @@
                 });
                 break;
             case 'increasingDifficulty':
+                exports.player.canMove = false;
                 makePlayerSpin('complete');
                 if (exports.allShapesDoneSpinning) {
                     exports.currentState = 'complete';
