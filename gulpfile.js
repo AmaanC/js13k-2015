@@ -23,8 +23,8 @@ var source = require('vinyl-source-stream');
 
 var jsFolder = 'src/js/';
 var fileList = [
-  'input',
   'loops',
+  'input',
   'player',
   'gameHandler',
   'effects',
