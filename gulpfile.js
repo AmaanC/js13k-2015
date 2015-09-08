@@ -19,16 +19,18 @@ var micro = require('gulp-micro');
 var size = require('gulp-size');
 var uglify = require('gulp-uglify');
 var zip = require('gulp-zip');
-var source = require('vinyl-source-stream');
 
 var jsFolder = 'src/js/';
 var fileList = [
+  'tinymusic',
+  'audio',
   'loops',
   'input',
   'player',
   'gameHandler',
   'effects',
   'background'
+
 ];
 fileList = fileList.map(function(fileName) {
   return jsFolder + fileName + '.js';
