@@ -22,7 +22,7 @@
     var ENEMY_HEIGHT = 50;
     var ENEMY_WIDTH = 20;
     var DEFAULT_ENEMY_SPEED = 10;
-    var SPEED_LIMIT = 30;
+    var SPEED_LIMIT = 20;
 
     var ODDS_OF_REVERSER = 0.15; // The odds of an enemy having the power to reverse the player's controls when it hits the player
 
