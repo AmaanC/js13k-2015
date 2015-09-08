@@ -25,6 +25,8 @@
     var DEFAULT_ENEMY_SPEED = 10;
     var SPEED_LIMIT = 30;
 
+    var ODDS_OF_REVERSER = 0.15; // The odds of an enemy having the power to reverse the player's controls when it hits the player
+
     var difficultyLevel = 1; // This follows the level progression description at the top of the file
     var numCrossed = 0; // How many "stages" has the player already dodged? When they cross X stages, we increase the difficulty level
     var enemySpeed = DEFAULT_ENEMY_SPEED; // Changed for level 2
@@ -32,6 +34,8 @@
     var spinPlayer = false;
     var alreadySpunPlayer = false;
     var STEPS_TO_NEXT_LEVEL = 2;
+
+    var crusherEnemyIndex = -1; // The index of the enemy which crushed the player
 
     var prevColor = ''; // Temp variable to store player's color
 
@@ -60,12 +64,12 @@
     exports.enemyDraw = function() {
         var enemy;
         var ctx = exports.ctx;
-        ctx.fillStyle = 'white';
         for (var i = 0; i < enemies.length; i++) {
             enemy = enemies[i];
             ctx.save();
             ctx.translate(exports.cx, exports.cy);
             ctx.rotate(enemy.angle);
+            ctx.fillStyle = enemy.reverser ? 'green' : 'white';
             ctx.fillRect(enemy.centerDist, -ENEMY_HEIGHT / 2, ENEMY_WIDTH, ENEMY_HEIGHT);
             ctx.restore();
         }
@@ -75,6 +79,7 @@
         var obj = {};
         obj.angle = angle || 0;
         obj.centerDist = 500;
+        obj.reverser = Math.random() < ODDS_OF_REVERSER;
 
         obj.time = 0;
 
@@ -123,8 +128,11 @@
         }
     };
 
-    var playerHit = function() {
+    var playerHit = function(enemyIndex) {
         // Here's what happens when the player is hit
+        if (enemies[enemyIndex].reverser) {
+            exports.reversePlayerControls();
+        }
         numCrossed = 0;
         exports.currentState = 'crushing';
         prevColor = exports.player.color;
@@ -243,8 +251,9 @@
                 break;
             case 'attacking':
                 animateEnemies(50, enemySpeed, function() {
-                    if (enemyPositions.indexOf(exports.player.pos) != -1) {
-                        playerHit();
+                    crusherEnemyIndex = enemyPositions.indexOf(exports.player.pos);
+                    if (crusherEnemyIndex != -1) {
+                        playerHit(crusherEnemyIndex);
                     }
                     else {
                         exports.currentState = 'complete';
