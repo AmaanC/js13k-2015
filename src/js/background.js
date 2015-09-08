@@ -8,6 +8,7 @@
     var NUM_SHAPES = 20;
 
     exports.steps = 1;
+    exports.allShapesDoneSpinning = true;
 
     // t = current time
     // b = start value
@@ -100,8 +101,10 @@
     };
 
     exports.backgroundLogic = function() {
+        exports.allShapesDoneSpinning = true;
         for (var i = 0; i < shapes.length; i++) {
             if (shapes[i].spinning) {
+                exports.allShapesDoneSpinning = false;
                 shapes[i].logic();
             }
         };

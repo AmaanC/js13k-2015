@@ -166,7 +166,10 @@
         if (numCrossed > STEPS_TO_NEXT_LEVEL) {
             numCrossed = 0;
             difficultyLevel++;
-            console.log(difficultyLevel);
+            exports.triggerSpin(exports.sides);
+            enemies = [];
+            exports.currentState = 'increasingDifficulty';
+            console.log('Difficulty:', difficultyLevel);
         }
 
         switch(difficultyLevel) {
@@ -181,6 +184,8 @@
                 break;
             case 5:
                 exports.changeSides(exports.sides + 1);
+                exports.currentState = 'increasingDifficulty';
+                exports.triggerSpin(exports.sides);
                 difficultyLevel = 1;
                 enemySpeed = DEFAULT_ENEMY_SPEED;
                 spinPlayer = false;
@@ -231,7 +236,7 @@
                         exports.spinAnimate(enemies[i], function() {
                             exports.spinning = false;
                             exports.currentState = 'attacking';
-                            makePlayerSpin();
+                            makePlayerSpin(); // Spin the player after the enemies are done spinning
                         });
                     }
                 }
@@ -242,8 +247,8 @@
                         playerHit();
                     }
                     else {
-                        increaseDifficulty();
                         exports.currentState = 'complete';
+                        increaseDifficulty();
                     }
                 });
                 break;
@@ -256,6 +261,11 @@
                         exports.currentState = 'complete';
                     }, 1000);
                 });
+                break;
+            case 'increasingDifficulty':
+                if (exports.allShapesDoneSpinning) {
+                    exports.currentState = 'complete';
+                }
                 break;
         }
     };
