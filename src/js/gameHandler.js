@@ -26,7 +26,7 @@
 
     var ODDS_OF_REVERSER = 0.15; // The odds of an enemy having the power to reverse the player's controls when it hits the player
 
-    var difficultyLevel = 3; // This follows the level progression description at the top of the file
+    var difficultyLevel = 1; // This follows the level progression description at the top of the file
     var numCrossed = 0; // How many "stages" has the player already dodged? When they cross X stages, we increase the difficulty level
     var enemySpeed = DEFAULT_ENEMY_SPEED; // Changed for level 2
     var spinPlayer = false;
