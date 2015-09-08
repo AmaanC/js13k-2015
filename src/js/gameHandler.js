@@ -1,12 +1,10 @@
-// Here's how level progression will work
+// The game has "stages", which are represented by different shapes, i.e. the square is one stage, and then the pentagon is the next.
+// Within each stage, there are the following levels:
 // 1) Plain old dodging. You move left/right and dodge.
 // 2) Faster enemies
 // 3) Player spins X degrees just before the enemies attack. Player has to start accounting for this
-// 4) Number of sides increases (i.e. a square becomes a pentagon)
-// 5) You cut the player's arm off to make the game harder still
-// 6) You kidnap their children to test their committment
-// 7) PROFIT
-// 8) goto 1
+// To cross one level, the player has to dodge the enemy blocks N times. N is the number of waves.
+// When these levels have been crossed, the player goes to the next stage.
 
 // (function(exports) {
     var exports = window.game;
@@ -16,6 +14,7 @@
     exports.sides = 4; // The number of sides that the player can turn
     var ticks = 0;
     var maxWait = 20;
+    var spinAmount = 2; // Will be randomized on different levels
 
     var enemies = [];
     var enemyPositions = [];
@@ -23,6 +22,10 @@
     var ENEMY_WIDTH = 20;
     var DEFAULT_ENEMY_SPEED = 10;
     var SPEED_LIMIT = 20;
+    var ENEMY_CENTER_DIST = 500;
+    var MIN_ENEMIES = 1;
+    var MIN_EMPTY_SPOTS = 1; // Minimum number of spots the player has to dodge enemies
+    var crusherEnemyIndex = -1; // The index of the enemy which crushed the player
 
     var ODDS_OF_REVERSER = 0.15; // The odds of an enemy having the power to reverse the player's controls when it hits the player
 
@@ -33,9 +36,20 @@
     var alreadySpunPlayer = false;
     var STEPS_TO_NEXT_LEVEL = 2;
 
-    var crusherEnemyIndex = -1; // The index of the enemy which crushed the player
+    var HIT_PARTICLE_COLORS = ['red']; // The color of the particles emitted when the player's triangle is crushed
+    var NORMAL_ENEMY_COLOR = 'white';
+    var REVERSER_ENEMY_COLOR = 'green';
 
-    var prevColor = ''; // Temp variable to store player's color
+    var WAIT_DIST = 200;
+    var MOVE_IN_SPEED = 5; // Speed at which it moves in from outside the screen to the wait position
+    var CRUSH_SPEED = 1;
+
+    var NUM_PARTICLES = 3; // Particles created on collision
+    var PARTICLE_SPEED = 1;
+    var PARTICLE_OFFSET = Math.PI / 2;
+    var PARTICLE_RANGE = 0.2;
+    var SHAKE_INTENSITY = 4;
+
 
     exports.turnStep = 2 * Math.PI / exports.sides;
 
@@ -43,8 +57,8 @@
     // Complete: an attack was just completed and new enemies need to slide in
     // Moving In: enemies are moving to position from outside the screen
     // Waiting: enemies are in position, and we're waiting to give the player time
-    // Spinning: enemies are spinning with the background (step will be skipped on easier levels)
-    // Attacking: Animate enemies moving in
+    // Spinning: player is spinning with the background (only when the difficulty is appropriate)
+    // Attacking: Animate enemies moving in toward the player from their waiting position
     // Crushing: The player didn't dodge, so the crushing animation is playing right now
     exports.currentState = 'complete';
 
@@ -68,7 +82,7 @@
             ctx.save();
             ctx.translate(exports.cx, exports.cy);
             ctx.rotate(enemy.angle);
-            ctx.fillStyle = enemy.reverser ? 'green' : 'white';
+            ctx.fillStyle = enemy.reverser ? REVERSER_ENEMY_COLOR : NORMAL_ENEMY_COLOR;
             ctx.fillRect(enemy.centerDist, -ENEMY_HEIGHT / 2, ENEMY_WIDTH, ENEMY_HEIGHT);
             ctx.restore();
         }
@@ -77,7 +91,7 @@
     var addEnemy = function(angle) {
         var obj = {};
         obj.angle = angle || 0;
-        obj.centerDist = 500;
+        obj.centerDist = ENEMY_CENTER_DIST;
         obj.reverser = Math.random() < ODDS_OF_REVERSER;
 
         obj.time = 0;
@@ -95,7 +109,7 @@
 
     var makeEnemyWave = function() {
         var possible = range(0, exports.sides);
-        var numToRemove = 1 + Math.floor(Math.random() * (exports.sides - 2));
+        var numToRemove = MIN_ENEMIES + Math.floor(Math.random() * (exports.sides - MIN_EMPTY_SPOTS - 1));
 
         for (var i = 0; i < numToRemove; i++) {
             possible.splice(Math.floor(Math.random() * possible.length), 1);
@@ -142,31 +156,30 @@
         }
         numCrossed = 0;
         exports.currentState = 'crushing';
-        prevColor = exports.player.color;
-        exports.player.color = '255, 184, 253';
+        exports.player.color = exports.player.skins.flashColor;
         setTimeout(function() {
-            exports.player.color = prevColor;
+            exports.player.color = exports.player.skins.default;
         }, 100);
         exports.createParticles(
-            Math.random() * 3 + 1,
+            Math.random() * NUM_PARTICLES + 1,
             exports.cx,
             exports.cy,
-            ['red'],
-            1,
-            exports.player.angle + Math.PI / 2,
-            0.2
+            HIT_PARTICLE_COLORS,
+            PARTICLE_SPEED,
+            exports.player.angle + PARTICLE_OFFSET,
+            PARTICLE_RANGE
         );
         exports.createParticles(
-            Math.random() * 3 + 1,
+            Math.random() * NUM_PARTICLES + 1,
             exports.cx,
             exports.cy,
-            ['red'],
-            1,
-            exports.player.angle - Math.PI / 2,
-            0.2
+            HIT_PARTICLE_COLORS,
+            PARTICLE_SPEED,
+            exports.player.angle - PARTICLE_OFFSET,
+            PARTICLE_RANGE
         );
 
-        exports.shakeScreen(4);
+        exports.shakeScreen(SHAKE_INTENSITY);
     };
 
     var increaseDifficulty = function() {
@@ -208,7 +221,7 @@
                 enemyPositions = makeEnemyWave();
                 break;
             case 'movingIn':
-                animateEnemies(200, 5, function() {
+                animateEnemies(WAIT_DIST, MOVE_IN_SPEED, function() {
                     exports.currentState = 'waiting';
                 });
                 break;
@@ -218,7 +231,7 @@
                     ticks = 0;
                     exports.currentState = 'attacking';
                     if (spinPlayer) {
-                        exports.triggerSpin(2);
+                        exports.triggerSpin(spinAmount);
                         exports.player.time = exports.NUM_SHAPES;
                         exports.currentState = 'spinning';
                         exports.player.canMove = false;
@@ -232,7 +245,7 @@
                 break;
             case 'attacking':
                 exports.player.canMove = true;
-                animateEnemies(50, enemySpeed, function() {
+                animateEnemies(exports.player.dist, enemySpeed, function() {
                     crusherEnemyIndex = enemyPositions.indexOf(exports.player.pos);
                     if (crusherEnemyIndex != -1) {
                         playerHit(crusherEnemyIndex);
@@ -245,13 +258,8 @@
                 break;
             case 'crushing':
                 exports.player.canMove = false;
-                animateEnemies(exports.player.dist, 1, function() {
-                    exports.player.alpha = 0;
-                    setTimeout(function() {
-                        exports.player.color = prevColor;
-                        exports.player.alpha = 1;
-                        exports.currentState = 'complete';
-                    }, 1000);
+                animateEnemies(exports.player.dist, CRUSH_SPEED, function() {
+                    exports.player.hideTemporarily();
                 });
                 break;
             case 'increasingDifficulty':

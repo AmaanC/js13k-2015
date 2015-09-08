@@ -12,8 +12,21 @@
     player.angle = 0;
     player.canMove = true;
     player.pos = 0; // This indicates which multiple of turnStep it is. For example, with 4 sides, player would point down when pos is 1
-    player.color = '13,213,252';
+    player.skins = {
+        default: '13, 213, 252',
+        flashColor: '255, 184, 253' // The color it flashes briefly when hit
+    };
+    player.color = player.skins.default;
     player.alpha = 1;
+
+    player.hideTemporarily = function() {
+        player.alpha = 0;
+        setTimeout(function() {
+            player.color = player.skins.default;
+            player.alpha = 1;
+            exports.currentState = 'complete';
+        }, 1000);
+    };
 
     exports.playerDraw = function() {
         var cx = player.cx;
