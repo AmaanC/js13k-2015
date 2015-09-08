@@ -156,7 +156,7 @@
 
     var makePlayerSpin = function() {
         if (spinPlayer && alreadySpunPlayer === false) {
-            exports.turnPlayer(1);
+            exports.turnPlayer(2);
             alreadySpunPlayer = true;
         }
     };

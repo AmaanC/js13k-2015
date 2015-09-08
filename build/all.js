@@ -102,10 +102,10 @@
     exports.turnPlayer = function(dir) {
         player.pos += dir;
         if (player.pos >= exports.sides) {
-            player.pos = 0;
+            player.pos %= exports.sides;
         }
         if (player.pos < 0) {
-            player.pos = exports.sides - 1;
+            player.pos = exports.sides + dir;
         }
         player.angle = exports.turnStep * player.pos;
     };
@@ -279,7 +279,7 @@
 
     var makePlayerSpin = function() {
         if (spinPlayer && alreadySpunPlayer === false) {
-            exports.turnPlayer(1);
+            exports.turnPlayer(2);
             alreadySpunPlayer = true;
         }
     };
