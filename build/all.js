@@ -4,7 +4,7 @@
 
     document.body.addEventListener('keydown', function(e) {
         exports.keys[e.keyCode] = true;
-        if (exports.currentState !== 'crushing') {
+        if (exports.player.canMove) {
             if (e.keyCode === 39) {
                 exports.turnPlayer(exports.playerDirection);
             }
@@ -57,10 +57,12 @@
     exports.player = player;
     player.cx = exports.cx;
     player.cy = exports.cy;
+    player.time = 0;
     player.dist = 40;
     player.halfBase = 10;
     player.halfHeight = 10;
     player.angle = 0;
+    player.canMove = true;
     player.pos = 0; // This indicates which multiple of turnStep it is. For example, with 4 sides, player would point down when pos is 1
     player.color = '13,213,252';
     player.alpha = 1;
@@ -108,6 +110,7 @@
             player.pos = exports.sides + dir;
         }
         player.angle = exports.turnStep * player.pos;
+        player.restAngle = player.angle;
     };
 
     exports.reversePlayerControls = function() {
@@ -125,12 +128,11 @@
 // 1) Plain old dodging. You move left/right and dodge.
 // 2) Faster enemies
 // 3) Player spins X degrees just before the enemies attack. Player has to start accounting for this
-// 4) Player still spins, but now so do the enemy blocks.
-// 5) Number of sides increases (i.e. a square becomes a pentagon)
-// 6) You cut the player's arm off to make the game harder still
-// 7) You kidnap their children to test their committment
-// 8) PROFIT
-// 9) goto 1
+// 4) Number of sides increases (i.e. a square becomes a pentagon)
+// 5) You cut the player's arm off to make the game harder still
+// 6) You kidnap their children to test their committment
+// 7) PROFIT
+// 8) goto 1
 
 // (function(exports) {
     var exports = window.game;
@@ -150,10 +152,9 @@
 
     var ODDS_OF_REVERSER = 0.15; // The odds of an enemy having the power to reverse the player's controls when it hits the player
 
-    var difficultyLevel = 1; // This follows the level progression description at the top of the file
+    var difficultyLevel = 3; // This follows the level progression description at the top of the file
     var numCrossed = 0; // How many "stages" has the player already dodged? When they cross X stages, we increase the difficulty level
     var enemySpeed = DEFAULT_ENEMY_SPEED; // Changed for level 2
-    var spinEnemies = false;
     var spinPlayer = false;
     var alreadySpunPlayer = false;
     var STEPS_TO_NEXT_LEVEL = 2;
@@ -181,6 +182,7 @@
         exports.turnStep = 2 * Math.PI / exports.sides;
         exports.player.pos = 0;
         exports.player.angle = 0;
+        exports.player.restAngle = 0;
         exports.initBackground();
     };
 
@@ -251,6 +253,14 @@
         }
     };
 
+    var makePlayerSpin = function(nextState) {
+        exports.spinAnimate(exports.player, function() {
+            exports.turnPlayer(exports.steps);
+            exports.spinning = false;
+            exports.currentState = nextState;
+        });
+    };
+
     var playerHit = function(enemyIndex) {
         // Here's what happens when the player is hit
         if (enemies[enemyIndex].reverser) {
@@ -285,13 +295,6 @@
         exports.shakeScreen(4);
     };
 
-    var makePlayerSpin = function() {
-        if (spinPlayer && alreadySpunPlayer === false) {
-            exports.turnPlayer(2);
-            alreadySpunPlayer = true;
-        }
-    };
-
     var increaseDifficulty = function() {
         numCrossed++;
         if (numCrossed > STEPS_TO_NEXT_LEVEL) {
@@ -299,6 +302,7 @@
             difficultyLevel++;
             exports.triggerSpin(exports.sides);
             enemies = [];
+            exports.player.time = exports.NUM_SHAPES;
             exports.currentState = 'increasingDifficulty';
             console.log('Difficulty:', difficultyLevel);
         }
@@ -311,16 +315,12 @@
                 spinPlayer = true;
                 break;
             case 4:
-                spinEnemies = true;
-                break;
-            case 5:
                 exports.changeSides(exports.sides + 1);
                 exports.currentState = 'increasingDifficulty';
                 exports.triggerSpin(exports.sides);
                 difficultyLevel = 1;
                 enemySpeed = DEFAULT_ENEMY_SPEED;
                 spinPlayer = false;
-                spinEnemies = false;
                 break;
         }
     };
@@ -328,6 +328,7 @@
     exports.enemyLogic = function() {
         switch(exports.currentState) {
             case 'complete':
+                exports.player.canMove = true;
                 alreadySpunPlayer = false;
                 enemies = [];
                 enemyPositions = makeEnemyWave();
@@ -339,40 +340,24 @@
                 break;
             case 'waiting':
                 ticks++;
-                if (difficultyLevel <= 3) {
-                    makePlayerSpin();
-                }
-                if (spinEnemies) {
-                    exports.triggerSpin(2);
-                    exports.currentState = 'spinning';
-
-                    for (i = 0; i < enemyPositions.length; i++) {
-                        enemyPositions[i] += exports.steps;
-                        if (enemyPositions[i] >= exports.sides) {
-                            enemyPositions[i] %= exports.sides;
-                        }
-                        else if (enemyPositions[i] < 0) {
-                            enemyPositions[i] = exports.sides - exports.steps;
-                        }
-                    }
-                }
-                else if (ticks > maxWait) {
+                if (ticks > maxWait) {
                     ticks = 0;
                     exports.currentState = 'attacking';
+                    if (spinPlayer) {
+                        exports.triggerSpin(2);
+                        exports.player.time = exports.NUM_SHAPES;
+                        exports.currentState = 'spinning';
+                        exports.player.canMove = false;
+                    }
                 }
                 break;
             case 'spinning':
                 if (exports.spinning) {
-                    for (var i = 0; i < enemies.length; i++) {
-                        exports.spinAnimate(enemies[i], function() {
-                            exports.spinning = false;
-                            exports.currentState = 'attacking';
-                            makePlayerSpin(); // Spin the player after the enemies are done spinning
-                        });
-                    }
+                    makePlayerSpin('attacking');
                 }
                 break;
             case 'attacking':
+                exports.player.canMove = true;
                 animateEnemies(50, enemySpeed, function() {
                     crusherEnemyIndex = enemyPositions.indexOf(exports.player.pos);
                     if (crusherEnemyIndex != -1) {
@@ -385,6 +370,7 @@
                 });
                 break;
             case 'crushing':
+                exports.player.canMove = false;
                 animateEnemies(exports.player.dist, 1, function() {
                     exports.player.alpha = 0;
                     setTimeout(function() {
@@ -395,6 +381,7 @@
                 });
                 break;
             case 'increasingDifficulty':
+                makePlayerSpin('complete');
                 if (exports.allShapesDoneSpinning) {
                     exports.currentState = 'complete';
                 }
@@ -521,8 +508,8 @@
 
     var minSize = exports.player.dist * 2;
     var DIST_BETWEEN = 50;
-    var NUM_SHAPES = 20;
 
+    exports.NUM_SHAPES = 20;
     exports.steps = 1;
     exports.allShapesDoneSpinning = true;
 
@@ -593,7 +580,7 @@
     exports.initBackground = function() {
         shapes = [];
         var colors = '#BF0C43,#F9BA15,#8EAC00,#127A97,#452B72'.split(',');
-        for (var i = NUM_SHAPES - 1; i >= 0; i--) {
+        for (var i = exports.NUM_SHAPES - 1; i >= 0; i--) {
             shapes.push(createShape(exports.cx, exports.cy, minSize + i * DIST_BETWEEN, colors[i % colors.length]));
         };
     };

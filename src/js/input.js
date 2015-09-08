@@ -4,7 +4,7 @@
 
     document.body.addEventListener('keydown', function(e) {
         exports.keys[e.keyCode] = true;
-        if (exports.currentState !== 'crushing') {
+        if (exports.player.canMove) {
             if (e.keyCode === 39) {
                 exports.turnPlayer(exports.playerDirection);
             }

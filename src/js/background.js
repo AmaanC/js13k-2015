@@ -5,8 +5,8 @@
 
     var minSize = exports.player.dist * 2;
     var DIST_BETWEEN = 50;
-    var NUM_SHAPES = 20;
 
+    exports.NUM_SHAPES = 20;
     exports.steps = 1;
     exports.allShapesDoneSpinning = true;
 
@@ -77,7 +77,7 @@
     exports.initBackground = function() {
         shapes = [];
         var colors = '#BF0C43,#F9BA15,#8EAC00,#127A97,#452B72'.split(',');
-        for (var i = NUM_SHAPES - 1; i >= 0; i--) {
+        for (var i = exports.NUM_SHAPES - 1; i >= 0; i--) {
             shapes.push(createShape(exports.cx, exports.cy, minSize + i * DIST_BETWEEN, colors[i % colors.length]));
         };
     };

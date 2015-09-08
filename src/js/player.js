@@ -5,10 +5,12 @@
     exports.player = player;
     player.cx = exports.cx;
     player.cy = exports.cy;
+    player.time = 0;
     player.dist = 40;
     player.halfBase = 10;
     player.halfHeight = 10;
     player.angle = 0;
+    player.canMove = true;
     player.pos = 0; // This indicates which multiple of turnStep it is. For example, with 4 sides, player would point down when pos is 1
     player.color = '13,213,252';
     player.alpha = 1;
@@ -56,6 +58,7 @@
             player.pos = exports.sides + dir;
         }
         player.angle = exports.turnStep * player.pos;
+        player.restAngle = player.angle;
     };
 
     exports.reversePlayerControls = function() {
