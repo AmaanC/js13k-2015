@@ -34,7 +34,7 @@
     var enemySpeed = DEFAULT_ENEMY_SPEED; // Changed for level 2
     var spinPlayer = false;
     var alreadySpunPlayer = false;
-    var STEPS_TO_NEXT_LEVEL = 2;
+    var STEPS_TO_NEXT_LEVEL = 3;
 
     var HIT_PARTICLE_COLORS = ['red']; // The color of the particles emitted when the player's triangle is crushed
     var NORMAL_ENEMY_COLOR = 'white';
@@ -141,12 +141,22 @@
         }
     };
 
-    var makePlayerSpin = function(nextState) {
+    var updateIndicator = function() {
+        exports.indicatorObj.numSides = numCrossed;
+    };
+
+    var makePlayerSpin = function(cb) {
         exports.spinAnimate(exports.player, function() {
             exports.turnPlayer(exports.steps);
             exports.spinning = false;
-            exports.currentState = nextState;
+            cb();
         });
+    };
+
+    var afterDifficultySpin = function() {
+        numCrossed = 0;
+        updateIndicator();
+        exports.currentState = 'complete';
     };
 
     var playerHit = function(enemyIndex) {
@@ -155,6 +165,7 @@
             exports.reversePlayerControls();
         }
         numCrossed = 0;
+        updateIndicator();
         exports.currentState = 'crushing';
         exports.player.color = exports.player.skins.flashColor;
         setTimeout(function() {
@@ -185,7 +196,6 @@
     var increaseDifficulty = function() {
         numCrossed++;
         if (numCrossed > STEPS_TO_NEXT_LEVEL) {
-            numCrossed = 0;
             difficultyLevel++;
             exports.triggerSpin(exports.sides);
             enemies = [];
@@ -193,6 +203,7 @@
             exports.currentState = 'increasingDifficulty';
             console.log('Difficulty:', difficultyLevel);
         }
+        updateIndicator();
 
         switch(difficultyLevel) {
             case 2:
@@ -240,7 +251,9 @@
                 break;
             case 'spinning':
                 if (exports.spinning) {
-                    makePlayerSpin('attacking');
+                    makePlayerSpin(function() {
+                        exports.currentState = 'attacking';
+                    });
                 }
                 break;
             case 'attacking':
@@ -264,9 +277,9 @@
                 break;
             case 'increasingDifficulty':
                 exports.player.canMove = false;
-                makePlayerSpin('complete');
+                makePlayerSpin(afterDifficultySpin);
                 if (exports.allShapesDoneSpinning) {
-                    exports.currentState = 'complete';
+                    afterDifficultySpin();
                 }
                 break;
         }

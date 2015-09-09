@@ -1,4 +1,34 @@
 (function(exports) {
+    var canvas = exports.canvas = document.getElementById('game');
+    var ctx = exports.ctx = canvas.getContext('2d');
+    exports.cx = canvas.width / 2;
+    exports.cy = canvas.height / 2;
+
+    var drawLoop = function() {
+        exports.backgroundDraw();
+        exports.playerDraw();
+        exports.particleDraw();
+        exports.enemyDraw();
+
+        requestAnimationFrame(drawLoop);
+    };
+
+    var logicLoop = function() {
+        exports.backgroundLogic();
+        exports.particleLogic();
+        exports.enemyLogic();
+
+        setTimeout(logicLoop, 100 / 6);
+    };
+
+    var init = function() {
+        drawLoop();
+        logicLoop();
+    };
+
+    window.addEventListener('load', init, false);
+})(window.game);
+(function(exports) {
     exports.keys = {};
     exports.playerDirection = 1; // Becomes -1 when things should be reversed
 
@@ -34,36 +64,6 @@
             inputPressed('right');
         }
     });
-})(window.game);
-(function(exports) {
-    var canvas = exports.canvas = document.getElementById('game');
-    var ctx = exports.ctx = canvas.getContext('2d');
-    exports.cx = canvas.width / 2;
-    exports.cy = canvas.height / 2;
-
-    var drawLoop = function() {
-        exports.backgroundDraw();
-        exports.playerDraw();
-        exports.particleDraw();
-        exports.enemyDraw();
-
-        requestAnimationFrame(drawLoop);
-    };
-
-    var logicLoop = function() {
-        exports.backgroundLogic();
-        exports.particleLogic();
-        exports.enemyLogic();
-
-        setTimeout(logicLoop, 100 / 6);
-    };
-
-    var init = function() {
-        drawLoop();
-        logicLoop();
-    };
-
-    window.addEventListener('load', init, false);
 })(window.game);
 (function(exports) {
     var ctx = exports.ctx;
@@ -188,7 +188,7 @@
     var enemySpeed = DEFAULT_ENEMY_SPEED; // Changed for level 2
     var spinPlayer = false;
     var alreadySpunPlayer = false;
-    var STEPS_TO_NEXT_LEVEL = 2;
+    var STEPS_TO_NEXT_LEVEL = 3;
 
     var HIT_PARTICLE_COLORS = ['red']; // The color of the particles emitted when the player's triangle is crushed
     var NORMAL_ENEMY_COLOR = 'white';
@@ -295,12 +295,22 @@
         }
     };
 
-    var makePlayerSpin = function(nextState) {
+    var updateIndicator = function() {
+        exports.indicatorObj.numSides = numCrossed;
+    };
+
+    var makePlayerSpin = function(cb) {
         exports.spinAnimate(exports.player, function() {
             exports.turnPlayer(exports.steps);
             exports.spinning = false;
-            exports.currentState = nextState;
+            cb();
         });
+    };
+
+    var afterDifficultySpin = function() {
+        numCrossed = 0;
+        updateIndicator();
+        exports.currentState = 'complete';
     };
 
     var playerHit = function(enemyIndex) {
@@ -309,6 +319,7 @@
             exports.reversePlayerControls();
         }
         numCrossed = 0;
+        updateIndicator();
         exports.currentState = 'crushing';
         exports.player.color = exports.player.skins.flashColor;
         setTimeout(function() {
@@ -339,7 +350,6 @@
     var increaseDifficulty = function() {
         numCrossed++;
         if (numCrossed > STEPS_TO_NEXT_LEVEL) {
-            numCrossed = 0;
             difficultyLevel++;
             exports.triggerSpin(exports.sides);
             enemies = [];
@@ -347,6 +357,7 @@
             exports.currentState = 'increasingDifficulty';
             console.log('Difficulty:', difficultyLevel);
         }
+        updateIndicator();
 
         switch(difficultyLevel) {
             case 2:
@@ -394,7 +405,9 @@
                 break;
             case 'spinning':
                 if (exports.spinning) {
-                    makePlayerSpin('attacking');
+                    makePlayerSpin(function() {
+                        exports.currentState = 'attacking';
+                    });
                 }
                 break;
             case 'attacking':
@@ -418,9 +431,9 @@
                 break;
             case 'increasingDifficulty':
                 exports.player.canMove = false;
-                makePlayerSpin('complete');
+                makePlayerSpin(afterDifficultySpin);
                 if (exports.allShapesDoneSpinning) {
-                    exports.currentState = 'complete';
+                    afterDifficultySpin();
                 }
                 break;
         }
@@ -552,6 +565,9 @@
     exports.steps = 1;
     exports.allShapesDoneSpinning = true;
 
+    exports.indicatorObj = {}; // It indicates how many waves you've crossed by highlighting the center shape
+    var INDICATOR_COLOR = 'blue';
+
     // t = current time
     // b = start value
     // c = change in value
@@ -567,13 +583,18 @@
 
 
     // x, y are the center co-ordinates of the shape
-    var drawShape = function(x, y, centerDist, angle, color) {
+    var drawShape = function(x, y, centerDist, angle, color, numSides) {
         var side = centerDist / (2 * Math.cos(exports.turnStep / 2));
+        if (numSides <= 0) {
+            return;
+        }
+        numSides = numSides || exports.sides;
         ctx.beginPath();
         ctx.moveTo(x + side * Math.cos(angle), y + side * Math.sin(angle));
-        for (var i = 1; i <= exports.sides; i++) {
-            ctx.lineTo(x + side * Math.cos(angle + 2 * Math.PI * i / exports.sides), y + side * Math.sin(angle + 2 * Math.PI * i / exports.sides ));
+        for (var i = 1; i <= numSides; i++) {
+            ctx.lineTo(x + side * Math.cos(angle + i * exports.turnStep), y + side * Math.sin(angle + i * exports.turnStep));
         };
+        ctx.lineTo(x, y);
         ctx.closePath();
 
         ctx.fillStyle = color || 'green';
@@ -591,7 +612,9 @@
             obj.angle = (obj.restAngle + exports.turnStep * exports.steps) % (2 * Math.PI);
             obj.time = 0;
             obj.spinning = false;
-
+            if (obj.numSides) {
+                obj.restAngle = obj.angle;
+            }
             if (cb) {
                 cb();
             }
@@ -608,7 +631,7 @@
         obj.color = color;
         obj.time = 0;
         obj.draw = function() {
-            drawShape(obj.x, obj.y, obj.side, obj.angle, obj.color);
+            drawShape(obj.x, obj.y, obj.side, obj.angle, obj.color, obj.numSides); // obj.numSides is set manually in initBackground
         };
         obj.logic = function() {
             exports.spinAnimate(obj);
@@ -622,6 +645,8 @@
         for (var i = exports.NUM_SHAPES - 1; i >= 0; i--) {
             shapes.push(createShape(exports.cx, exports.cy, minSize + i * DIST_BETWEEN, colors[i % colors.length]));
         };
+        exports.indicatorObj = createShape(exports.cx, exports.cy, minSize, INDICATOR_COLOR);
+        exports.indicatorObj.numSides = 0;
     };
 
     exports.triggerSpin = function(step) {
@@ -634,12 +659,16 @@
             obj.spinning = true;
             obj.time = i;
         }
+        exports.indicatorObj.spinning = true;
+        exports.indicatorObj.time = i - 1;
+        exports.indicatorObj.restAngle = exports.indicatorObj.angle;
     };
 
     exports.backgroundDraw = function() {
         for (var i = 0; i < shapes.length; i++) {
             shapes[i].draw();
         };
+        exports.indicatorObj.draw();
     };
 
     exports.backgroundLogic = function() {
@@ -650,6 +679,9 @@
                 shapes[i].logic();
             }
         };
+        if (exports.indicatorObj.spinning) {
+            exports.indicatorObj.logic();
+        }
     };
 
     exports.initBackground();

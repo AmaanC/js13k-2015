@@ -12,6 +12,9 @@
     exports.steps = 1;
     exports.allShapesDoneSpinning = true;
 
+    exports.indicatorObj = {}; // It indicates how many waves you've crossed by highlighting the center shape
+    var INDICATOR_COLOR = 'blue';
+
     // t = current time
     // b = start value
     // c = change in value
@@ -27,13 +30,18 @@
 
 
     // x, y are the center co-ordinates of the shape
-    var drawShape = function(x, y, centerDist, angle, color) {
+    var drawShape = function(x, y, centerDist, angle, color, numSides) {
         var side = centerDist / (2 * Math.cos(exports.turnStep / 2));
+        if (numSides <= 0) {
+            return;
+        }
+        numSides = numSides || exports.sides;
         ctx.beginPath();
         ctx.moveTo(x + side * Math.cos(angle), y + side * Math.sin(angle));
-        for (var i = 1; i <= exports.sides; i++) {
-            ctx.lineTo(x + side * Math.cos(angle + 2 * Math.PI * i / exports.sides), y + side * Math.sin(angle + 2 * Math.PI * i / exports.sides ));
+        for (var i = 1; i <= numSides; i++) {
+            ctx.lineTo(x + side * Math.cos(angle + i * exports.turnStep), y + side * Math.sin(angle + i * exports.turnStep));
         };
+        ctx.lineTo(x, y);
         ctx.closePath();
 
         ctx.fillStyle = color || 'green';
@@ -51,7 +59,9 @@
             obj.angle = (obj.restAngle + exports.turnStep * exports.steps) % (2 * Math.PI);
             obj.time = 0;
             obj.spinning = false;
-
+            if (obj.numSides) {
+                obj.restAngle = obj.angle;
+            }
             if (cb) {
                 cb();
             }
@@ -68,7 +78,7 @@
         obj.color = color;
         obj.time = 0;
         obj.draw = function() {
-            drawShape(obj.x, obj.y, obj.side, obj.angle, obj.color);
+            drawShape(obj.x, obj.y, obj.side, obj.angle, obj.color, obj.numSides); // obj.numSides is set manually in initBackground
         };
         obj.logic = function() {
             exports.spinAnimate(obj);
@@ -82,6 +92,8 @@
         for (var i = exports.NUM_SHAPES - 1; i >= 0; i--) {
             shapes.push(createShape(exports.cx, exports.cy, minSize + i * DIST_BETWEEN, colors[i % colors.length]));
         };
+        exports.indicatorObj = createShape(exports.cx, exports.cy, minSize, INDICATOR_COLOR);
+        exports.indicatorObj.numSides = 0;
     };
 
     exports.triggerSpin = function(step) {
@@ -94,12 +106,16 @@
             obj.spinning = true;
             obj.time = i;
         }
+        exports.indicatorObj.spinning = true;
+        exports.indicatorObj.time = i - 1;
+        exports.indicatorObj.restAngle = exports.indicatorObj.angle;
     };
 
     exports.backgroundDraw = function() {
         for (var i = 0; i < shapes.length; i++) {
             shapes[i].draw();
         };
+        exports.indicatorObj.draw();
     };
 
     exports.backgroundLogic = function() {
@@ -110,6 +126,9 @@
                 shapes[i].logic();
             }
         };
+        if (exports.indicatorObj.spinning) {
+            exports.indicatorObj.logic();
+        }
     };
 
     exports.initBackground();
