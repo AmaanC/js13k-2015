@@ -1,13 +1,10 @@
 // Tiny audio with tinymusic!
 // Tracks are sheet music,
-// Audio contain the tempo, instruments ( + sheet music ).
-// Audio can be stop / started.
+// Nano emulates nanoloop app.
 (function(exports) {
 
     // Tracks
     var tracks = {};
-    exports.tracks = tracks;
-
     // Tracks - Default
     tracks.default = {};
 
@@ -65,59 +62,40 @@
         '_  q',
     ];
 
-    // Create magic
+    // Create audio ctx, Tiny Music handles interaction
     var ac = new AudioContext();
 
-    // Create audio
-    var audio = {};
-    exports.audio = audio;
+    // Emulate nanoloops
+    var nano = {};
 
-    // Tempo and track
-    audio.tempo = 120;
-    audio.track = tracks.default;
+    // Export nano
+    exports.nano = nano;
 
-    // Give band tempo and music
-    var lead = new TinyMusic.Sequence( ac, audio.tempo, audio.track.lead );
-    var harm = new TinyMusic.Sequence( ac, audio.tempo, audio.track.harm );
-    var bass = new TinyMusic.Sequence( ac, audio.tempo, audio.track.bass );
+    // Set tempo and patten
+    nano.tempo = 120;
+    nano.pattern = tracks.default;
 
-    exports.lead = lead;
-    exports.audio.harm = harm;
-    exports.audio.bass = bass;
+    // Create nanoloops channels
+    var chanA = new TinyMusic.Sequence( ac, nano.temp, nano.pattern.lead );
+    var chanB = new TinyMusic.Sequence( ac, nano.temp, nano.pattern.bass );
+    var chanC = new TinyMusic.Sequence( ac, nano.temp, nano.pattern.lead );
+    var chanD = new TinyMusic.Sequence( ac, nano.temp, nano.pattern.lead );
 
-    // TODO: Make these easier to change, ala presets
-    lead.staccato = 0.55;
-    harm.staccato = 0;
-    bass.staccato = 0.5;
-
-    lead.gain.gain.value = 1.0;
-    harm.gain.gain.value = 0.2;
-    bass.gain.gain.value = 0.1;
-
-    lead.mid.frequency.value = 800;
-    lead.mid.gain.value = 3;
-    harm.mid.frequency.value = 1200;
-    bass.mid.gain.value = 3;
-    bass.bass.gain.value = -6;
-    bass.bass.frequency.value = 80;
-    bass.mid.gain.value = -6;
-    bass.mid.frequency.value = 100;
-    bass.treble.gain.value = -2;
-    bass.treble.frequency.value = 1400;
-
-    exports.audioStart = function () {
-        lead.play();
-        harm.play();
-        bass.play();
+    exports.nanoStart = function () {
+        chanA.play();
+        chanB.play();
+        chanC.play();
+        chanD.play();
     };
 
-    exports.audioStop = function () {
-        lead.stop();
-        harm.stop();
-        bass.stop();
+    exports.nanoStop = function () {
+        chanA.stop();
+        chanB.stop();
+        chanC.stop();
+        chanD.stop();
     };
 
-    // Lazy...
-    exports.audioStart();
+    // Tests.
+    //exports.nanoStart();
 
 })(window.game);
