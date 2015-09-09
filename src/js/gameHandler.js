@@ -34,7 +34,6 @@
     var enemySpeed = DEFAULT_ENEMY_SPEED; // Changed for level 2
     var spinPlayer = false;
     var alreadySpunPlayer = false;
-    var STEPS_TO_NEXT_LEVEL = 3;
 
     var HIT_PARTICLE_COLORS = ['red']; // The color of the particles emitted when the player's triangle is crushed
     var NORMAL_ENEMY_COLOR = 'white';
@@ -195,7 +194,7 @@
 
     var increaseDifficulty = function() {
         numCrossed++;
-        if (numCrossed > STEPS_TO_NEXT_LEVEL) {
+        if (numCrossed > exports.sides) {
             difficultyLevel++;
             exports.triggerSpin(exports.sides);
             enemies = [];
@@ -207,7 +206,7 @@
 
         switch(difficultyLevel) {
             case 2:
-                enemySpeed += (SPEED_LIMIT - DEFAULT_ENEMY_SPEED) / STEPS_TO_NEXT_LEVEL;
+                enemySpeed += (SPEED_LIMIT - DEFAULT_ENEMY_SPEED) / exports.sides;
                 break;
             case 3:
                 spinPlayer = true;
