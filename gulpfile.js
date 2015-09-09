@@ -23,6 +23,7 @@ var zip = require('gulp-zip');
 var jsFolder = 'src/js/';
 var fileList = [
   'tinymusic',
+  'sfx',
   'audio',
   'loops',
   'input',
@@ -116,7 +117,11 @@ gulp.task('dist', ['build'], function() {
     .pipe(zip('archive.zip'))
     .pipe(size())
     .pipe(micro({limit: 13 * 1024}))
+    .on('error', function (err) {
+      gutil.log(chalk.red( err.message ) + '\n' + chalk.gray( err.fileName ) );
+    })
     .pipe(gulp.dest('dist'));
+
 });
 
 gulp.task('watch', function() {
