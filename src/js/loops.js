@@ -1,6 +1,11 @@
 (function(exports) {
     var canvas = exports.canvas = document.getElementById('game');
     var ctx = exports.ctx = canvas.getContext('2d');
+    if (window.innerWidth < canvas.width) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        document.body.style.margin = 0;
+    }
     exports.cx = canvas.width / 2;
     exports.cy = canvas.height / 2;
 
