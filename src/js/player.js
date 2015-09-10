@@ -18,7 +18,7 @@
     };
     player.color = player.skins.default;
     player.alpha = 1;
-    player.numShields = 2; // Shields are automatically drawn with the player
+    player.numShields = 1; // Shields are automatically drawn with the player
     var DIST_BETWEEN_SHIELDS = 20;
     var shieldMinDist = player.dist + 2 * player.halfHeight;
     var SHIELD_COLOR = 'white';
@@ -86,7 +86,6 @@
         // Fill
         ctx.fillStyle = 'rgba('+player.color+', 0)';
         ctx.fill();
-        ctx.shadowBlur = 0;
 
     };
 

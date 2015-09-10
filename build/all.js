@@ -92,7 +92,7 @@
     };
     player.color = player.skins.default;
     player.alpha = 1;
-    player.numShields = 2; // Shields are automatically drawn with the player
+    player.numShields = 1; // Shields are automatically drawn with the player
     var DIST_BETWEEN_SHIELDS = 20;
     var shieldMinDist = player.dist + 2 * player.halfHeight;
     var SHIELD_COLOR = 'white';
@@ -160,7 +160,6 @@
         // Fill
         ctx.fillStyle = 'rgba('+player.color+', 0)';
         ctx.fill();
-        ctx.shadowBlur = 0;
 
     };
 
@@ -189,9 +188,8 @@
 })(window.game);
 // The game has "stages", which are represented by different shapes, i.e. the square is one stage, and then the pentagon is the next.
 // Within each stage, there are the following levels:
-// 1) Plain old dodging. You move left/right and dodge.
-// 2) Faster enemies
-// 3) Player spins X degrees just before the enemies attack. Player has to start accounting for this
+// 1) Faster enemies
+// 2) Player spins X degrees just before the enemies attack. Player has to start accounting for this
 // To cross one level, the player has to dodge the enemy blocks N times. N is the number of waves.
 // When these levels have been crossed, the player goes to the next stage.
 
@@ -433,13 +431,13 @@
         updateIndicator();
 
         switch(difficultyLevel) {
-            case 2:
+            case 1:
                 enemySpeed += (SPEED_LIMIT - DEFAULT_ENEMY_SPEED) / exports.sides;
                 break;
-            case 3:
+            case 2:
                 spinPlayer = true;
                 break;
-            case 4:
+            case 3:
                 exports.changeSides(exports.sides + 1);
                 exports.currentState = 'increasingDifficulty';
                 exports.triggerSpin(exports.sides);
