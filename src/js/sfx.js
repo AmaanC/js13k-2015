@@ -1,41 +1,27 @@
 // Tiny sfx with tinymusic!
 (function(exports) {
 
-    // Effects
-    var effects = {};
-    effects.default = [
-        'A1 e',
-    ];
-    effects.damage = [
-        'D1 q',
-    ];
-    exports.effects = effects;
-
     // Create audio ctx, Tiny Music handles interaction
     var ac = new AudioContext();
+    var tempo = 120;
 
-    // SFX
-    var sfx = {};
-    exports.sfx = sfx;
+    // Damage
+    var damage = new TinyMusic.Sequence( ac, tempo, ['B0 h'] );
 
-    sfx.tempo = 120;
+    damage.loop = false;
+    damage.smoothing = 0.2;
+    damage.staccato = 0.8;
+    damage.waveType = 'sawtooth';
+    damage.gain.gain.value = 10;
+    damage.mid.gain.value = -10;
+    damage.mid.frequency.value = 2000;
+    damage.treble.gain.value = -10;
+    damage.treble.frequency.value = 1000;
+    damage.bass.gain.value = 10;
+    damage.bass.frequency.value = 100;
 
-    // Cheap pattern changer
-    exports.sfxLoader = function(pattern) {
-
-        // Create instance for each effect as TinyNote can't change
-        // patterns using start / stop
-        var chan = new TinyMusic.Sequence( ac, sfx.tempo, pattern );
-        chan.loop = false;
-        chan.play();
-
+    exports.sfxDamage = function() {
+        damage.play();
     };
-
-    // Tests
-    //exports.sfxLoader(effects.default);
-
-    //setTimeout(function() {
-        //exports.sfxLoader(effects.damage);
-    //}, 1000 );
 
 })(window.game);
