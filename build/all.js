@@ -92,7 +92,7 @@
     };
     player.color = player.skins.default;
     player.alpha = 1;
-    player.numShields = 3; // Shields are automatically drawn with the player
+    player.numShields = 2; // Shields are automatically drawn with the player
     var DIST_BETWEEN_SHIELDS = 20;
     var shieldMinDist = player.dist + 2 * player.halfHeight;
     var SHIELD_COLOR = 'white';
@@ -238,6 +238,8 @@
     var PARTICLE_RANGE = 0.4;
     var SHAKE_INTENSITY = 4;
 
+    var MAX_SHIELDS = 3;
+
 
     exports.turnStep = 2 * Math.PI / exports.sides;
 
@@ -358,6 +360,12 @@
         exports.currentState = 'complete';
     };
 
+    var addShield = function() {
+        if (exports.player.numShields < MAX_SHIELDS) {
+            exports.player.numShields++;
+        }
+    };
+
     var playerHit = function() {
         if (crusherEnemyIndex < 0) {
             return;
@@ -418,8 +426,8 @@
             exports.triggerSpin(exports.sides);
             enemies = [];
             exports.player.time = exports.NUM_SHAPES;
-            exports.player.numShields++;
             exports.currentState = 'increasingDifficulty';
+            addShield();
             console.log('Difficulty:', difficultyLevel);
         }
         updateIndicator();
