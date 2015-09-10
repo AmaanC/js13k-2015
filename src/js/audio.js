@@ -13,7 +13,7 @@
     audio.tempo = 120;
     audio.trackCount = 12;
 
-    // Patterns - 4 x 16 bar.
+    // Patterns
     // w  - 1
     // h  - 1/2
     // q  - 1/4
@@ -23,53 +23,47 @@
     var patterns = {};
 
     patterns[0] = [
-        'A1 q',
-        '_  q',
-        'A1 q',
-        '_  q',
-        'A1 q',
-        'A2 q',
-        'A1 q',
-        '_  q',
-        'A1 q',
-        '_  q',
-        'A1 q',
-        '_  q',
-        'A1 q',
-        'A2 q',
-        'A1 q',
-        '_  q',
+        'B2 e',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
     ];
+
 
     // Create tracks
     var tracks = [];
     for (var i = 0; i < audio.trackCount; i++) {
-
         var track = new TinyMusic.Sequence( ac, audio.tempo, patterns[i] );
         track.loop = true;
         tracks.push( track );
-
     }
 
-    // Configure instruments
+    // Configure track 1
     // Smoothing
-    tracks[0].smoothing = 0;
-    tracks[0].staccato = 0;
-
+    tracks[0].smoothing = 0.2;
+    tracks[0].staccato = 0.8;
+    // Wave - square, sine, sawtooth, triangle
+    tracks[0].waveType = 'sine';
     // Volume
     tracks[0].gain.gain.value = 1;
-
-    // Mid
-    tracks[0].mid.frequency.value = 800;
-    tracks[0].mid.gain.value = 3;
-
-    // Bass
-    tracks[0].bass.gain.value = 6;
-    tracks[0].bass.frequency.value = 80;
-
-    // Trebile
-    tracks[0].treble.gain.value = -2;
-    tracks[0].treble.frequency.value = 1400;
+    // Others
+    tracks[0].mid.gain.value = -6;
+    tracks[0].mid.frequency.value = 2000;
+    tracks[0].treble.gain.value = -6;
+    tracks[0].treble.frequency.value = 800;
+    tracks[0].bass.gain.value = 10;
+    tracks[0].bass.frequency.value = 60;
 
 
     // Start tracks
