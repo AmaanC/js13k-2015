@@ -221,42 +221,28 @@ Sequence.prototype.stop = function() {
 // Tiny sfx with tinymusic!
 (function(exports) {
 
-    // Effects
-    var effects = {};
-    effects.default = [
-        'A1 e',
-    ];
-    effects.damage = [
-        'D1 q',
-    ];
-    exports.effects = effects;
-
     // Create audio ctx, Tiny Music handles interaction
     var ac = new AudioContext();
+    var tempo = 120;
 
-    // SFX
-    var sfx = {};
-    exports.sfx = sfx;
+    // Damage
+    var damage = new TinyMusic.Sequence( ac, tempo, ['B0 h'] );
 
-    sfx.tempo = 120;
+    damage.loop = false;
+    damage.smoothing = 0.2;
+    damage.staccato = 0.8;
+    damage.waveType = 'sawtooth';
+    damage.gain.gain.value = 10;
+    damage.mid.gain.value = -10;
+    damage.mid.frequency.value = 2000;
+    damage.treble.gain.value = -10;
+    damage.treble.frequency.value = 1000;
+    damage.bass.gain.value = 10;
+    damage.bass.frequency.value = 100;
 
-    // Cheap pattern changer
-    exports.sfxLoader = function(pattern) {
-
-        // Create instance for each effect as TinyNote can't change
-        // patterns using start / stop
-        var chan = new TinyMusic.Sequence( ac, sfx.tempo, pattern );
-        chan.loop = false;
-        chan.play();
-
+    exports.sfxDamage = function() {
+        damage.play();
     };
-
-    // Tests
-    //exports.sfxLoader(effects.default);
-
-    //setTimeout(function() {
-        //exports.sfxLoader(effects.damage);
-    //}, 1000 );
 
 })(window.game);
 
@@ -275,7 +261,7 @@ Sequence.prototype.stop = function() {
     audio.tempo = 120;
     audio.trackCount = 12;
 
-    // Patterns - 4 x 16 bar.
+    // Patterns
     // w  - 1
     // h  - 1/2
     // q  - 1/4
@@ -285,53 +271,47 @@ Sequence.prototype.stop = function() {
     var patterns = {};
 
     patterns[0] = [
-        'A1 q',
-        '_  q',
-        'A1 q',
-        '_  q',
-        'A1 q',
-        'A2 q',
-        'A1 q',
-        '_  q',
-        'A1 q',
-        '_  q',
-        'A1 q',
-        '_  q',
-        'A1 q',
-        'A2 q',
-        'A1 q',
-        '_  q',
+        'B2 e',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
+        '-  s',
     ];
+
 
     // Create tracks
     var tracks = [];
     for (var i = 0; i < audio.trackCount; i++) {
-
         var track = new TinyMusic.Sequence( ac, audio.tempo, patterns[i] );
         track.loop = true;
         tracks.push( track );
-
     }
 
-    // Configure instruments
+    // Configure track 1
     // Smoothing
-    tracks[0].smoothing = 0;
-    tracks[0].staccato = 0;
-
+    tracks[0].smoothing = 0.2;
+    tracks[0].staccato = 0.8;
+    // Wave - square, sine, sawtooth, triangle
+    tracks[0].waveType = 'sine';
     // Volume
     tracks[0].gain.gain.value = 1;
-
-    // Mid
-    tracks[0].mid.frequency.value = 800;
-    tracks[0].mid.gain.value = 3;
-
-    // Bass
-    tracks[0].bass.gain.value = 6;
-    tracks[0].bass.frequency.value = 80;
-
-    // Trebile
-    tracks[0].treble.gain.value = -2;
-    tracks[0].treble.frequency.value = 1400;
+    // Others
+    tracks[0].mid.gain.value = -6;
+    tracks[0].mid.frequency.value = 2000;
+    tracks[0].treble.gain.value = -6;
+    tracks[0].treble.frequency.value = 800;
+    tracks[0].bass.gain.value = 10;
+    tracks[0].bass.frequency.value = 60;
 
 
     // Start tracks
