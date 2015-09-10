@@ -685,9 +685,10 @@
         if (typeof obj.restAngle === 'undefined') {
             obj.restAngle = obj.angle;
         }
-        obj.angle = easeInOutQuad(obj.time, obj.restAngle, exports.steps * exports.turnStep, exports.steps * duration);
-        if (obj.time > duration * exports.steps) {
-            obj.angle = (obj.restAngle + exports.turnStep * exports.steps) % (2 * Math.PI);
+        var absSteps = Math.abs(exports.steps);
+        obj.angle = easeInOutQuad(obj.time, obj.restAngle, exports.steps * exports.turnStep, absSteps * duration);
+        if (obj.time > duration * absSteps) {
+            obj.angle = (obj.restAngle + exports.turnStep * absSteps) % (2 * Math.PI);
             obj.time = 0;
             obj.spinning = false;
             if (obj.numSides) {
