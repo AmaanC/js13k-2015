@@ -128,8 +128,8 @@ gulp.task('serve', ['build'], function() {
   var app = express();
 
   app.use(express.static(htdocs));
-  app.listen(3000, function() {
-    gutil.log("Server started on '" + chalk.green('http://localhost:3000') + "'");
+  app.listen(4000, function() {
+    gutil.log("Server started on '" + chalk.green('http://localhost:4000') + "'");
   });
 });
 
