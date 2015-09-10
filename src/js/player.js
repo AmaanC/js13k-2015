@@ -18,6 +18,12 @@
     };
     player.color = player.skins.default;
     player.alpha = 1;
+    player.numShields = 3; // Shields are automatically drawn with the player
+    var DIST_BETWEEN_SHIELDS = 20;
+    var shieldMinDist = player.dist + 2 * player.halfHeight;
+    var SHIELD_COLOR = 'white';
+    var SHIELD_RANGE = 0.4;
+
 
     player.hideTemporarily = function() {
         player.alpha = 0;
@@ -26,6 +32,27 @@
             player.alpha = 1;
             exports.currentState = 'complete';
         }, 1000);
+    };
+
+    player.isColliding = function(objCenterDist) {
+        // Only in terms of distance, not in position
+        if (
+            (player.numShields <= 0 && objCenterDist <= player.dist) ||
+            (player.numShields > 0 && objCenterDist <= player.numShields * DIST_BETWEEN_SHIELDS + shieldMinDist)
+        ) {
+            return true;
+        }
+        return false;
+    };
+
+    var shieldDraw = function() {
+        ctx.strokeStyle = SHIELD_COLOR;
+        for (var i = 1; i <= player.numShields; i++) {
+            ctx.beginPath();
+            ctx.arc(0, 0, shieldMinDist + i * DIST_BETWEEN_SHIELDS, -SHIELD_RANGE, SHIELD_RANGE, false);
+            ctx.closePath();
+            ctx.stroke();
+        }
     };
 
     exports.playerDraw = function() {
@@ -37,6 +64,7 @@
 
         ctx.translate(cx, cy);
         ctx.rotate(player.angle);
+        shieldDraw();
 
         // The triangle points to the right by default
         ctx.translate(player.dist + hh, 0);

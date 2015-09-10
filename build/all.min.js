@@ -92,6 +92,12 @@
     };
     player.color = player.skins.default;
     player.alpha = 1;
+    player.numShields = 3; // Shields are automatically drawn with the player
+    var DIST_BETWEEN_SHIELDS = 20;
+    var shieldMinDist = player.dist + 2 * player.halfHeight;
+    var SHIELD_COLOR = 'white';
+    var SHIELD_RANGE = 0.4;
+
 
     player.hideTemporarily = function() {
         player.alpha = 0;
@@ -100,6 +106,27 @@
             player.alpha = 1;
             exports.currentState = 'complete';
         }, 1000);
+    };
+
+    player.isColliding = function(objCenterDist) {
+        // Only in terms of distance, not in position
+        if (
+            (player.numShields <= 0 && objCenterDist <= player.dist) ||
+            (player.numShields > 0 && objCenterDist <= player.numShields * DIST_BETWEEN_SHIELDS + shieldMinDist)
+        ) {
+            return true;
+        }
+        return false;
+    };
+
+    var shieldDraw = function() {
+        ctx.strokeStyle = SHIELD_COLOR;
+        for (var i = 1; i <= player.numShields; i++) {
+            ctx.beginPath();
+            ctx.arc(0, 0, shieldMinDist + i * DIST_BETWEEN_SHIELDS, -SHIELD_RANGE, SHIELD_RANGE, false);
+            ctx.closePath();
+            ctx.stroke();
+        }
     };
 
     exports.playerDraw = function() {
@@ -111,6 +138,7 @@
 
         ctx.translate(cx, cy);
         ctx.rotate(player.angle);
+        shieldDraw();
 
         // The triangle points to the right by default
         ctx.translate(player.dist + hh, 0);
@@ -204,10 +232,10 @@
     var MOVE_IN_SPEED = 5; // Speed at which it moves in from outside the screen to the wait position
     var CRUSH_SPEED = 1;
 
-    var NUM_PARTICLES = 3; // Particles created on collision
+    var NUM_PARTICLES = 5; // Particles created on collision
     var PARTICLE_SPEED = 1;
     var PARTICLE_OFFSET = Math.PI / 2;
-    var PARTICLE_RANGE = 0.2;
+    var PARTICLE_RANGE = 0.4;
     var SHAKE_INTENSITY = 4;
 
 
@@ -283,9 +311,20 @@
         return possible;
     };
 
+    var playerInTheWay = function() {
+        crusherEnemyIndex = enemyPositions.indexOf(exports.player.pos);
+        if (crusherEnemyIndex != -1) {
+            return true;
+        }
+        return false;
+    };
     // Animate enemies to a certain position and call cb when it reaches it
-    var animateEnemies = function(min, speed, cb) {
+    var animateEnemies = function(min, speed, cb, checkFn) {
         var allReached = true;
+        if (checkFn) {
+            checkFn();
+        }
+        
         for (var i = 0; i < enemies.length; i++) {
             enemy = enemies[i];
             enemy.centerDist -= speed || 5;
@@ -319,14 +358,33 @@
         exports.currentState = 'complete';
     };
 
-    var playerHit = function(enemyIndex) {
+    var playerHit = function() {
+        if (crusherEnemyIndex < 0) {
+            return;
+        }
         // Here's what happens when the player is hit
-        if (enemies[enemyIndex].reverser) {
+        if (enemies[crusherEnemyIndex].reverser) {
             exports.reversePlayerControls();
         }
         numCrossed = 0;
         updateIndicator();
         exports.currentState = 'crushing';
+        if (exports.player.numShields > 0) {
+            exports.player.numShields--;
+            // Explode the block into pieces
+            exports.createParticles(
+                Math.random() * NUM_PARTICLES + 1,
+                exports.cx,
+                exports.cy,
+                HIT_PARTICLE_COLORS,
+                PARTICLE_SPEED,
+                exports.player.angle + Math.PI,
+                PARTICLE_RANGE
+            );
+
+            exports.shakeScreen(SHAKE_INTENSITY);
+            return;
+        }
         exports.player.color = exports.player.skins.flashColor;
         setTimeout(function() {
             exports.player.color = exports.player.skins.default;
@@ -360,6 +418,7 @@
             exports.triggerSpin(exports.sides);
             enemies = [];
             exports.player.time = exports.NUM_SHAPES;
+            exports.player.numShields++;
             exports.currentState = 'increasingDifficulty';
             console.log('Difficulty:', difficultyLevel);
         }
@@ -419,13 +478,20 @@
             case 'attacking':
                 exports.player.canMove = true;
                 animateEnemies(exports.player.dist, enemySpeed, function() {
-                    crusherEnemyIndex = enemyPositions.indexOf(exports.player.pos);
-                    if (crusherEnemyIndex != -1) {
-                        playerHit(crusherEnemyIndex);
+                    if (playerInTheWay()) {
+                        playerHit();
+                        exports.currentState = 'crushing';
                     }
                     else {
                         exports.currentState = 'complete';
                         increaseDifficulty();
+                    }
+                }, function() {
+                    if (playerInTheWay() && exports.player.isColliding(enemies[0].centerDist)) {
+                        // A shield was hit
+                        playerHit();
+                        exports.currentState = 'complete';
+                        return;
                     }
                 });
                 break;
