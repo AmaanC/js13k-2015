@@ -69,6 +69,7 @@
             obj.speed = speed || 5;
             obj.color = color || 'black';
             obj.angle = angle || 0;
+            obj.rotAngle = exports.player.angle;
 
             obj.opacity = 1;
             obj.decRate = DEC_RATE;
@@ -82,7 +83,7 @@
                 ctx.globalCompositeOperation = 'lighter';
                 ctx.translate(this.x, this.y);
 
-                ctx.rotate(exports.player.angle); // Custom for this game
+                ctx.rotate(this.rotAngle); // Custom for this game
 
                 ctx.fillStyle = this.color || 'red';
                 ctx.fillRect(exports.player.dist, 0, W, H); // Customized too
