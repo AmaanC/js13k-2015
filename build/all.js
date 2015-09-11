@@ -483,7 +483,7 @@
                 break;
             case 'attacking':
                 exports.player.canMove = true;
-                animateEnemies(exports.player.dist, enemySpeed, function() {
+                animateEnemies(exports.player.dist + exports.player.halfHeight, enemySpeed, function() {
                     if (playerInTheWay()) {
                         playerHit();
                         exports.currentState = 'crushing';
