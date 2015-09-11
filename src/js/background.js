@@ -57,11 +57,11 @@
         var absSteps = Math.abs(exports.steps);
         obj.angle = easeInOutQuad(obj.time, obj.restAngle, exports.steps * exports.turnStep, absSteps * duration);
         if (obj.time > duration * absSteps) {
-            obj.angle = (obj.restAngle + exports.turnStep * absSteps) % (2 * Math.PI);
+            obj.angle = (obj.restAngle + exports.turnStep * exports.steps) % (2 * Math.PI);
             obj.time = 0;
             obj.spinning = false;
-            if (obj.numSides) {
-                obj.restAngle = obj.angle;
+            if (obj === exports.indicatorObj) {
+                // obj.restAngle = obj.angle;
             }
             if (cb) {
                 cb();

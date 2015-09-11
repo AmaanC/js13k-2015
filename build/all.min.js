@@ -169,7 +169,7 @@
             player.pos %= exports.sides;
         }
         if (player.pos < 0) {
-            player.pos = exports.sides + dir;
+            player.pos = exports.sides + player.pos;
         }
         player.angle = exports.turnStep * player.pos;
         player.restAngle = player.angle;
@@ -198,7 +198,7 @@
 
 
 
-    exports.sides = 4; // The number of sides that the player can turn
+    exports.sides = 5; // The number of sides that the player can turn
     var ticks = 0;
     var maxWait = 20;
     var spinAmount = 2; // Will be randomized on different levels
@@ -216,11 +216,12 @@
 
     var ODDS_OF_REVERSER = 0.15; // The odds of an enemy having the power to reverse the player's controls when it hits the player
 
-    var difficultyLevel = 1; // This follows the level progression description at the top of the file
-    var numCrossed = 0; // How many "stages" has the player already dodged? When they cross X stages, we increase the difficulty level
+    var difficultyLevel = 2; // This follows the level progression description at the top of the file
+    var numCrossed = 4; // How many "stages" has the player already dodged? When they cross X stages, we increase the difficulty level
     var enemySpeed = DEFAULT_ENEMY_SPEED; // Changed for level 2
     var spinPlayer = false;
-    var alreadySpunPlayer = false;
+    var LAST_STAGE = 8; // When you get to the end of this stage (shape), the levels reverse
+    var progressionDirection = -1; // Becomes -1 when you cross the last shape
 
     var HIT_PARTICLE_COLORS = ['red']; // The color of the particles emitted when the player's triangle is crushed
     var NORMAL_ENEMY_COLOR = 'white';
@@ -352,8 +353,12 @@
         });
     };
 
+    var resetNumCrossed = function() {
+        numCrossed = (progressionDirection === 1) ? 0 : exports.sides;
+    };
+
     var afterDifficultySpin = function() {
-        numCrossed = 0;
+        resetNumCrossed();
         updateIndicator();
         exports.currentState = 'complete';
     };
@@ -372,7 +377,7 @@
         if (enemies[crusherEnemyIndex].reverser) {
             exports.reversePlayerControls();
         }
-        numCrossed = 0;
+        resetNumCrossed();
         updateIndicator();
         exports.currentState = 'crushing';
         if (exports.player.numShields > 0) {
@@ -418,10 +423,10 @@
     };
 
     var increaseDifficulty = function() {
-        numCrossed++;
-        if (numCrossed > exports.sides) {
-            difficultyLevel++;
-            exports.triggerSpin(exports.sides);
+        numCrossed += progressionDirection;
+        if (numCrossed > exports.sides || numCrossed < 0) {
+            difficultyLevel += progressionDirection;
+            exports.triggerSpin(exports.sides * progressionDirection);
             enemies = [];
             exports.player.time = exports.NUM_SHAPES;
             exports.currentState = 'increasingDifficulty';
@@ -432,18 +437,33 @@
 
         switch(difficultyLevel) {
             case 1:
-                enemySpeed += (SPEED_LIMIT - DEFAULT_ENEMY_SPEED) / exports.sides;
+                spinPlayer = false;
+                enemySpeed += progressionDirection * (SPEED_LIMIT - DEFAULT_ENEMY_SPEED) / exports.sides;
+                if (enemySpeed > SPEED_LIMIT) {
+                    enemySpeed = SPEED_LIMIT;
+                }
+                if (enemySpeed < DEFAULT_ENEMY_SPEED) {
+                    enemySpeed = DEFAULT_ENEMY_SPEED;
+                }
                 break;
             case 2:
                 spinPlayer = true;
                 break;
+            // If we're going in reverse or if we're going straight ahead, we want to loop over
+            case 0:
             case 3:
-                exports.changeSides(exports.sides + 1);
+                exports.changeSides(exports.sides + progressionDirection);
                 exports.currentState = 'increasingDifficulty';
-                exports.triggerSpin(exports.sides);
-                difficultyLevel = 1;
-                enemySpeed = DEFAULT_ENEMY_SPEED;
-                spinPlayer = false;
+                exports.triggerSpin(exports.sides * progressionDirection);
+                if (progressionDirection === 1) {
+                    difficultyLevel = 1;
+                    enemySpeed = DEFAULT_ENEMY_SPEED;
+                    spinPlayer = false;
+                }
+                else {
+                    difficultyLevel = 2;
+                    enemySpeed = SPEED_LIMIT;
+                }
                 break;
         }
     };
@@ -452,7 +472,6 @@
         switch(exports.currentState) {
             case 'complete':
                 exports.player.canMove = true;
-                alreadySpunPlayer = false;
                 enemies = [];
                 enemyPositions = makeEnemyWave();
                 break;
@@ -467,7 +486,7 @@
                     ticks = 0;
                     exports.currentState = 'attacking';
                     if (spinPlayer) {
-                        exports.triggerSpin(spinAmount);
+                        exports.triggerSpin(progressionDirection * spinAmount);
                         exports.player.time = exports.NUM_SHAPES;
                         exports.currentState = 'spinning';
                         exports.player.canMove = false;
@@ -689,11 +708,11 @@
         var absSteps = Math.abs(exports.steps);
         obj.angle = easeInOutQuad(obj.time, obj.restAngle, exports.steps * exports.turnStep, absSteps * duration);
         if (obj.time > duration * absSteps) {
-            obj.angle = (obj.restAngle + exports.turnStep * absSteps) % (2 * Math.PI);
+            obj.angle = (obj.restAngle + exports.turnStep * exports.steps) % (2 * Math.PI);
             obj.time = 0;
             obj.spinning = false;
-            if (obj.numSides) {
-                obj.restAngle = obj.angle;
+            if (obj === exports.indicatorObj) {
+                // obj.restAngle = obj.angle;
             }
             if (cb) {
                 cb();

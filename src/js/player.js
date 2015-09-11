@@ -95,7 +95,7 @@
             player.pos %= exports.sides;
         }
         if (player.pos < 0) {
-            player.pos = exports.sides + dir;
+            player.pos = exports.sides + player.pos;
         }
         player.angle = exports.turnStep * player.pos;
         player.restAngle = player.angle;
