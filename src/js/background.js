@@ -13,7 +13,7 @@
     exports.allShapesDoneSpinning = true;
 
     exports.indicatorObj = {}; // It indicates how many waves you've crossed by highlighting the center shape
-    var INDICATOR_COLOR = 'blue';
+    var INDICATOR_COLOR = 'white';
 
     // t = current time
     // b = start value
