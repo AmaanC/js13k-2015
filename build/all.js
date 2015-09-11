@@ -175,8 +175,8 @@
         player.restAngle = player.angle;
     };
 
-    exports.reversePlayerControls = function() {
-        exports.playerDirection *= -1;
+    exports.setPlayerDirection = function(dir) {
+        exports.playerDirection = dir;
         if (exports.playerDirection > 0) {
             exports.ctx.globalCompositeOperation = 'source-over';
         }
@@ -198,7 +198,7 @@
 
 
 
-    exports.sides = 5; // The number of sides that the player can turn
+    exports.sides = 4; // The number of sides that the player can turn
     var ticks = 0;
     var maxWait = 20;
     var spinAmount = 2; // Will be randomized on different levels
@@ -216,12 +216,13 @@
 
     var ODDS_OF_REVERSER = 0.15; // The odds of an enemy having the power to reverse the player's controls when it hits the player
 
-    var difficultyLevel = 2; // This follows the level progression description at the top of the file
-    var numCrossed = 4; // How many "stages" has the player already dodged? When they cross X stages, we increase the difficulty level
+    var difficultyLevel = 1; // This follows the level progression description at the top of the file
+    var numCrossed = 0; // How many "stages" has the player already dodged? When they cross X stages, we increase the difficulty level
     var enemySpeed = DEFAULT_ENEMY_SPEED; // Changed for level 2
     var spinPlayer = false;
-    var LAST_STAGE = 8; // When you get to the end of this stage (shape), the levels reverse
-    var progressionDirection = -1; // Becomes -1 when you cross the last shape
+    var LAST_STAGE = 5; // When you get to the end of this stage (shape), the levels reverse
+    var FIRST_STAGE = 4;
+    var progressionDirection = 1; // Becomes -1 when you cross the last shape
 
     var HIT_PARTICLE_COLORS = ['red']; // The color of the particles emitted when the player's triangle is crushed
     var NORMAL_ENEMY_COLOR = 'white';
@@ -281,7 +282,7 @@
         var obj = {};
         obj.angle = angle || 0;
         obj.centerDist = ENEMY_CENTER_DIST;
-        obj.reverser = Math.random() < ODDS_OF_REVERSER;
+        obj.reverser = (progressionDirection === 1) ? Math.random() < ODDS_OF_REVERSER : false;
 
         obj.time = 0;
 
@@ -375,7 +376,7 @@
         }
         // Here's what happens when the player is hit
         if (enemies[crusherEnemyIndex].reverser) {
-            exports.reversePlayerControls();
+            exports.setPlayerDirection(-exports.playerDirection);
         }
         resetNumCrossed();
         updateIndicator();
@@ -449,9 +450,15 @@
             case 2:
                 spinPlayer = true;
                 break;
-            // If we're going in reverse or if we're going straight ahead, we want to loop over
+            // If we're going in reverse or if we're going straight ahead, we want to loop over to whichever level is apt
             case 0:
             case 3:
+                // Check if we're at either ends of the "stages"
+                if ((exports.sides >= LAST_STAGE && difficultyLevel === 3) || (exports.sides <= FIRST_STAGE && difficultyLevel === 0)) {
+                    progressionDirection *= -1;
+                    exports.sides -= progressionDirection;
+                    exports.setPlayerDirection(progressionDirection);
+                }
                 exports.changeSides(exports.sides + progressionDirection);
                 exports.currentState = 'increasingDifficulty';
                 exports.triggerSpin(exports.sides * progressionDirection);
@@ -463,6 +470,7 @@
                 else {
                     difficultyLevel = 2;
                     enemySpeed = SPEED_LIMIT;
+                    spinPlayer = true;
                 }
                 break;
         }

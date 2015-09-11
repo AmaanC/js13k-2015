@@ -101,8 +101,8 @@
         player.restAngle = player.angle;
     };
 
-    exports.reversePlayerControls = function() {
-        exports.playerDirection *= -1;
+    exports.setPlayerDirection = function(dir) {
+        exports.playerDirection = dir;
         if (exports.playerDirection > 0) {
             exports.ctx.globalCompositeOperation = 'source-over';
         }
