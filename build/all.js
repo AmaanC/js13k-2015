@@ -545,18 +545,16 @@ Sequence.prototype.stop = function() {
         'B1  e',
         'A1  e',
 
+    ];
+    patterns[1][1] = [
         'G1  w',
 
         'Bb1 w',
 
         'B1  w',
 
-        'C1  h',
-        'C1  q',
-        'B1  e',
-        'A1  e'
+        'C1  w'
     ];
-    patterns[1][1] = changeOctave(patterns[1][0], 1);
 
     // Lead.
     patterns[2] = [];
@@ -581,7 +579,8 @@ Sequence.prototype.stop = function() {
         'D3  s',
         'D3  s',
         'D3  e',
-
+    ];
+    patterns[2][1] = [
         'F2  h',
         'F2  e',
         'F2  e',
@@ -608,7 +607,57 @@ Sequence.prototype.stop = function() {
         'D2  e',
         'D2  e'
     ];
-    patterns[2][1] = changeOctave(patterns[2][0], 1);
+    patterns[2][2] = [
+        '-   w',
+
+        '-   w',
+
+        '-   w',
+
+        'F2  h',
+        'F2  e',
+        'F2  e',
+        'F2  e',
+        'E1  e',
+
+        'F2  q',
+        'F2  q',
+        'E2  e',
+        'E2  e',
+        'D2  e',
+        'D2  e'
+    ];
+    patterns[2][3] = [
+        'F2  e',
+        'F2  e',
+        'E2  e',
+        'E2  e',
+        'A1  e',
+        'A1  e',
+        'A1  e',
+        'A1  s',
+        'A1  s',
+
+        '-   h',
+        'F2  e',
+        'F2  e',
+        'F2  s',
+        'F2  s',
+        'E1  e',
+
+        'F2  h',
+        'F2  e',
+        'F2  e',
+        'F2  e',
+        'E1  e',
+
+        'F2  q',
+        'F2  q',
+        'E2  e',
+        'E2  e',
+        'D2  e',
+        'D2  e'
+    ];
 
     // Create sequences
     var seqs = [];
@@ -662,17 +711,24 @@ Sequence.prototype.stop = function() {
         seqs[seq].push.apply(seqs[seq], patterns[pattern][loop]);
     };
 
+    // Below can be moved
     exports.audioStart();
 
-    // Add loop one.
+    // Add loop one
     exports.audioAddLoop(0,0,0);
     exports.audioAddLoop(1,1,0);
     exports.audioAddLoop(2,2,0);
 
-    // Add loop two.
-    //exports.audioAddLoop(0,0,1);
-    //exports.audioAddLoop(1,1,1);
-    //exports.audioAddLoop(2,2,1);
+    // Add loop two
+    exports.audioAddLoop(0,0,1);
+    exports.audioAddLoop(1,1,1);
+    exports.audioAddLoop(2,2,1);
+
+    // Add loop three
+    exports.audioAddLoop(2,2,2);
+
+    // Add loop four
+    exports.audioAddLoop(2,2,3);
 
     // Mess with all the things
     //exports.audioAddLoop(0,2,1);
