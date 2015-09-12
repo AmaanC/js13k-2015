@@ -22,7 +22,7 @@
         else if (e.keyCode === 37) {
             inputPressed('left');
         }
-        else if (e.keyCode === 32 && exports.currentState === 'endScreen') {
+        else if (e.keyCode === 32 && (exports.currentState === 'endScreen' || exports.currentState === 'mainScreen')) {
             exports.reset();
         }
     });

@@ -60,14 +60,14 @@
 
     exports.turnStep = 2 * Math.PI / exports.sides;
 
-    // Possible states: complete, movingIn, waiting, attacking
+    // Possible states: mainScreen, complete, movingIn, waiting, spinning, attacking, crushing, increasingDifficulty, endScreen
     // Complete: an attack was just completed and new enemies need to slide in
     // Moving In: enemies are moving to position from outside the screen
     // Waiting: enemies are in position, and we're waiting to give the player time
     // Spinning: player is spinning with the background (only when the difficulty is appropriate)
     // Attacking: Animate enemies moving in toward the player from their waiting position
     // Crushing: The player didn't dodge, so the crushing animation is playing right now
-    exports.currentState = 'complete';
+    exports.currentState = 'mainScreen';
 
     exports.reset = function() {
         exports.changeSides(FIRST_STAGE);

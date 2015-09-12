@@ -5,6 +5,16 @@
     var ALPHA_STEP = 0.01;
     var MAX_ALPHA = 0.5;
     var textColor = '';
+
+    exports.mainScreenDraw = function() {
+        ctx.fillStyle = 'rgba(' + exports.END_OVERLAY_COLOR + ', ' + 0.5 + ')';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        exports.write('Press space to play', 'center', 'center', 8, 'white');
+        if (exports.allShapesDoneSpinning) {
+            exports.triggerSpin(exports.sides);
+        }
+    };
+
     exports.endScreenDraw = function() {
         ctx.fillStyle = 'rgba(' + exports.END_OVERLAY_COLOR + ', ' + exports.endAlpha + ')';
         ctx.fillRect(0, 0, canvas.width, canvas.height);

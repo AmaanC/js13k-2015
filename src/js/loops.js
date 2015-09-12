@@ -12,13 +12,19 @@
     exports.player = {};
 
     var drawLoop = function() {
-        exports.backgroundDraw();
-        exports.playerDraw();
-        exports.particleDraw();
-        exports.enemyDraw();
+        if (exports.currentState === 'mainScreen') {
+            exports.backgroundDraw();
+            exports.mainScreenDraw();
+        }
+        else {
+            exports.backgroundDraw();
+            exports.playerDraw();
+            exports.particleDraw();
+            exports.enemyDraw();
 
-        if (exports.currentState === 'endScreen') {
-            exports.endScreenDraw();
+            if (exports.currentState === 'endScreen') {
+                exports.endScreenDraw();
+            }
         }
 
         requestAnimationFrame(drawLoop);

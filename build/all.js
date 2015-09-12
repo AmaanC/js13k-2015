@@ -12,13 +12,19 @@
     exports.player = {};
 
     var drawLoop = function() {
-        exports.backgroundDraw();
-        exports.playerDraw();
-        exports.particleDraw();
-        exports.enemyDraw();
+        if (exports.currentState === 'mainScreen') {
+            exports.backgroundDraw();
+            exports.mainScreenDraw();
+        }
+        else {
+            exports.backgroundDraw();
+            exports.playerDraw();
+            exports.particleDraw();
+            exports.enemyDraw();
 
-        if (exports.currentState === 'endScreen') {
-            exports.endScreenDraw();
+            if (exports.currentState === 'endScreen') {
+                exports.endScreenDraw();
+            }
         }
 
         requestAnimationFrame(drawLoop);
@@ -1027,7 +1033,7 @@ Sequence.prototype.stop = function() {
         else if (e.keyCode === 37) {
             inputPressed('left');
         }
-        else if (e.keyCode === 32 && exports.currentState === 'endScreen') {
+        else if (e.keyCode === 32 && (exports.currentState === 'endScreen' || exports.currentState === 'mainScreen')) {
             exports.reset();
         }
     });
@@ -1107,14 +1113,14 @@ Sequence.prototype.stop = function() {
 
     exports.turnStep = 2 * Math.PI / exports.sides;
 
-    // Possible states: complete, movingIn, waiting, attacking
+    // Possible states: mainScreen, complete, movingIn, waiting, spinning, attacking, crushing, increasingDifficulty, endScreen
     // Complete: an attack was just completed and new enemies need to slide in
     // Moving In: enemies are moving to position from outside the screen
     // Waiting: enemies are in position, and we're waiting to give the player time
     // Spinning: player is spinning with the background (only when the difficulty is appropriate)
     // Attacking: Animate enemies moving in toward the player from their waiting position
     // Crushing: The player didn't dodge, so the crushing animation is playing right now
-    exports.currentState = 'complete';
+    exports.currentState = 'mainScreen';
 
     exports.reset = function() {
         exports.changeSides(FIRST_STAGE);
@@ -1697,6 +1703,16 @@ Sequence.prototype.stop = function() {
     var ALPHA_STEP = 0.01;
     var MAX_ALPHA = 0.5;
     var textColor = '';
+
+    exports.mainScreenDraw = function() {
+        ctx.fillStyle = 'rgba(' + exports.END_OVERLAY_COLOR + ', ' + 0.5 + ')';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        exports.write('Press space to play', 'center', 'center', 8, 'white');
+        if (exports.allShapesDoneSpinning) {
+            exports.triggerSpin(exports.sides);
+        }
+    };
+
     exports.endScreenDraw = function() {
         ctx.fillStyle = 'rgba(' + exports.END_OVERLAY_COLOR + ', ' + exports.endAlpha + ')';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
