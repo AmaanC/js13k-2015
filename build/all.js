@@ -165,6 +165,10 @@
     // Used in background.js
     exports.DEFAULT_BACKGROUND_COLORS = ['#BF0C43', '#F9BA15', '#8EAC00', '#127A97', '#452B72'];
     exports.INDICATOR_COLOR = 'white';
+
+    // Used in uiScreens.js
+    exports.END_OVERLAY_COLOR = '0, 0, 0';
+    exports.END_TEXT_COLOR = '255, 255, 255';
 })(window.game);
 (function ( root, factory ) {
   if ( typeof define === 'function' && define.amd ) {
@@ -1404,7 +1408,9 @@ Sequence.prototype.stop = function() {
                 animateEnemies(exports.player.dist, CRUSH_SPEED, function() {
                     exports.player.hidePlayer();
                     exports.currentState = 'endScreen';
-                    exports.ctx.globalCompositeOperation = 'xor';
+                    if (exports.playerDirection === 1) {
+                        exports.ctx.globalCompositeOperation = 'xor';
+                    }
                 });
                 break;
             case 'increasingDifficulty':
@@ -1668,13 +1674,15 @@ Sequence.prototype.stop = function() {
     var ctx = exports.ctx;
     var canvas = exports.canvas;
     var alpha = 0;
+    var ALPHA_STEP = 0.01;
+    var MAX_ALPHA = 0.5;
     exports.endScreenDraw = function() {
-        ctx.fillStyle = 'rgba(0, 0, 0, ' + alpha + ')';
+        ctx.fillStyle = 'rgba(' + exports.END_OVERLAY_COLOR + ', ' + alpha + ')';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        alpha += 0.01;
-        exports.write('Score: ' + exports.player.score, 'center', 'center', 5, 'rgba(255, 255, 255, ' + 2 * alpha + ')');
-        if (alpha >= 0.5) {
-            alpha = 0.5;
+        alpha += ALPHA_STEP;
+        exports.write('Score: ' + exports.player.score, 'center', 'center', 5, 'rgba(' + exports.END_TEXT_COLOR + ', ' + 2 * alpha + ')');
+        if (alpha >= MAX_ALPHA) {
+            alpha = MAX_ALPHA;
         }
     };
 })(window.game);
