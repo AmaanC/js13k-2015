@@ -9,6 +9,7 @@
     exports.smallerDimension = (canvas.width < canvas.height) ? canvas.width : canvas.height;
     exports.cx = canvas.width / 2;
     exports.cy = canvas.height / 2;
+    exports.player = {};
 
     var drawLoop = function() {
         exports.backgroundDraw();

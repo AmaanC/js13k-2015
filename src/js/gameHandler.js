@@ -36,10 +36,6 @@
     var FIRST_STAGE = 4;
     var progressionDirection = 1; // Becomes -1 when you cross the last shape
 
-    var HIT_PARTICLE_COLORS = ['red']; // The color of the particles emitted when the player's triangle is crushed
-    var NORMAL_ENEMY_COLOR = 'white';
-    var REVERSER_ENEMY_COLOR = 'green';
-
     var WAIT_DIST = 0.35 * exports.smallerDimension;
     var MOVE_IN_SPEED = 5; // Speed at which it moves in from outside the screen to the wait position
     var CRUSH_SPEED = 1;
@@ -106,7 +102,7 @@
             ctx.save();
             ctx.translate(exports.cx, exports.cy);
             ctx.rotate(enemy.angle);
-            ctx.fillStyle = enemy.reverser ? REVERSER_ENEMY_COLOR : NORMAL_ENEMY_COLOR;
+            ctx.fillStyle = enemy.reverser ? exports.REVERSER_ENEMY_COLOR : exports.NORMAL_ENEMY_COLOR;
             ctx.fillRect(enemy.centerDist, -ENEMY_HEIGHT / 2, ENEMY_WIDTH, ENEMY_HEIGHT);
             ctx.restore();
         }
@@ -222,7 +218,7 @@
                 Math.random() * NUM_PARTICLES + 1,
                 exports.cx,
                 exports.cy,
-                HIT_PARTICLE_COLORS,
+                exports.HIT_PARTICLE_COLORS,
                 PARTICLE_SPEED_FOR_SHIELD,
                 exports.player.angle + Math.PI,
                 PARTICLE_RANGE,
@@ -241,7 +237,7 @@
             Math.random() * NUM_PARTICLES + 1,
             exports.cx,
             exports.cy,
-            HIT_PARTICLE_COLORS,
+            exports.HIT_PARTICLE_COLORS,
             PARTICLE_SPEED_FOR_PLAYER,
             exports.player.angle + PARTICLE_OFFSET,
             PARTICLE_RANGE,
@@ -251,7 +247,7 @@
             Math.random() * NUM_PARTICLES + 1,
             exports.cx,
             exports.cy,
-            HIT_PARTICLE_COLORS,
+            exports.HIT_PARTICLE_COLORS,
             PARTICLE_SPEED_FOR_PLAYER,
             exports.player.angle - PARTICLE_OFFSET,
             PARTICLE_RANGE,

@@ -3,8 +3,6 @@
     var shapes = [];
     var ctx = exports.ctx;
 
-    var DEFAULT_COLORS = ['#BF0C43', '#F9BA15', '#8EAC00', '#127A97', '#452B72'];
-
     var minSize = exports.player.dist * 2;
     var DIST_BETWEEN = 80;
 
@@ -13,7 +11,6 @@
     exports.allShapesDoneSpinning = true;
 
     exports.indicatorObj = {}; // It indicates how many waves you've crossed by highlighting the center shape
-    var INDICATOR_COLOR = 'white';
 
     // t = current time
     // b = start value
@@ -89,11 +86,11 @@
 
     exports.initBackground = function() {
         shapes = [];
-        var colors = DEFAULT_COLORS;
+        var colors = exports.DEFAULT_BACKGROUND_COLORS;
         for (var i = exports.NUM_SHAPES - 1; i >= 0; i--) {
             shapes.push(createShape(exports.cx, exports.cy, minSize + i * DIST_BETWEEN, colors[i % colors.length]));
         };
-        exports.indicatorObj = createShape(exports.cx, exports.cy, minSize, INDICATOR_COLOR);
+        exports.indicatorObj = createShape(exports.cx, exports.cy, minSize, exports.INDICATOR_COLOR);
         exports.indicatorObj.numSides = 0;
     };
 
