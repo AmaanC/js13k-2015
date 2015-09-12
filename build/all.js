@@ -875,6 +875,13 @@ Sequence.prototype.stop = function() {
             [, ,],
             [, ,],
             [, ,]
+        ],
+        ':': [
+            [, ,],
+            [, 1,],
+            [, ,],
+            [, ,],
+            [, 1,]
         ]
     };
     var ctx = exports.ctx;
