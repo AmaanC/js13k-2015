@@ -20,6 +20,19 @@
     // s  - 1/16
     // es - 1/8 + 1/16
 
+
+    var changeOctave = function(originalArray, changeBy) {
+        var ret = [];
+        var num = 0;
+        var newNote;
+        ret = originalArray.map(function(note) {
+            newNote = note;
+            num = Number(note.match(/\d/));
+            return note.replace(num, num + changeBy);
+        });
+        return ret;
+    };
+
     // Bass
     var bass = [];
 
@@ -123,29 +136,7 @@
         'B1  e',
         'A1  e'
     ];
-    harmony[1] = [
-        'G2  w',
-
-        'Bb2 w',
-
-        'B2  w',
-
-        'C2  h',
-        'C2  q',
-        'B2  e',
-        'A2  e',
-
-        'G2  w',
-
-        'Bb2 w',
-
-        'B2  w',
-
-        'C2  h',
-        'C2  q',
-        'B2  e',
-        'A2  e'
-    ];
+    harmony[1] = changeOctave(harmony[0], 1);
 
     // Lead.
     var lead = [];
