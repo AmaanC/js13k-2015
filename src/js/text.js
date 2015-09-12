@@ -223,7 +223,7 @@
         var currX = xPos;
         var totalLen;
         if (xPos === 'center') {
-            totalLen = letter[0].length * size * letter.length + (letter.length - 1) * size;
+            totalLen = letter[0].length * size * needed.length + (needed.length - 1) * size;
             // The above is basically = sizeof(all characters) + sizeof(spaces between characters)
             currX = exports.cx - totalLen / 2;
         }

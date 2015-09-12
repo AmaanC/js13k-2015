@@ -17,8 +17,6 @@
         exports.particleDraw();
         exports.enemyDraw();
 
-        // exports.write('Hello', 'center', 'center', 5, 'green');
-
         if (exports.currentState === 'endScreen') {
             exports.endScreenDraw();
         }
@@ -896,7 +894,7 @@ Sequence.prototype.stop = function() {
         var currX = xPos;
         var totalLen;
         if (xPos === 'center') {
-            totalLen = letter[0].length * size * letter.length + (letter.length - 1) * size;
+            totalLen = letter[0].length * size * needed.length + (needed.length - 1) * size;
             // The above is basically = sizeof(all characters) + sizeof(spaces between characters)
             currX = exports.cx - totalLen / 2;
         }
@@ -1600,7 +1598,7 @@ Sequence.prototype.stop = function() {
         alpha += 0.01;
         if (alpha >= 0.5) {
             alpha = 0.5;
-            exports.write('Score: ' + exports.player.score, exports.cx, exports.cy, 5, 'white');
+            exports.write('Score: ' + exports.player.score, 'center', 'center', 5, 'white');
         }
     };
 })(window.game);
