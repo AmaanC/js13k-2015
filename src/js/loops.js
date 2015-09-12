@@ -6,6 +6,7 @@
         canvas.height = window.innerHeight;
         document.body.style.margin = 0;
     }
+    exports.smallerDimension = (canvas.width < canvas.height) ? canvas.width : canvas.height;
     exports.cx = canvas.width / 2;
     exports.cy = canvas.height / 2;
 

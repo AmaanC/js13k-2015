@@ -572,6 +572,7 @@ Sequence.prototype.stop = function() {
         canvas.height = window.innerHeight;
         document.body.style.margin = 0;
     }
+    exports.smallerDimension = (canvas.width < canvas.height) ? canvas.width : canvas.height;
     exports.cx = canvas.width / 2;
     exports.cy = canvas.height / 2;
 
@@ -797,7 +798,7 @@ Sequence.prototype.stop = function() {
     var NORMAL_ENEMY_COLOR = 'white';
     var REVERSER_ENEMY_COLOR = 'green';
 
-    var WAIT_DIST = 200;
+    var WAIT_DIST = 0.35 * exports.smallerDimension;
     var MOVE_IN_SPEED = 5; // Speed at which it moves in from outside the screen to the wait position
     var CRUSH_SPEED = 1;
 
@@ -1244,9 +1245,9 @@ Sequence.prototype.stop = function() {
     var DEFAULT_COLORS = ['#BF0C43', '#F9BA15', '#8EAC00', '#127A97', '#452B72'];
 
     var minSize = exports.player.dist * 2;
-    var DIST_BETWEEN = 50;
+    var DIST_BETWEEN = 80;
 
-    exports.NUM_SHAPES = 20;
+    exports.NUM_SHAPES = 12;
     exports.steps = 1;
     exports.allShapesDoneSpinning = true;
 

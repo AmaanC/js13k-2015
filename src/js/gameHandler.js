@@ -40,7 +40,7 @@
     var NORMAL_ENEMY_COLOR = 'white';
     var REVERSER_ENEMY_COLOR = 'green';
 
-    var WAIT_DIST = 200;
+    var WAIT_DIST = 0.35 * exports.smallerDimension;
     var MOVE_IN_SPEED = 5; // Speed at which it moves in from outside the screen to the wait position
     var CRUSH_SPEED = 1;
 

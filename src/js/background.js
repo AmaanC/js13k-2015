@@ -6,9 +6,9 @@
     var DEFAULT_COLORS = ['#BF0C43', '#F9BA15', '#8EAC00', '#127A97', '#452B72'];
 
     var minSize = exports.player.dist * 2;
-    var DIST_BETWEEN = 50;
+    var DIST_BETWEEN = 80;
 
-    exports.NUM_SHAPES = 20;
+    exports.NUM_SHAPES = 12;
     exports.steps = 1;
     exports.allShapesDoneSpinning = true;
 
