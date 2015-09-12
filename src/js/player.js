@@ -71,16 +71,9 @@
         ctx.closePath();
         ctx.restore();
 
-        // Stroke
-        ctx.lineWidth = 5;
-        ctx.lineJoin = 'round';
-        ctx.strokeStyle = 'rgba('+player.color+', ' + player.alpha + ')';
-        ctx.stroke();
-
         // Fill
-        ctx.fillStyle = 'rgba('+player.color+', 0)';
+        ctx.fillStyle = 'rgba('+player.color+', 1)';
         ctx.fill();
-
 
     };
 
