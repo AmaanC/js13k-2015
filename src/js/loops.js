@@ -26,6 +26,7 @@
                 exports.endScreenDraw();
             }
         }
+        exports.controlsDraw();
 
         requestAnimationFrame(drawLoop);
     };

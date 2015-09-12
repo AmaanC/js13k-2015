@@ -2,6 +2,7 @@
 // Tracks are sheet music,
 // Audio emulates nanoloop app.
 (function(exports) {
+    exports.musicEnabled = true;
 
     // Change Octave
     var changeOctave = function(originalArray, changeBy) {
@@ -284,6 +285,22 @@
         seqs[0].play();
         seqs[1].play();
         seqs[2].play();
+    };
+
+    exports.audioStop = function() {
+        seqs[0].stop();
+        seqs[1].stop();
+        seqs[2].stop();
+    };
+
+    exports.toggleMusic = function() {
+        exports.musicEnabled = !exports.musicEnabled;
+        if (exports.musicEnabled) {
+            exports.audioStart();
+        }
+        else {
+            exports.audioStop();
+        }
     };
 
     exports.audioAddPreset = function(seq,preset) {

@@ -25,18 +25,27 @@
         else if (e.keyCode === 32 && (exports.currentState === 'endScreen' || exports.currentState === 'mainScreen')) {
             exports.reset();
         }
+        else if (e.keyCode === 77) {
+            // Toggle when "m" is pressed
+            exports.toggleMusic();
+        }
     });
     document.body.addEventListener('keyup', function(e) {
         exports.keys[e.keyCode] = false;
     });
 
     document.body.addEventListener('touchstart', function(e) {
-        console.log(e.changedTouches[0].pageX);
         if (e.changedTouches[0].pageX < exports.cx) {
             inputPressed('left');
         }
         else {
             inputPressed('right');
+        }
+    });
+
+    exports.canvas.addEventListener('click', function(e) {
+        if (e.pageX > exports.musicX && e.pageY < exports.musicY) {
+            exports.toggleMusic();
         }
     });
 })(window.game);

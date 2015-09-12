@@ -24,4 +24,7 @@
     exports.MAIN_TEXT_COLOR = 'white';
     exports.END_OVERLAY_COLOR = '0, 0, 0';
     exports.END_TEXT_COLOR = '255, 255, 255';
+    exports.MUSIC_ENABLED_COLOR = 'white';
+    exports.MUSIC_DISABLED_COLOR = 'gray';
+    
 })(window.game);

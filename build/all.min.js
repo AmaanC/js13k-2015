@@ -26,6 +26,7 @@
                 exports.endScreenDraw();
             }
         }
+        exports.controlsDraw();
 
         requestAnimationFrame(drawLoop);
     };
@@ -181,6 +182,9 @@
     exports.MAIN_TEXT_COLOR = 'white';
     exports.END_OVERLAY_COLOR = '0, 0, 0';
     exports.END_TEXT_COLOR = '255, 255, 255';
+    exports.MUSIC_ENABLED_COLOR = 'white';
+    exports.MUSIC_DISABLED_COLOR = 'gray';
+    
 })(window.game);
 (function ( root, factory ) {
   if ( typeof define === 'function' && define.amd ) {
@@ -434,6 +438,7 @@ Sequence.prototype.stop = function() {
 // Tracks are sheet music,
 // Audio emulates nanoloop app.
 (function(exports) {
+    exports.musicEnabled = true;
 
     // Change Octave
     var changeOctave = function(originalArray, changeBy) {
@@ -718,6 +723,22 @@ Sequence.prototype.stop = function() {
         seqs[2].play();
     };
 
+    exports.audioStop = function() {
+        seqs[0].stop();
+        seqs[1].stop();
+        seqs[2].stop();
+    };
+
+    exports.toggleMusic = function() {
+        exports.musicEnabled = !exports.musicEnabled;
+        if (exports.musicEnabled) {
+            exports.audioStart();
+        }
+        else {
+            exports.audioStop();
+        }
+    };
+
     exports.audioAddPreset = function(seq,preset) {
 
     };
@@ -974,6 +995,14 @@ Sequence.prototype.stop = function() {
             [1,0,1,1],
             [1,,],
             [1,1,1,1],
+        ],
+        // This won't draw "#"! It draws the music symbol.
+        '#': [
+            [,1,1,1,1],
+            [,1,,,1],
+            [,1,,,1],
+            [1,1,,1,1],
+            [1,1,,1,1],
         ]
     };
     var ctx = exports.ctx;
@@ -1056,18 +1085,27 @@ Sequence.prototype.stop = function() {
         else if (e.keyCode === 32 && (exports.currentState === 'endScreen' || exports.currentState === 'mainScreen')) {
             exports.reset();
         }
+        else if (e.keyCode === 77) {
+            // Toggle when "m" is pressed
+            exports.toggleMusic();
+        }
     });
     document.body.addEventListener('keyup', function(e) {
         exports.keys[e.keyCode] = false;
     });
 
     document.body.addEventListener('touchstart', function(e) {
-        console.log(e.changedTouches[0].pageX);
         if (e.changedTouches[0].pageX < exports.cx) {
             inputPressed('left');
         }
         else {
             inputPressed('right');
+        }
+    });
+
+    exports.canvas.addEventListener('click', function(e) {
+        if (e.pageX > exports.musicX && e.pageY < exports.musicY) {
+            exports.toggleMusic();
         }
     });
 })(window.game);
@@ -1723,13 +1761,23 @@ Sequence.prototype.stop = function() {
     var ALPHA_STEP = 0.01;
     var MAX_ALPHA = 0.5;
     var textColor = '';
+    exports.musicX = canvas.width - 40;
+    exports.musicY = 60;
+    var musicHeight = 50;
+
+    exports.controlsDraw = function() {
+        textColor = exports.musicEnabled ? exports.MUSIC_ENABLED_COLOR : exports.MUSIC_DISABLED_COLOR;
+        exports.write('#', exports.musicX, exports.musicY - musicHeight, 5, textColor);
+    };
 
     exports.mainScreenDraw = function() {
         ctx.fillStyle = 'rgba(' + exports.MAIN_OVERLAY_RGBA + ')';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        exports.controlsDraw();
+
         textColor = exports.MAIN_TEXT_COLOR;
         exports.write('Press space to play', 'center', 'center', 8, textColor);
-
         exports.write('A game by @AmaanC and @mikedidthis', 'center', canvas.height - 40, 5, textColor);
         
         if (exports.allShapesDoneSpinning) {
