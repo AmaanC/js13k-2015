@@ -10,6 +10,9 @@
         ctx.fillStyle = 'rgba(' + exports.END_OVERLAY_COLOR + ', ' + 0.5 + ')';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         exports.write('Press space to play', 'center', 'center', 8, 'white');
+
+        exports.write('A game by @AmaanC and @mikedidthis', 50, canvas.height - 40, 5, 'white');
+        
         if (exports.allShapesDoneSpinning) {
             exports.triggerSpin(exports.sides);
         }
