@@ -20,6 +20,8 @@
     exports.INDICATOR_COLOR = 'white';
 
     // Used in uiScreens.js
+    exports.MAIN_OVERLAY_RGBA = '0, 0, 0, 0.5';
+    exports.MAIN_TEXT_COLOR = 'white';
     exports.END_OVERLAY_COLOR = '0, 0, 0';
     exports.END_TEXT_COLOR = '255, 255, 255';
 })(window.game);

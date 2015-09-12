@@ -177,6 +177,8 @@
     exports.INDICATOR_COLOR = 'white';
 
     // Used in uiScreens.js
+    exports.MAIN_OVERLAY_RGBA = '0, 0, 0, 0.5';
+    exports.MAIN_TEXT_COLOR = 'white';
     exports.END_OVERLAY_COLOR = '0, 0, 0';
     exports.END_TEXT_COLOR = '255, 255, 255';
 })(window.game);
@@ -1713,11 +1715,12 @@ Sequence.prototype.stop = function() {
     var textColor = '';
 
     exports.mainScreenDraw = function() {
-        ctx.fillStyle = 'rgba(' + exports.END_OVERLAY_COLOR + ', ' + 0.5 + ')';
+        ctx.fillStyle = 'rgba(' + exports.MAIN_OVERLAY_RGBA + ')';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        exports.write('Press space to play', 'center', 'center', 8, 'white');
+        textColor = exports.MAIN_TEXT_COLOR;
+        exports.write('Press space to play', 'center', 'center', 8, textColor);
 
-        exports.write('A game by @AmaanC and @mikedidthis', 50, canvas.height - 40, 5, 'white');
+        exports.write('A game by @AmaanC and @mikedidthis', 50, canvas.height - 40, 5, textColor);
         
         if (exports.allShapesDoneSpinning) {
             exports.triggerSpin(exports.sides);
