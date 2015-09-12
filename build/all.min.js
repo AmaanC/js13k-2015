@@ -164,6 +164,7 @@
 
     // Used in background.js
     exports.DEFAULT_BACKGROUND_COLORS = ['#BF0C43', '#F9BA15', '#8EAC00', '#127A97', '#452B72'];
+    exports.PLAYER_SPIN_BACKGROUND_COLORS = ['#dcdcd2', '#262626'];
     exports.INDICATOR_COLOR = 'white';
 
     // Used in uiScreens.js
@@ -1326,9 +1327,11 @@ Sequence.prototype.stop = function() {
                 if (enemySpeed < DEFAULT_ENEMY_SPEED) {
                     enemySpeed = DEFAULT_ENEMY_SPEED;
                 }
+                exports.changeColors(exports.DEFAULT_BACKGROUND_COLORS);
                 break;
             case 2:
                 spinPlayer = true;
+                exports.changeColors(exports.PLAYER_SPIN_BACKGROUND_COLORS);
                 break;
             // If we're going in reverse or if we're going straight ahead, we want to loop over to whichever level is apt
             case 0:
@@ -1632,8 +1635,15 @@ Sequence.prototype.stop = function() {
         for (var i = exports.NUM_SHAPES - 1; i >= 0; i--) {
             shapes.push(createShape(exports.cx, exports.cy, minSize + i * DIST_BETWEEN, colors[i % colors.length]));
         };
+        exports.changeColors(colors);
         exports.indicatorObj = createShape(exports.cx, exports.cy, minSize, exports.INDICATOR_COLOR);
         exports.indicatorObj.numSides = 0;
+    };
+
+    exports.changeColors = function(arr) {
+        for (var i = exports.NUM_SHAPES - 1; i >= 0; i--) {
+            shapes[i].color = arr[i % arr.length];
+        }
     };
 
     exports.triggerSpin = function(step) {

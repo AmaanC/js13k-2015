@@ -90,8 +90,15 @@
         for (var i = exports.NUM_SHAPES - 1; i >= 0; i--) {
             shapes.push(createShape(exports.cx, exports.cy, minSize + i * DIST_BETWEEN, colors[i % colors.length]));
         };
+        exports.changeColors(colors);
         exports.indicatorObj = createShape(exports.cx, exports.cy, minSize, exports.INDICATOR_COLOR);
         exports.indicatorObj.numSides = 0;
+    };
+
+    exports.changeColors = function(arr) {
+        for (var i = exports.NUM_SHAPES - 1; i >= 0; i--) {
+            shapes[i].color = arr[i % arr.length];
+        }
     };
 
     exports.triggerSpin = function(step) {

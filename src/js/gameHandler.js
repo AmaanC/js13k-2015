@@ -283,9 +283,11 @@
                 if (enemySpeed < DEFAULT_ENEMY_SPEED) {
                     enemySpeed = DEFAULT_ENEMY_SPEED;
                 }
+                exports.changeColors(exports.DEFAULT_BACKGROUND_COLORS);
                 break;
             case 2:
                 spinPlayer = true;
+                exports.changeColors(exports.PLAYER_SPIN_BACKGROUND_COLORS);
                 break;
             // If we're going in reverse or if we're going straight ahead, we want to loop over to whichever level is apt
             case 0:

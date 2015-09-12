@@ -13,6 +13,7 @@
 
     // Used in background.js
     exports.DEFAULT_BACKGROUND_COLORS = ['#BF0C43', '#F9BA15', '#8EAC00', '#127A97', '#452B72'];
+    exports.PLAYER_SPIN_BACKGROUND_COLORS = ['#dcdcd2', '#262626'];
     exports.INDICATOR_COLOR = 'white';
 
     // Used in uiScreens.js
