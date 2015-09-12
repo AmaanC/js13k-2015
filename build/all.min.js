@@ -252,7 +252,7 @@ Sequence.prototype.stop = function() {
 (function(exports) {
 
     // Create audio ctx, Tiny Music handles interaction
-    var ac = new AudioContext();
+    var ac = typeof AudioContext !== 'undefined' ? new AudioContext : new webkitAudioContext;
 
     // Emulate nanoloops
     var audio = exports.audio = {};
@@ -443,14 +443,15 @@ Sequence.prototype.stop = function() {
         'E2  e',
         'E2  e',
         'D2  e',
-        'D2  e',
+        'D2  e'
     ];
 
     lead[1] = [
     ];
 
+
+
     // Create sequences
-    var seqs = {};
     var seq1 = new TinyMusic.Sequence( ac, audio.tempo, bass[0] );
     var seq2 = new TinyMusic.Sequence( ac, audio.tempo, harmony[0] );
     var seq3 = new TinyMusic.Sequence( ac, audio.tempo, lead[0] );
@@ -473,6 +474,7 @@ Sequence.prototype.stop = function() {
     seq2.createCustomWave([-1,1,-1,1,-1,1],[1,0,1,0,1,0]);
     seq3.createCustomWave([-1,-0.9,-0.6,-0.3, 0, 0.3, 0.6, 0.9,1]);
 
+    console.log( lead, seq1, seq2, seq3 );
     seq1.play();
     seq2.play();
     seq3.play();
