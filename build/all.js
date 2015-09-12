@@ -914,9 +914,6 @@ Sequence.prototype.stop = function() {
     // Animate enemies to a certain position and call cb when it reaches it
     var animateEnemies = function(min, speed, cb, checkFn) {
         var allReached = true;
-        if (checkFn) {
-            checkFn();
-        }
         
         for (var i = 0; i < enemies.length; i++) {
             enemy = enemies[i];
@@ -930,6 +927,9 @@ Sequence.prototype.stop = function() {
         }
         if (allReached) {
             cb();
+        }
+        else if (checkFn) {
+            checkFn();
         }
     };
 
@@ -971,7 +971,6 @@ Sequence.prototype.stop = function() {
         }
         resetNumCrossed();
         updateIndicator();
-        exports.currentState = 'crushing';
         if (exports.player.numShields > 0) {
             exports.player.numShields--;
             exports.player.score += SHIELD_LOST_SCORE;
@@ -986,10 +985,11 @@ Sequence.prototype.stop = function() {
                 PARTICLE_RANGE,
                 DEC_RATE_FOR_SHIELD_PARTICLES
             );
-
+            exports.currentState = 'complete';
             exports.shakeScreen(SHAKE_INTENSITY);
             return;
         }
+        exports.currentState = 'crushing';
         exports.player.color = exports.player.skins.flashColor;
         setTimeout(function() {
             exports.player.color = exports.player.skins.default;
@@ -1111,7 +1111,6 @@ Sequence.prototype.stop = function() {
                 animateEnemies(exports.player.dist + exports.player.halfHeight, enemySpeed, function() {
                     if (playerInTheWay()) {
                         playerHit();
-                        exports.currentState = 'crushing';
                     }
                     else {
                         exports.currentState = 'complete';
@@ -1121,7 +1120,6 @@ Sequence.prototype.stop = function() {
                     if (playerInTheWay() && exports.player.isColliding(enemies[0].centerDist)) {
                         // A shield was hit
                         playerHit();
-                        exports.currentState = 'complete';
                         return;
                     }
                 });
