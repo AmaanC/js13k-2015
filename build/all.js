@@ -163,8 +163,11 @@
     exports.REVERSER_ENEMY_COLOR = 'green';
 
     // Used in background.js
-    exports.DEFAULT_BACKGROUND_COLORS = ['#BF0C43', '#F9BA15', '#8EAC00', '#127A97', '#452B72'];
-    exports.PLAYER_SPIN_BACKGROUND_COLORS = ['#dcdcd2', '#262626'];
+    exports.bgIndex = 0;
+    exports.BACKGROUND_COLORS_LIST = [
+        ['#BF0C43', '#F9BA15', '#8EAC00', '#127A97', '#452B72'],
+        ['#BF0C43', '#F9BA15', '#452B72', '#127A97', '#8EAC00']
+    ];
     exports.INDICATOR_COLOR = 'white';
 
     // Used in uiScreens.js
@@ -1309,6 +1312,11 @@ Sequence.prototype.stop = function() {
             exports.player.score += LEVEL_CHANGE_SCORE;
             difficultyLevel += progressionDirection;
             exports.triggerSpin(exports.sides * progressionDirection);
+            exports.bgIndex++;
+            if (exports.bgIndex >= exports.BACKGROUND_COLORS_LIST.length) {
+                exports.bgIndex = 0;
+            }
+            exports.changeColors(exports.BACKGROUND_COLORS_LIST[exports.bgIndex]);
             enemies = [];
             exports.player.time = 2 * exports.NUM_SHAPES;
             exports.currentState = 'increasingDifficulty';
@@ -1327,11 +1335,9 @@ Sequence.prototype.stop = function() {
                 if (enemySpeed < DEFAULT_ENEMY_SPEED) {
                     enemySpeed = DEFAULT_ENEMY_SPEED;
                 }
-                exports.changeColors(exports.DEFAULT_BACKGROUND_COLORS);
                 break;
             case 2:
                 spinPlayer = true;
-                exports.changeColors(exports.PLAYER_SPIN_BACKGROUND_COLORS);
                 break;
             // If we're going in reverse or if we're going straight ahead, we want to loop over to whichever level is apt
             case 0:
@@ -1631,7 +1637,7 @@ Sequence.prototype.stop = function() {
 
     exports.initBackground = function() {
         shapes = [];
-        var colors = exports.DEFAULT_BACKGROUND_COLORS;
+        var colors = exports.BACKGROUND_COLORS_LIST[exports.bgIndex];
         for (var i = exports.NUM_SHAPES - 1; i >= 0; i--) {
             shapes.push(createShape(exports.cx, exports.cy, minSize + i * DIST_BETWEEN, colors[i % colors.length]));
         };

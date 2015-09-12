@@ -86,7 +86,7 @@
 
     exports.initBackground = function() {
         shapes = [];
-        var colors = exports.DEFAULT_BACKGROUND_COLORS;
+        var colors = exports.BACKGROUND_COLORS_LIST[exports.bgIndex];
         for (var i = exports.NUM_SHAPES - 1; i >= 0; i--) {
             shapes.push(createShape(exports.cx, exports.cy, minSize + i * DIST_BETWEEN, colors[i % colors.length]));
         };

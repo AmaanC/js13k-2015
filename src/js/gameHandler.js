@@ -265,6 +265,11 @@
             exports.player.score += LEVEL_CHANGE_SCORE;
             difficultyLevel += progressionDirection;
             exports.triggerSpin(exports.sides * progressionDirection);
+            exports.bgIndex++;
+            if (exports.bgIndex >= exports.BACKGROUND_COLORS_LIST.length) {
+                exports.bgIndex = 0;
+            }
+            exports.changeColors(exports.BACKGROUND_COLORS_LIST[exports.bgIndex]);
             enemies = [];
             exports.player.time = 2 * exports.NUM_SHAPES;
             exports.currentState = 'increasingDifficulty';
@@ -283,11 +288,9 @@
                 if (enemySpeed < DEFAULT_ENEMY_SPEED) {
                     enemySpeed = DEFAULT_ENEMY_SPEED;
                 }
-                exports.changeColors(exports.DEFAULT_BACKGROUND_COLORS);
                 break;
             case 2:
                 spinPlayer = true;
-                exports.changeColors(exports.PLAYER_SPIN_BACKGROUND_COLORS);
                 break;
             // If we're going in reverse or if we're going straight ahead, we want to loop over to whichever level is apt
             case 0:
