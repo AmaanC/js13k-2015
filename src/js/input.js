@@ -22,6 +22,9 @@
         else if (e.keyCode === 37) {
             inputPressed('left');
         }
+        else if (e.keyCode === 32 && exports.currentState === 'endScreen') {
+            exports.reset();
+        }
     });
     document.body.addEventListener('keyup', function(e) {
         exports.keys[e.keyCode] = false;

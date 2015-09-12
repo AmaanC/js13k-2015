@@ -992,7 +992,7 @@ Sequence.prototype.stop = function() {
                         ctx.fillRect(currX + x * size, currY, size, size);
                     }
                 }
-                addX = row.length * size;
+                addX = Math.max(addX, row.length * size);
                 currY += size;
             }
             currX += size + addX;
@@ -1022,6 +1022,9 @@ Sequence.prototype.stop = function() {
         }
         else if (e.keyCode === 37) {
             inputPressed('left');
+        }
+        else if (e.keyCode === 32 && exports.currentState === 'endScreen') {
+            exports.reset();
         }
     });
     document.body.addEventListener('keyup', function(e) {
@@ -1676,11 +1679,15 @@ Sequence.prototype.stop = function() {
     var alpha = 0;
     var ALPHA_STEP = 0.01;
     var MAX_ALPHA = 0.5;
+    var textColor = '';
     exports.endScreenDraw = function() {
         ctx.fillStyle = 'rgba(' + exports.END_OVERLAY_COLOR + ', ' + alpha + ')';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         alpha += ALPHA_STEP;
-        exports.write('Score: ' + exports.player.score, 'center', 'center', 5, 'rgba(' + exports.END_TEXT_COLOR + ', ' + 2 * alpha + ')');
+        textColor = 'rgba(' + exports.END_TEXT_COLOR + ', ' + 2 * alpha + ')';
+        exports.write('Score: ' + exports.player.score, 'center', 'center', 5, textColor);
+        exports.write('Press space to restart', 'center', exports.cy + 50, 5, textColor);
+
         if (alpha >= MAX_ALPHA) {
             alpha = MAX_ALPHA;
         }

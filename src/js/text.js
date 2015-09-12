@@ -249,7 +249,7 @@
                         ctx.fillRect(currX + x * size, currY, size, size);
                     }
                 }
-                addX = row.length * size;
+                addX = Math.max(addX, row.length * size);
                 currY += size;
             }
             currX += size + addX;
