@@ -617,22 +617,34 @@ Sequence.prototype.stop = function() {
     seqs[2] = new TinyMusic.Sequence(ac, audio.tempo, []);
 
     // Set volume
-    seqs[0].gain.gain.value = 0.6;
-    seqs[1].gain.gain.value = 0.8;
-    seqs[2].gain.gain.value = 0.8;
+    seqs[0].gain.gain.value = 0.35;
+    seqs[1].gain.gain.value = 0.25;
+    seqs[2].gain.gain.value = 0.45;
 
     // Set coolness
     seqs[0].smoothing = 0.5;
-    seqs[1].smoothing = 0.1;
+    seqs[1].smoothing = 0.4;
     seqs[2].smoothing = 0.1;
     seqs[0].staccato = 0.4;
-    seqs[1].staccato = 0.4;
+    seqs[1].staccato = 0.1;
     seqs[2].staccato = 0.4;
 
-    // Set wave
-    seqs[0].createCustomWave([-1,0,1,0.5,-1,0,1]);
+    // Set wave - square, sine, sawtooth, triangle, custom
+    seqs[0].waveType = 'triangle';
     seqs[1].createCustomWave([-1,1,-1,1,-1,1],[1,0,1,0,1,0]);
     seqs[2].createCustomWave([-1,-0.9,-0.6,-0.3, 0, 0.3, 0.6, 0.9,1]);
+
+    seqs[0].mid.gain.value = -6;
+    seqs[0].mid.frequency.value = 500;
+    seqs[1].mid.frequency.value = 800;
+    seqs[1].mid.gain.value = 3;
+    seqs[2].mid.frequency.value = 1200;
+    seqs[2].mid.gain.value = 3;
+
+    seqs[0].treble.gain.value = -2;
+    seqs[0].treble.frequency.value = 1400;
+    seqs[0].bass.gain.value = 6;
+    seqs[0].bass.frequency.value = 80;
 
     // Start all sequence
     exports.audioStart = function() {
@@ -658,14 +670,14 @@ Sequence.prototype.stop = function() {
     exports.audioAddLoop(2,2,0);
 
     // Add loop two.
-    exports.audioAddLoop(0,0,1);
-    exports.audioAddLoop(1,1,1);
-    exports.audioAddLoop(2,2,1);
+    //exports.audioAddLoop(0,0,1);
+    //exports.audioAddLoop(1,1,1);
+    //exports.audioAddLoop(2,2,1);
 
     // Mess with all the things
-    exports.audioAddLoop(0,2,1);
-    exports.audioAddLoop(1,0,1);
-    exports.audioAddLoop(2,1,0);
+    //exports.audioAddLoop(0,2,1);
+    //exports.audioAddLoop(1,0,1);
+    //exports.audioAddLoop(2,1,0);
 
 })(window.game);
 
