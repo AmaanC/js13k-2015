@@ -45,10 +45,13 @@
     var CRUSH_SPEED = 1;
 
     var NUM_PARTICLES = 5; // Particles created on collision
-    var PARTICLE_SPEED = 1;
+    var PARTICLE_SPEED_FOR_SHIELD = 1;
+    var PARTICLE_SPEED_FOR_PLAYER = 0.3;
     var PARTICLE_OFFSET = Math.PI / 2;
     var PARTICLE_RANGE = 0.4;
     var SHAKE_INTENSITY = 4;
+    var DEC_RATE_FOR_SHIELD_PARTICLES = 0.02;
+    var DEC_RATE_FOR_PLAYER_PARTICLES = 0.005;
 
     var MAX_SHIELDS = 3;
 
@@ -78,6 +81,8 @@
         spinPlayer = false;
         progressionDirection = 1;
         exports.setPlayerDirection(1);
+        exports.player.alpha = 1;
+        exports.player.numShields = exports.player.DEFAULT_NUM_SHIELDS;
 
         exports.currentState = 'complete';
     };
@@ -205,6 +210,7 @@
         }
         // Here's what happens when the player is hit
         if (enemies[crusherEnemyIndex].reverser) {
+            console.log('Reverse');
             exports.setPlayerDirection(-exports.playerDirection);
         }
         resetNumCrossed();
@@ -219,9 +225,10 @@
                 exports.cx,
                 exports.cy,
                 HIT_PARTICLE_COLORS,
-                PARTICLE_SPEED,
+                PARTICLE_SPEED_FOR_SHIELD,
                 exports.player.angle + Math.PI,
-                PARTICLE_RANGE
+                PARTICLE_RANGE,
+                DEC_RATE_FOR_SHIELD_PARTICLES
             );
 
             exports.shakeScreen(SHAKE_INTENSITY);
@@ -236,18 +243,20 @@
             exports.cx,
             exports.cy,
             HIT_PARTICLE_COLORS,
-            PARTICLE_SPEED,
+            PARTICLE_SPEED_FOR_PLAYER,
             exports.player.angle + PARTICLE_OFFSET,
-            PARTICLE_RANGE
+            PARTICLE_RANGE,
+            DEC_RATE_FOR_PLAYER_PARTICLES
         );
         exports.createParticles(
             Math.random() * NUM_PARTICLES + 1,
             exports.cx,
             exports.cy,
             HIT_PARTICLE_COLORS,
-            PARTICLE_SPEED,
+            PARTICLE_SPEED_FOR_PLAYER,
             exports.player.angle - PARTICLE_OFFSET,
-            PARTICLE_RANGE
+            PARTICLE_RANGE,
+            DEC_RATE_FOR_PLAYER_PARTICLES
         );
 
         exports.shakeScreen(SHAKE_INTENSITY);
@@ -364,7 +373,8 @@
             case 'crushing':
                 exports.player.canMove = false;
                 animateEnemies(exports.player.dist, CRUSH_SPEED, function() {
-                    exports.player.hideTemporarily();
+                    exports.player.hidePlayer();
+                    exports.currentState = 'endScreen';
                 });
                 break;
             case 'increasingDifficulty':

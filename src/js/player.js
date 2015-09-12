@@ -18,7 +18,8 @@
     };
     player.color = player.skins.default;
     player.alpha = 1;
-    player.numShields = 1; // Shields are automatically drawn with the player
+    player.DEFAULT_NUM_SHIELDS = 1;
+    player.numShields = player.DEFAULT_NUM_SHIELDS; // Shields are automatically drawn with the player
     player.score = 0;
     var DIST_BETWEEN_SHIELDS = 20;
     var shieldMinDist = player.dist + 2 * player.halfHeight;
@@ -26,12 +27,10 @@
     var SHIELD_RANGE = 0.4;
 
 
-    player.hideTemporarily = function() {
+    player.hidePlayer = function() {
         player.alpha = 0;
         setTimeout(function() {
             player.color = player.skins.default;
-            player.alpha = 1;
-            exports.currentState = 'complete';
         }, 1000);
     };
 

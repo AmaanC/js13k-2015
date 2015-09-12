@@ -659,7 +659,8 @@ Sequence.prototype.stop = function() {
     };
     player.color = player.skins.default;
     player.alpha = 1;
-    player.numShields = 1; // Shields are automatically drawn with the player
+    player.DEFAULT_NUM_SHIELDS = 1;
+    player.numShields = player.DEFAULT_NUM_SHIELDS; // Shields are automatically drawn with the player
     player.score = 0;
     var DIST_BETWEEN_SHIELDS = 20;
     var shieldMinDist = player.dist + 2 * player.halfHeight;
@@ -667,12 +668,10 @@ Sequence.prototype.stop = function() {
     var SHIELD_RANGE = 0.4;
 
 
-    player.hideTemporarily = function() {
+    player.hidePlayer = function() {
         player.alpha = 0;
         setTimeout(function() {
             player.color = player.skins.default;
-            player.alpha = 1;
-            exports.currentState = 'complete';
         }, 1000);
     };
 
@@ -803,10 +802,13 @@ Sequence.prototype.stop = function() {
     var CRUSH_SPEED = 1;
 
     var NUM_PARTICLES = 5; // Particles created on collision
-    var PARTICLE_SPEED = 1;
+    var PARTICLE_SPEED_FOR_SHIELD = 1;
+    var PARTICLE_SPEED_FOR_PLAYER = 0.3;
     var PARTICLE_OFFSET = Math.PI / 2;
     var PARTICLE_RANGE = 0.4;
     var SHAKE_INTENSITY = 4;
+    var DEC_RATE_FOR_SHIELD_PARTICLES = 0.02;
+    var DEC_RATE_FOR_PLAYER_PARTICLES = 0.005;
 
     var MAX_SHIELDS = 3;
 
@@ -836,6 +838,8 @@ Sequence.prototype.stop = function() {
         spinPlayer = false;
         progressionDirection = 1;
         exports.setPlayerDirection(1);
+        exports.player.alpha = 1;
+        exports.player.numShields = exports.player.DEFAULT_NUM_SHIELDS;
 
         exports.currentState = 'complete';
     };
@@ -963,6 +967,7 @@ Sequence.prototype.stop = function() {
         }
         // Here's what happens when the player is hit
         if (enemies[crusherEnemyIndex].reverser) {
+            console.log('Reverse');
             exports.setPlayerDirection(-exports.playerDirection);
         }
         resetNumCrossed();
@@ -977,9 +982,10 @@ Sequence.prototype.stop = function() {
                 exports.cx,
                 exports.cy,
                 HIT_PARTICLE_COLORS,
-                PARTICLE_SPEED,
+                PARTICLE_SPEED_FOR_SHIELD,
                 exports.player.angle + Math.PI,
-                PARTICLE_RANGE
+                PARTICLE_RANGE,
+                DEC_RATE_FOR_SHIELD_PARTICLES
             );
 
             exports.shakeScreen(SHAKE_INTENSITY);
@@ -994,18 +1000,20 @@ Sequence.prototype.stop = function() {
             exports.cx,
             exports.cy,
             HIT_PARTICLE_COLORS,
-            PARTICLE_SPEED,
+            PARTICLE_SPEED_FOR_PLAYER,
             exports.player.angle + PARTICLE_OFFSET,
-            PARTICLE_RANGE
+            PARTICLE_RANGE,
+            DEC_RATE_FOR_PLAYER_PARTICLES
         );
         exports.createParticles(
             Math.random() * NUM_PARTICLES + 1,
             exports.cx,
             exports.cy,
             HIT_PARTICLE_COLORS,
-            PARTICLE_SPEED,
+            PARTICLE_SPEED_FOR_PLAYER,
             exports.player.angle - PARTICLE_OFFSET,
-            PARTICLE_RANGE
+            PARTICLE_RANGE,
+            DEC_RATE_FOR_PLAYER_PARTICLES
         );
 
         exports.shakeScreen(SHAKE_INTENSITY);
@@ -1122,7 +1130,8 @@ Sequence.prototype.stop = function() {
             case 'crushing':
                 exports.player.canMove = false;
                 animateEnemies(exports.player.dist, CRUSH_SPEED, function() {
-                    exports.player.hideTemporarily();
+                    exports.player.hidePlayer();
+                    exports.currentState = 'endScreen';
                 });
                 break;
             case 'increasingDifficulty':
@@ -1200,7 +1209,7 @@ Sequence.prototype.stop = function() {
             }
         };
 
-        var addParticle = function(x, y, speed, color, angle) {
+        var addParticle = function(x, y, speed, color, angle, decRate) {
             var obj = {};
             obj.x = x;
             obj.y = y;
@@ -1210,7 +1219,7 @@ Sequence.prototype.stop = function() {
             obj.rotAngle = exports.player.angle;
 
             obj.opacity = 1;
-            obj.decRate = DEC_RATE;
+            obj.decRate = decRate || DEC_RATE;
             obj.dx = Math.cos(obj.angle) * obj.speed;
             obj.dy = Math.sin(obj.angle) * obj.speed;
 
@@ -1241,9 +1250,9 @@ Sequence.prototype.stop = function() {
             particles.push(obj);
         };
 
-        return function(num, x, y, colorList, speed, angle, range) {
+        return function(num, x, y, colorList, speed, angle, range, decRate) {
             for (var i = 0; i < num; i++) {
-                addParticle(x, y, speed, colorList[Math.floor(Math.random() * colorList.length)], angle - range + (Math.random() * 2 * range));
+                addParticle(x, y, speed, colorList[Math.floor(Math.random() * colorList.length)], angle - range + (Math.random() * 2 * range), decRate);
             }
         };
     })();

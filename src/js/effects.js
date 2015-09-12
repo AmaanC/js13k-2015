@@ -62,7 +62,7 @@
             }
         };
 
-        var addParticle = function(x, y, speed, color, angle) {
+        var addParticle = function(x, y, speed, color, angle, decRate) {
             var obj = {};
             obj.x = x;
             obj.y = y;
@@ -72,7 +72,7 @@
             obj.rotAngle = exports.player.angle;
 
             obj.opacity = 1;
-            obj.decRate = DEC_RATE;
+            obj.decRate = decRate || DEC_RATE;
             obj.dx = Math.cos(obj.angle) * obj.speed;
             obj.dy = Math.sin(obj.angle) * obj.speed;
 
@@ -103,9 +103,9 @@
             particles.push(obj);
         };
 
-        return function(num, x, y, colorList, speed, angle, range) {
+        return function(num, x, y, colorList, speed, angle, range, decRate) {
             for (var i = 0; i < num; i++) {
-                addParticle(x, y, speed, colorList[Math.floor(Math.random() * colorList.length)], angle - range + (Math.random() * 2 * range));
+                addParticle(x, y, speed, colorList[Math.floor(Math.random() * colorList.length)], angle - range + (Math.random() * 2 * range), decRate);
             }
         };
     })();
