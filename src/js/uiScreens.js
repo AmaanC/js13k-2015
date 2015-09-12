@@ -8,8 +8,7 @@
         alpha += 0.01;
         if (alpha >= 0.5) {
             alpha = 0.5;
-            ctx.fillStyle = 'white';
-            ctx.fillText('Score: ' + exports.player.score, exports.cx, exports.cy);
+            exports.write('Score: ' + exports.player.score, 'center', 'center', 5, 'white');
         }
     };
 })(window.game);

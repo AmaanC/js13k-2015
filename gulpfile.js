@@ -28,6 +28,7 @@ var fileList = [
   'tinymusic',
   'sfx',
   'audio',
+  'text',
   'input',
   'gameHandler',
   'effects',
