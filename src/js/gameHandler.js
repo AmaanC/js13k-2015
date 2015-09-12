@@ -29,7 +29,7 @@
     var ODDS_OF_REVERSER = 0.15; // The odds of an enemy having the power to reverse the player's controls when it hits the player
 
     var difficultyLevel = 1; // This follows the level progression description at the top of the file
-    var numCrossed = 0; // How many "stages" has the player already dodged? When they cross X stages, we increase the difficulty level
+    var numCrossed = 0; // How many "waves" has the player already dodged? When they cross X waves, we increase the difficulty level
     var enemySpeed = DEFAULT_ENEMY_SPEED; // Changed for level 2
     var spinPlayer = false;
     var LAST_STAGE = 5; // When you get to the end of this stage (shape), the levels reverse
@@ -51,6 +51,12 @@
     var SHAKE_INTENSITY = 4;
 
     var MAX_SHIELDS = 3;
+
+    // How much the score increases by when you cross a wave, a level, or a stage (shape)
+    var WAVE_CROSSED_SCORE = 10; // Multiplied by the level you're on, so you get more points on level 2 than on level 1
+    var LEVEL_CHANGE_SCORE = 100;
+    var SHAPE_CHANGE_SCORE = 300;
+    var SHIELD_LOST_SCORE = -30;
 
 
     exports.turnStep = 2 * Math.PI / exports.sides;
@@ -195,6 +201,7 @@
         exports.currentState = 'crushing';
         if (exports.player.numShields > 0) {
             exports.player.numShields--;
+            exports.player.score += SHIELD_LOST_SCORE;
             // Explode the block into pieces
             exports.createParticles(
                 Math.random() * NUM_PARTICLES + 1,
@@ -237,7 +244,9 @@
 
     var increaseDifficulty = function() {
         numCrossed += progressionDirection;
+        exports.player.score += WAVE_CROSSED_SCORE * difficultyLevel;
         if (numCrossed > exports.sides || numCrossed < 0) {
+            exports.player.score += LEVEL_CHANGE_SCORE;
             difficultyLevel += progressionDirection;
             exports.triggerSpin(exports.sides * progressionDirection);
             enemies = [];
@@ -266,6 +275,7 @@
             case 0:
             case 3:
                 // Check if we're at either ends of the "stages"
+                exports.player.score += SHAPE_CHANGE_SCORE;
                 if ((exports.sides >= LAST_STAGE && difficultyLevel === 3) || (exports.sides <= FIRST_STAGE && difficultyLevel === 0)) {
                     progressionDirection *= -1;
                     exports.sides -= progressionDirection;
