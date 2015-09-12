@@ -306,7 +306,7 @@ Sequence.prototype.stop = function() {
         'B1  e',
         'B1  e',
         'B1  e',
-        'B1  e',
+        'B1  e'
     ];
     bass[1] = [
         'E1  e',
@@ -343,7 +343,7 @@ Sequence.prototype.stop = function() {
         'B1  s',
         'B1  s',
         'B1  e',
-        'B1  e',
+        'B1  e'
     ];
 
     // Harmony
