@@ -1254,6 +1254,7 @@ Sequence.prototype.stop = function() {
         exports.setPlayerDirection(1);
         exports.player.alpha = 1;
         exports.player.numShields = exports.player.DEFAULT_NUM_SHIELDS;
+        exports.player.score = 0;
 
         exports.currentState = 'complete';
     };
