@@ -368,6 +368,7 @@
                 animateEnemies(exports.player.dist, CRUSH_SPEED, function() {
                     exports.player.hidePlayer();
                     exports.currentState = 'endScreen';
+                    exports.ctx.globalCompositeOperation = 'xor';
                 });
                 break;
             case 'increasingDifficulty':
