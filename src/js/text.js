@@ -237,8 +237,18 @@
         ctx.fillStyle = color || 'black';
         var currX = xPos;
         var totalLen;
+        var totalWidth;
+        var currWidths;
         if (xPos === 'center') {
-            totalLen = letter[0].length * size * needed.length + (needed.length - 1) * size;
+            totalWidth = 0;
+            for (var i = 0; i < needed.length; i++) {
+                letter = needed[i];
+                currWidths = letter.map(function(elem) {
+                    return elem.length;
+                });
+                totalWidth += Math.max.apply(undefined, currWidths);
+            }
+            totalLen = totalWidth * size + (needed.length - 1) * size;
             // The above is basically = sizeof(all characters) + sizeof(spaces between characters)
             currX = exports.cx - totalLen / 2;
         }

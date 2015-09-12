@@ -12,7 +12,7 @@
         textColor = exports.MAIN_TEXT_COLOR;
         exports.write('Press space to play', 'center', 'center', 8, textColor);
 
-        exports.write('A game by @AmaanC and @mikedidthis', 50, canvas.height - 40, 5, textColor);
+        exports.write('A game by @AmaanC and @mikedidthis', 'center', canvas.height - 40, 5, textColor);
         
         if (exports.allShapesDoneSpinning) {
             exports.triggerSpin(exports.sides);
