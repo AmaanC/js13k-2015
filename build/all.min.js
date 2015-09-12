@@ -967,7 +967,6 @@ Sequence.prototype.stop = function() {
         }
         // Here's what happens when the player is hit
         if (enemies[crusherEnemyIndex].reverser) {
-            console.log('Reverse');
             exports.setPlayerDirection(-exports.playerDirection);
         }
         resetNumCrossed();
