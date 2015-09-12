@@ -71,6 +71,7 @@
 
     exports.reset = function() {
         exports.changeSides(FIRST_STAGE);
+        exports.endAlpha = 0;
         enemies = [];
         numCrossed = 0;
         difficultyLevel = 1;
