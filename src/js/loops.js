@@ -16,6 +16,10 @@
         exports.particleDraw();
         exports.enemyDraw();
 
+        if (exports.currentState === 'endScreen') {
+            exports.endScreenDraw();
+        }
+
         requestAnimationFrame(drawLoop);
     };
 

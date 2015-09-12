@@ -30,7 +30,8 @@ var fileList = [
   'player',
   'gameHandler',
   'effects',
-  'background'
+  'background',
+  'uiScreens'
 
 ];
 fileList = fileList.map(function(fileName) {
