@@ -14,4 +14,8 @@
     // Used in background.js
     exports.DEFAULT_BACKGROUND_COLORS = ['#BF0C43', '#F9BA15', '#8EAC00', '#127A97', '#452B72'];
     exports.INDICATOR_COLOR = 'white';
+
+    // Used in uiScreens.js
+    exports.END_OVERLAY_COLOR = '0, 0, 0';
+    exports.END_TEXT_COLOR = '255, 255, 255';
 })(window.game);
