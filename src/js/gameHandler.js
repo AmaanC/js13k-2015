@@ -70,6 +70,17 @@
     // Crushing: The player didn't dodge, so the crushing animation is playing right now
     exports.currentState = 'complete';
 
+    exports.reset = function() {
+        exports.changeSides(FIRST_STAGE);
+        enemies = [];
+        numCrossed = 0;
+        difficultyLevel = 1;
+        spinPlayer = false;
+        progressionDirection = 1;
+        exports.setPlayerDirection(1);
+
+        exports.currentState = 'complete';
+    };
 
     exports.changeSides = function(n) {
         enemies = [];
