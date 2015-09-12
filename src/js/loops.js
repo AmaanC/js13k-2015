@@ -17,6 +17,8 @@
         exports.particleDraw();
         exports.enemyDraw();
 
+        // exports.write('Hello', 'center', 'center', 5, 'green');
+
         if (exports.currentState === 'endScreen') {
             exports.endScreenDraw();
         }
