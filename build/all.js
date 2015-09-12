@@ -259,7 +259,6 @@ Sequence.prototype.stop = function() {
 
     // Set tempo and track count
     audio.tempo = 120;
-    audio.trackCount = 12;
 
     // Patterns
     // w  - 1
@@ -268,65 +267,300 @@ Sequence.prototype.stop = function() {
     // e  - 1/8
     // s  - 1/16
     // es - 1/8 + 1/16
-    var patterns = {};
 
-    patterns[0] = [
-        'B2 e',
-        '-  s',
-        '-  s',
-        '-  s',
-        '-  s',
-        '-  s',
-        '-  s',
-        '-  s',
-        '-  s',
-        '-  s',
-        '-  s',
-        '-  s',
-        '-  s',
-        '-  s',
-        '-  s',
+    // Bass
+    var bass = [];
+
+    bass[0] = [
+        'E1  e',
+        'F1  e',
+        'F1  e',
+        'F1  e',
+        'F1  e',
+        'F1  e',
+        'F1  e',
+        'F1  e',
+
+        'G1  e',
+        'G1  e',
+        'G1  e',
+        'G1  e',
+        'G1  e',
+        'G1  e',
+        'G1  e',
+        'G1  e',
+
+        'A1  e',
+        'A1  e',
+        'A1  e',
+        'A1  e',
+        'A1  e',
+        'A1  e',
+        'A1  e',
+        'A1  e',
+
+        'B1  e',
+        'B1  e',
+        'B1  e',
+        'B1  e',
+        'B1  e',
+        'B1  e',
+        'B1  e',
+        'B1  e',
+    ];
+    bass[1] = [
+        'E1  e',
+        'F1  e',
+        'F1  e',
+        'F1  e',
+        'F1  e',
+        'F1  e',
+        'F1  e',
+        'F1  e',
+
+        'G1  e',
+        'G1  e',
+        'G1  e',
+        'G1  e',
+        'G1  e',
+        'G1  e',
+        'G1  e',
+        'G1  e',
+
+        'A1  e',
+        'A1  e',
+        'A1  e',
+        'A1  e',
+        'A1  e',
+        'A1  e',
+        'A1  e',
+        'A1  e',
+
+        'B1  s',
+        'B1  s',
+        'B1  e',
+        'B1  e',
+        'B1  s',
+        'B1  s',
+        'B1  e',
+        'B1  e',
     ];
 
+    // Harmony
+    var harmony = [];
+    harmony[0] = [
+        'G1  w',
 
-    // Create tracks
-    var tracks = [];
-    for (var i = 0; i < audio.trackCount; i++) {
-        var track = new TinyMusic.Sequence( ac, audio.tempo, patterns[i] );
-        track.loop = true;
-        tracks.push( track );
-    }
+        'Bb1 w',
 
-    // Configure track 1
-    // Smoothing
-    tracks[0].smoothing = 0.2;
-    tracks[0].staccato = 0.8;
-    // Wave - square, sine, sawtooth, triangle
-    tracks[0].waveType = 'sine';
-    // Volume
-    tracks[0].gain.gain.value = 1;
-    // Others
-    tracks[0].mid.gain.value = -6;
-    tracks[0].mid.frequency.value = 2000;
-    tracks[0].treble.gain.value = -6;
-    tracks[0].treble.frequency.value = 800;
-    tracks[0].bass.gain.value = 10;
-    tracks[0].bass.frequency.value = 60;
+        'B1  w',
 
+        'C1  h',
+        'C1  q',
+        'B1  e',
+        'A1  e',
 
-    // Start tracks
-    exports.startAudio = function() {
-        for (var i = 0; i < tracks.length; i++) {
-            tracks[i].play();
-        }
-    };
+        'G1  w',
 
-    // Stop tracks
-    exports.startStop = function() {
-        for (var i = 0; i < tracks.length; i++) {
-            tracks[i].stop();
-        }
-    };
+        'Bb1 w',
+
+        'B1  w',
+
+        'C1  h',
+        'C1  q',
+        'B1  e',
+        'A1  e'
+    ];
+    harmony[1] = [
+        'G2  w',
+
+        'Bb2 w',
+
+        'B2  w',
+
+        'C2  h',
+        'C2  q',
+        'B2  e',
+        'A2  e',
+
+        'G2  w',
+
+        'Bb2 w',
+
+        'B2  w',
+
+        'C2  h',
+        'C2  q',
+        'B2  e',
+        'A2  e'
+    ];
+
+    // Lead.
+    var lead = [];
+    lead[0] = [
+        '-   w',
+
+        '-   w',
+
+        '-   w',
+
+        '-   w',
+
+        '-   w',
+
+        '-   w',
+
+        '-   w',
+
+        '-   h',
+        'E3  e',
+        'E3  e',
+        'D3  s',
+        'D3  s',
+        'D3  e',
+
+        'F2  h',
+        'F2  e',
+        'F2  e',
+        'F2  e',
+        'E1  e',
+
+        '-   h',
+        'F2  e',
+        'F2  e',
+        'F2  s',
+        'F2  s',
+        'E1  e',
+
+        'F2  h',
+        'F2  e',
+        'F2  e',
+        'F2  e',
+        'E1  e',
+
+        'F2  q',
+        'F2  q',
+        'E2  e',
+        'E2  e',
+        'D2  e',
+        'D2  e',
+    ];
+
+    lead[1] = [
+    ];
+
+    // Create sequences
+    var seqs = {};
+    var seq1 = new TinyMusic.Sequence( ac, audio.tempo, bass[0] );
+    var seq2 = new TinyMusic.Sequence( ac, audio.tempo, harmony[0] );
+    var seq3 = new TinyMusic.Sequence( ac, audio.tempo, lead[0] );
+
+    // Set volume
+    seq1.gain.gain.value = 0.6;
+    seq2.gain.gain.value = 0.8;
+    seq3.gain.gain.value = 0.8;
+
+    // Set coolness
+    seq1.smoothing = 0.5;
+    seq2.smoothing = 0.1;
+    seq3.smoothing = 0.1;
+    seq1.staccato = 0.4;
+    seq2.staccato = 0.4;
+    seq3.staccato = 0.4;
+
+    // Set wave
+    seq1.createCustomWave([-1,0,1,0.5,-1,0,1]);
+    seq2.createCustomWave([-1,1,-1,1,-1,1],[1,0,1,0,1,0]);
+    seq3.createCustomWave([-1,-0.9,-0.6,-0.3, 0, 0.3, 0.6, 0.9,1]);
+
+    seq1.play();
+    seq2.play();
+    seq3.play();
+
+    // FIXME: Pushing arrays doesn't work below is temporary
+    seq1.push(
+        'E1  e',
+        'F1  e',
+        'F1  e',
+        'F1  e',
+        'F1  e',
+        'F1  e',
+        'F1  e',
+        'F1  e',
+
+        'G1  e',
+        'G1  e',
+        'G1  e',
+        'G1  e',
+        'G1  e',
+        'G1  e',
+        'G1  e',
+        'G1  e',
+
+        'A1  e',
+        'A1  e',
+        'A1  e',
+        'A1  e',
+        'A1  e',
+        'A1  e',
+        'A1  e',
+        'A1  e',
+
+        'B1  s',
+        'B1  s',
+        'B1  e',
+        'B1  e',
+        'B1  s',
+        'B1  s',
+        'B1  e',
+        'B1  e'
+    );
+    seq2.push(
+        'G2  w',
+
+        'Bb2 w',
+
+        'B2  w',
+
+        'C2  h',
+        'C2  q',
+        'B2  e',
+        'A2  e',
+
+        'G2  w',
+
+        'Bb2 w',
+
+        'B2  w',
+
+        'C2  h',
+        'C2  q',
+        'B2  e',
+        'A2  e'
+    );
+    seq3.push(
+        'G2  w',
+
+        'Bb2 w',
+
+        'B2  w',
+
+        'C2  h',
+        'C2  q',
+        'B2  e',
+        'A2  e',
+
+        'G2  w',
+
+        'Bb2 w',
+
+        'B2  w',
+
+        'C2  h',
+        'C2  q',
+        'B2  e',
+        'A2  e'
+    );
 
 })(window.game);
 
