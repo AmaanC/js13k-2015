@@ -97,7 +97,8 @@
 
     exports.changeColors = function(arr) {
         for (var i = exports.NUM_SHAPES - 1; i >= 0; i--) {
-            shapes[i].color = arr[i % arr.length];
+            shapes[i].color = exports.shade(arr[0], -0.1*i/2);
+            exports.INDICATOR_COLOR = arr[0];
         }
     };
 
@@ -105,7 +106,7 @@
         var obj;
         exports.steps = step;
         exports.spinning = true;
-        
+
         for (var i = 0; i < shapes.length; i++) {
             obj = shapes[i];
             obj.spinning = true;
