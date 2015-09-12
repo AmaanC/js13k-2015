@@ -22,12 +22,13 @@ var zip = require('gulp-zip');
 
 var jsFolder = 'src/js/';
 var fileList = [
+  'loops',
+  'player',
+  'colors',
   'tinymusic',
   'sfx',
   'audio',
-  'loops',
   'input',
-  'player',
   'gameHandler',
   'effects',
   'background',

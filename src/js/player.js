@@ -1,8 +1,7 @@
 (function(exports) {
     var ctx = exports.ctx;
 
-    var player = {};
-    exports.player = player;
+    var player = exports.player;
     player.cx = exports.cx;
     player.cy = exports.cy;
     player.time = 0;
@@ -12,11 +11,6 @@
     player.angle = 0;
     player.canMove = true;
     player.pos = 0; // This indicates which multiple of turnStep it is. For example, with 4 sides, player would point down when pos is 1
-    player.skins = {
-        default: '13, 213, 252',
-        flashColor: '255, 184, 253' // The color it flashes briefly when hit
-    };
-    player.color = player.skins.default;
     player.alpha = 1;
     player.DEFAULT_NUM_SHIELDS = 1;
     player.numShields = player.DEFAULT_NUM_SHIELDS; // Shields are automatically drawn with the player
