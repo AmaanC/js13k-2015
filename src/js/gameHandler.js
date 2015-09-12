@@ -269,7 +269,7 @@
             difficultyLevel += progressionDirection;
             exports.triggerSpin(exports.sides * progressionDirection);
             enemies = [];
-            exports.player.time = exports.NUM_SHAPES;
+            exports.player.time = 2 * exports.NUM_SHAPES;
             exports.currentState = 'increasingDifficulty';
             addShield();
             console.log('Difficulty:', difficultyLevel);
@@ -336,7 +336,7 @@
                     exports.currentState = 'attacking';
                     if (spinPlayer) {
                         exports.triggerSpin(progressionDirection * spinAmount);
-                        exports.player.time = exports.NUM_SHAPES;
+                        exports.player.time = 2 * exports.NUM_SHAPES;
                         exports.currentState = 'spinning';
                         exports.player.canMove = false;
                     }

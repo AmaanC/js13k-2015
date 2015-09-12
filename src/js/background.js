@@ -105,10 +105,10 @@
         for (var i = 0; i < shapes.length; i++) {
             obj = shapes[i];
             obj.spinning = true;
-            obj.time = i;
+            obj.time = 2 * i;
         }
         exports.indicatorObj.spinning = true;
-        exports.indicatorObj.time = i - 1;
+        exports.indicatorObj.time = 2 * (i - 1);
         exports.indicatorObj.restAngle = exports.indicatorObj.angle;
     };
 
