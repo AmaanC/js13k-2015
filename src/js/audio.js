@@ -117,7 +117,7 @@
     ];
 
     // Harmony
-    patterns[1]= [];
+    patterns[1] = [];
     patterns[1][0] = [
         'G1  w',
 
@@ -303,12 +303,12 @@
         }
     };
 
-    exports.audioAddPreset = function(seq,preset) {
+    exports.audioAddPreset = function(seq, preset) {
 
     };
 
     // Adds loop to seq
-    exports.audioAddLoop = function(seq,pattern,loop) {
+    exports.audioAddLoop = function(seq, pattern, loop) {
         seqs[seq].push.apply(seqs[seq], patterns[pattern][loop]);
     };
 
