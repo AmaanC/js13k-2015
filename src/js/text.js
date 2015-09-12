@@ -321,11 +321,11 @@
             }
             totalLen = totalWidth * size + (needed.length - 1) * size;
             // The above is basically = sizeof(all characters) + sizeof(spaces between characters)
-            currX = exports.cx - totalLen / 2;
+            currX = Math.floor(exports.cx - totalLen / 2);
         }
         if (yPos === 'center') {
             totalLen = letter.length * size;
-            yPos = exports.cy - totalLen / 2;
+            yPos = Math.floor(exports.cy - totalLen / 2);
         }
         for (i = 0; i < needed.length; i++) {
             letter = needed[i];
