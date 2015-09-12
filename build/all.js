@@ -164,7 +164,7 @@
     exports.player.color = exports.player.skins.default;
 
     // Used in gameHandler.js
-    exports.HIT_PARTICLE_COLORS = ['red']; // The color of the particles emitted when the player's triangle is crushed
+    exports.HIT_PARTICLE_COLORS = ['red', 'white']; // The color of the particles emitted when the player's triangle is crushed
     exports.NORMAL_ENEMY_COLOR = 'white';
     exports.REVERSER_ENEMY_COLOR = 'green';
 
