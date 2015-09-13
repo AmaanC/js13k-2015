@@ -318,9 +318,9 @@
     };
 
     // Add loop one
-    //exports.audioAddLoop(0,0,0);
-    //exports.audioAddLoop(1,1,0);
-    //exports.audioAddLoop(2,2,0);
+    exports.audioAddLoop(0,0,0);
+    exports.audioAddLoop(1,1,0);
+    exports.audioAddLoop(2,2,0);
 
     // Add loop two
     //exports.audioAddLoop(0,0,1);

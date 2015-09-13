@@ -844,9 +844,9 @@ Sequence.prototype.stop = function() {
     };
 
     // Add loop one
-    //exports.audioAddLoop(0,0,0);
-    //exports.audioAddLoop(1,1,0);
-    //exports.audioAddLoop(2,2,0);
+    exports.audioAddLoop(0,0,0);
+    exports.audioAddLoop(1,1,0);
+    exports.audioAddLoop(2,2,0);
 
     // Add loop two
     //exports.audioAddLoop(0,0,1);
@@ -1556,6 +1556,11 @@ Sequence.prototype.stop = function() {
             exports.player.time = 2 * exports.NUM_SHAPES;
             exports.currentState = 'increasingDifficulty';
             addShield();
+
+            exports.audioAddLoop(0, 0, difficultyLevel - 1);
+            exports.audioAddLoop(1, 1, difficultyLevel - 1);
+            exports.audioAddLoop(2, 2, difficultyLevel - 1);
+
             console.log('Difficulty:', difficultyLevel);
         }
         updateIndicator();
