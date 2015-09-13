@@ -2,10 +2,18 @@
     var canvas = exports.canvas = document.getElementById('game');
     var ctx = exports.ctx = canvas.getContext('2d');
     exports.ratio = 1;
+    var widthToHeight = canvas.width / canvas.height;
     if (canvas.width > window.innerWidth || canvas.height > window.innerHeight) {
-        exports.ratio = window.innerWidth / canvas.width;
-        canvas.height *= window.innerWidth / canvas.width;
-        canvas.width = window.innerWidth;
+        if (window.innerWidth > window.innerHeight * widthToHeight) {
+            exports.ratio = window.innerHeight / canvas.height;
+            canvas.width *= window.innerHeight / canvas.height;
+            canvas.height = window.innerHeight;
+        }
+        else {
+            exports.ratio = window.innerWidth / canvas.width;
+            canvas.height *= window.innerWidth / canvas.width;
+            canvas.width = window.innerWidth;
+        }
         document.body.style.margin = 0;
     }
     exports.smallerDimension = Math.min(canvas.width, canvas.height); // Used to determine where the enemies should wait
