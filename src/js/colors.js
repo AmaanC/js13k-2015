@@ -33,7 +33,6 @@
     // Used in background.js
     exports.bgIndex = 0;
     exports.BACKGROUND_COLORS_LIST = shuffleArray([
-        ['#272D4D'],
         ['#B83564'],
         ['#FF6A5A'],
         ['#FFB350'],
@@ -68,9 +67,7 @@
         ['#2B5166'],
         ['#FAB243'],
         ['#E02130'],
-
-        // emo mode
-        ['#212121'],
+        
         ['#efefef']
     ]);
     exports.INDICATOR_COLOR = '#1B9171';
