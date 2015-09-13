@@ -8,7 +8,7 @@
         canvas.width = window.innerWidth;
         document.body.style.margin = 0;
     }
-    exports.smallerDimension = (canvas.width < canvas.height) ? canvas.width : canvas.height;
+    exports.smallerDimension = Math.min(canvas.width, canvas.height); // Used to determine where the enemies should wait
     exports.cx = canvas.width / 2;
     exports.cy = canvas.height / 2;
     exports.player = {};
