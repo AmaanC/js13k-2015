@@ -6,22 +6,31 @@
     var tempo = 120;
 
     // Damage
-    var damage = new TinyMusic.Sequence( ac, tempo, ['B0 h'] );
+    var damage = new TinyMusic.Sequence( ac, tempo, ['C1 s','C1 e'] );
 
     damage.loop = false;
-    damage.smoothing = 0.2;
-    damage.staccato = 0.8;
-    damage.waveType = 'sawtooth';
-    damage.gain.gain.value = 10;
-    damage.mid.gain.value = -10;
-    damage.mid.frequency.value = 2000;
-    damage.treble.gain.value = -10;
-    damage.treble.frequency.value = 1000;
-    damage.bass.gain.value = 10;
-    damage.bass.frequency.value = 100;
+    damage.gain.gain.value = 1;
+    damage.smoothing = 0.3;
+    damage.staccato = 0.3;
+    damage.createCustomWave([-0.8, 1, 0.8, 0.8, -0.8, -0.8, -1]);
+
+    var shield = new TinyMusic.Sequence( ac, tempo, ['C4 s','E4 s'] );
+
+    shield.loop = false;
+    shield.gain.gain.value = 0.8;
+    shield.smoothing = 0.3;
+    shield.staccato = 0.3;
+    shield.createCustomWave([-0.8, 1, 0.8, 0.8, -0.8, -0.8, -1]);
 
     exports.sfxDamage = function() {
         damage.play();
     };
+
+    exports.sfxShield = function() {
+        shield.play();
+    };
+
+    damage.play();
+    shield.play();
 
 })(window.game);

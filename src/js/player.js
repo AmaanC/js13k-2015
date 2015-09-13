@@ -20,7 +20,6 @@
     var SHIELD_COLOR = 'white';
     var SHIELD_RANGE = 0.4;
 
-
     player.hidePlayer = function() {
         player.alpha = 0;
         setTimeout(function() {

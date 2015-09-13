@@ -155,7 +155,7 @@
     // Animate enemies to a certain position and call cb when it reaches it
     var animateEnemies = function(min, speed, cb, checkFn) {
         var allReached = true;
-        
+
         for (var i = 0; i < enemies.length; i++) {
             enemy = enemies[i];
             enemy.centerDist -= speed || 5;

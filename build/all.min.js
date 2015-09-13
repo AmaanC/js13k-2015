@@ -68,7 +68,6 @@
     var SHIELD_COLOR = 'white';
     var SHIELD_RANGE = 0.4;
 
-
     player.hidePlayer = function() {
         player.alpha = 0;
         setTimeout(function() {
@@ -230,6 +229,7 @@
     exports.HIT_PARTICLE_COLORS = ['red', 'white']; // The color of the particles emitted when the player's triangle is crushed
     exports.NORMAL_ENEMY_COLOR = 'white';
     exports.REVERSER_ENEMY_COLOR = '#FD0251';
+
 
     // Used in uiScreens.js
     exports.MAIN_OVERLAY_RGBA = '0, 0, 0, 0.5';
@@ -469,23 +469,32 @@ Sequence.prototype.stop = function() {
     var tempo = 120;
 
     // Damage
-    var damage = new TinyMusic.Sequence( ac, tempo, ['B0 h'] );
+    var damage = new TinyMusic.Sequence( ac, tempo, ['C1 s','C1 e'] );
 
     damage.loop = false;
-    damage.smoothing = 0.2;
-    damage.staccato = 0.8;
-    damage.waveType = 'sawtooth';
-    damage.gain.gain.value = 10;
-    damage.mid.gain.value = -10;
-    damage.mid.frequency.value = 2000;
-    damage.treble.gain.value = -10;
-    damage.treble.frequency.value = 1000;
-    damage.bass.gain.value = 10;
-    damage.bass.frequency.value = 100;
+    damage.gain.gain.value = 1;
+    damage.smoothing = 0.3;
+    damage.staccato = 0.3;
+    damage.createCustomWave([-0.8, 1, 0.8, 0.8, -0.8, -0.8, -1]);
+
+    var shield = new TinyMusic.Sequence( ac, tempo, ['C4 s','E4 s'] );
+
+    shield.loop = false;
+    shield.gain.gain.value = 0.8;
+    shield.smoothing = 0.3;
+    shield.staccato = 0.3;
+    shield.createCustomWave([-0.8, 1, 0.8, 0.8, -0.8, -0.8, -1]);
 
     exports.sfxDamage = function() {
         damage.play();
     };
+
+    exports.sfxShield = function() {
+        shield.play();
+    };
+
+    damage.play();
+    shield.play();
 
 })(window.game);
 
@@ -803,24 +812,21 @@ Sequence.prototype.stop = function() {
         seqs[seq].push.apply(seqs[seq], patterns[pattern][loop]);
     };
 
-    // Below can be moved
-    exports.audioStart();
-
     // Add loop one
-    exports.audioAddLoop(0,0,0);
-    exports.audioAddLoop(1,1,0);
-    exports.audioAddLoop(2,2,0);
+    //exports.audioAddLoop(0,0,0);
+    //exports.audioAddLoop(1,1,0);
+    //exports.audioAddLoop(2,2,0);
 
     // Add loop two
-    exports.audioAddLoop(0,0,1);
-    exports.audioAddLoop(1,1,1);
-    exports.audioAddLoop(2,2,1);
+    //exports.audioAddLoop(0,0,1);
+    //exports.audioAddLoop(1,1,1);
+    //exports.audioAddLoop(2,2,1);
 
     // Add loop three
-    exports.audioAddLoop(2,2,2);
+    //exports.audioAddLoop(2,2,2);
 
     // Add loop four
-    exports.audioAddLoop(2,2,3);
+    //exports.audioAddLoop(2,2,3);
 
     // Mess with all the things
     //exports.audioAddLoop(0,2,1);
@@ -1384,7 +1390,7 @@ Sequence.prototype.stop = function() {
     // Animate enemies to a certain position and call cb when it reaches it
     var animateEnemies = function(min, speed, cb, checkFn) {
         var allReached = true;
-        
+
         for (var i = 0; i < enemies.length; i++) {
             enemy = enemies[i];
             enemy.centerDist -= speed || 5;
@@ -1620,6 +1626,7 @@ Sequence.prototype.stop = function() {
     };
 
 // })(window.game);
+
 // This file contains most of the visual effects used in the game. I've tried to make every function self contained so that copying just that
 // function itself is enough to get that effect.
 (function(exports) {

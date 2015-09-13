@@ -80,6 +80,7 @@
     exports.NORMAL_ENEMY_COLOR = 'white';
     exports.REVERSER_ENEMY_COLOR = '#FD0251';
 
+
     // Used in uiScreens.js
     exports.MAIN_OVERLAY_RGBA = '0, 0, 0, 0.5';
     exports.MAIN_TEXT_COLOR = 'white';
