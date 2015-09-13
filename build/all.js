@@ -846,20 +846,20 @@ Sequence.prototype.stop = function() {
     };
 
     // Add loop one
-    exports.audioAddLoop(0,0,0);
-    exports.audioAddLoop(1,1,0);
-    exports.audioAddLoop(2,2,0);
+    //exports.audioAddLoop(0,0,0);
+    //exports.audioAddLoop(1,1,0);
+    //exports.audioAddLoop(2,2,0);
 
     // Add loop two
-    exports.audioAddLoop(0,0,1);
-    exports.audioAddLoop(1,1,1);
-    exports.audioAddLoop(2,2,1);
+    //exports.audioAddLoop(0,0,1);
+    //exports.audioAddLoop(1,1,1);
+    //exports.audioAddLoop(2,2,1);
 
     // Add loop three
-    exports.audioAddLoop(2,2,2);
+    //exports.audioAddLoop(2,2,2);
 
     // Add loop four
-    exports.audioAddLoop(2,2,3);
+    //exports.audioAddLoop(2,2,3);
 
     // Mess with all the things
     //exports.audioAddLoop(0,2,1);
