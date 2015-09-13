@@ -211,6 +211,12 @@
         'F5  e',
         'A5  e',
     ];
+    patterns[2][2] = patterns[2][0];
+    patterns[2][3] = changeOctave(patterns[2][1], -1);
+    patterns[2][4] = patterns[2][0];
+    patterns[2][5] = changeOctave(patterns[2][1], 1);
+    patterns[2][6] = patterns[2][0];
+    patterns[2][7] = patterns[2][1];
 
     // Create sequences
     var seqs = [];
