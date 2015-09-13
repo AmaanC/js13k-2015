@@ -2,7 +2,8 @@
 // Tracks are sheet music,
 // Audio emulates nanoloop app.
 (function(exports) {
-    exports.musicEnabled = true;
+    exports.musicEnabled = ('musicEnabled' in localStorage) ? localStorage.musicEnabled === 'true' : true;
+    console.log(exports.musicEnabled);
 
     // Change Octave
     var changeOctave = function(originalArray, changeBy) {
@@ -282,6 +283,9 @@
 
     // Start all sequence
     exports.audioStart = function() {
+        if (exports.musicEnabled !== true) {
+            return;
+        }
         seqs[0].play();
         seqs[1].play();
         seqs[2].play();
@@ -295,6 +299,7 @@
 
     exports.toggleMusic = function() {
         exports.musicEnabled = !exports.musicEnabled;
+        localStorage.musicEnabled = exports.musicEnabled;
         if (exports.musicEnabled) {
             exports.audioStart();
         }
@@ -313,24 +318,26 @@
     };
 
     // Add loop one
-    //exports.audioAddLoop(0,0,0);
-    //exports.audioAddLoop(1,1,0);
-    //exports.audioAddLoop(2,2,0);
+    exports.audioAddLoop(0,0,0);
+    exports.audioAddLoop(1,1,0);
+    exports.audioAddLoop(2,2,0);
 
     // Add loop two
-    //exports.audioAddLoop(0,0,1);
-    //exports.audioAddLoop(1,1,1);
-    //exports.audioAddLoop(2,2,1);
+    exports.audioAddLoop(0,0,1);
+    exports.audioAddLoop(1,1,1);
+    exports.audioAddLoop(2,2,1);
 
     // Add loop three
-    //exports.audioAddLoop(2,2,2);
+    exports.audioAddLoop(2,2,2);
 
     // Add loop four
-    //exports.audioAddLoop(2,2,3);
+    exports.audioAddLoop(2,2,3);
 
     // Mess with all the things
     //exports.audioAddLoop(0,2,1);
     //exports.audioAddLoop(1,0,1);
     //exports.audioAddLoop(2,1,0);
+
+    exports.audioStart();
 
 })(window.game);
