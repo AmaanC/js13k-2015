@@ -800,8 +800,8 @@ Sequence.prototype.stop = function() {
 
     // Add loop one
     exports.audioAddLoop(0,0,0);
-    exports.audioAddLoop(0,0,1);
-    exports.audioAddLoop(0,0,2);
+    exports.audioAddLoop(1,0,0);
+    exports.audioAddLoop(2,0,0);
 
     exports.audioStart();
 
