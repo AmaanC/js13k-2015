@@ -3,7 +3,6 @@
 // Audio emulates nanoloop app.
 (function(exports) {
     exports.musicEnabled = ('musicEnabled' in localStorage) ? localStorage.musicEnabled === 'true' : true;
-    console.log(exports.musicEnabled);
 
     // Change Octave
     var changeOctave = function(originalArray, changeBy) {
