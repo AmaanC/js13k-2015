@@ -47,5 +47,8 @@
         if (e.pageX > exports.musicX && e.pageY < exports.musicY) {
             exports.toggleMusic();
         }
+        if (exports.currentState === 'endScreen' || exports.currentState === 'mainScreen') {
+            exports.reset();
+        }
     });
 })(window.game);

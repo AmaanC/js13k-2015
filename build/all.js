@@ -1,9 +1,11 @@
 (function(exports) {
     var canvas = exports.canvas = document.getElementById('game');
     var ctx = exports.ctx = canvas.getContext('2d');
-    if (window.innerWidth < canvas.width) {
+    exports.ratio = 1;
+    if (canvas.width > window.innerWidth || canvas.height > window.innerHeight) {
+        exports.ratio = window.innerWidth / canvas.width;
+        canvas.height *= window.innerWidth / canvas.width;
         canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
         document.body.style.margin = 0;
     }
     exports.smallerDimension = (canvas.width < canvas.height) ? canvas.width : canvas.height;
@@ -1133,6 +1135,7 @@ Sequence.prototype.stop = function() {
     var canvas = exports.canvas;
 
     exports.write = function(string, xPos, yPos, size, color) {
+        size = Math.floor(size * exports.ratio);
         var needed = [];
         string = string.toUpperCase(); // because I only did uppercase letters
         for (var i = 0; i < string.length; i++) {
@@ -1230,6 +1233,9 @@ Sequence.prototype.stop = function() {
     exports.canvas.addEventListener('click', function(e) {
         if (e.pageX > exports.musicX && e.pageY < exports.musicY) {
             exports.toggleMusic();
+        }
+        if (exports.currentState === 'endScreen' || exports.currentState === 'mainScreen') {
+            exports.reset();
         }
     });
 })(window.game);

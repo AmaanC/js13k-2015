@@ -1,9 +1,11 @@
 (function(exports) {
     var canvas = exports.canvas = document.getElementById('game');
     var ctx = exports.ctx = canvas.getContext('2d');
-    if (window.innerWidth < canvas.width) {
+    exports.ratio = 1;
+    if (canvas.width > window.innerWidth || canvas.height > window.innerHeight) {
+        exports.ratio = window.innerWidth / canvas.width;
+        canvas.height *= window.innerWidth / canvas.width;
         canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
         document.body.style.margin = 0;
     }
     exports.smallerDimension = (canvas.width < canvas.height) ? canvas.width : canvas.height;

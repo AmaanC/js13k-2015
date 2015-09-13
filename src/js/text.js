@@ -296,6 +296,7 @@
     var canvas = exports.canvas;
 
     exports.write = function(string, xPos, yPos, size, color) {
+        size = Math.floor(size * exports.ratio);
         var needed = [];
         string = string.toUpperCase(); // because I only did uppercase letters
         for (var i = 0; i < string.length; i++) {
