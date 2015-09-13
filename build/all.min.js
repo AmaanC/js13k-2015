@@ -1442,6 +1442,11 @@ Sequence.prototype.stop = function() {
             exports.player.time = 2 * exports.NUM_SHAPES;
             exports.currentState = 'increasingDifficulty';
             addShield();
+
+            exports.audioAddLoop(0, 0, difficultyLevel - 1);
+            exports.audioAddLoop(1, 1, difficultyLevel - 1);
+            exports.audioAddLoop(2, 2, difficultyLevel - 1);
+
             console.log('Difficulty:', difficultyLevel);
         }
         updateIndicator();
