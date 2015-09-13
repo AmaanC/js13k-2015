@@ -278,9 +278,12 @@
             exports.currentState = 'increasingDifficulty';
             addShield();
 
-            exports.audioAddLoop(0, 0, difficultyLevel - 1);
-            exports.audioAddLoop(1, 1, difficultyLevel - 1);
-            exports.audioAddLoop(2, 2, difficultyLevel - 1);
+            exports.currentTrack++;
+            if (exports.currentTrack < exports.TOTAL_TRACKS) {
+                exports.audioAddLoop(0, 0, exports.currentTrack);
+                exports.audioAddLoop(1, 1, exports.currentTrack);
+                exports.audioAddLoop(2, 2, exports.currentTrack);
+            }
 
             console.log('Difficulty:', difficultyLevel);
         }

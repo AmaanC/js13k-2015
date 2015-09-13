@@ -3,6 +3,8 @@
 // Audio emulates nanoloop app.
 (function(exports) {
     exports.musicEnabled = ('musicEnabled' in localStorage) ? localStorage.musicEnabled === 'true' : true;
+    exports.currentTrack = 0;
+    exports.TOTAL_TRACKS = 8; // How many tracks there are for each instrument
 
     // Change Octave
     var changeOctave = function(originalArray, changeBy) {

@@ -526,6 +526,8 @@ Sequence.prototype.stop = function() {
 // Audio emulates nanoloop app.
 (function(exports) {
     exports.musicEnabled = ('musicEnabled' in localStorage) ? localStorage.musicEnabled === 'true' : true;
+    exports.currentTrack = 0;
+    exports.TOTAL_TRACKS = 8; // How many tracks there are for each instrument
 
     // Change Octave
     var changeOctave = function(originalArray, changeBy) {
@@ -1499,9 +1501,12 @@ Sequence.prototype.stop = function() {
             exports.currentState = 'increasingDifficulty';
             addShield();
 
-            exports.audioAddLoop(0, 0, difficultyLevel - 1);
-            exports.audioAddLoop(1, 1, difficultyLevel - 1);
-            exports.audioAddLoop(2, 2, difficultyLevel - 1);
+            exports.currentTrack++;
+            if (exports.currentTrack < exports.TOTAL_TRACKS) {
+                exports.audioAddLoop(0, 0, exports.currentTrack);
+                exports.audioAddLoop(1, 1, exports.currentTrack);
+                exports.audioAddLoop(2, 2, exports.currentTrack);
+            }
 
             console.log('Difficulty:', difficultyLevel);
         }
