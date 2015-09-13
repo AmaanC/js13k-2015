@@ -1750,7 +1750,7 @@ Sequence.prototype.stop = function() {
     var ctx = exports.ctx;
 
     var minSize = exports.player.dist * 2;
-    var DIST_BETWEEN = 80;
+    var DIST_BETWEEN = 90;
 
     exports.NUM_SHAPES = 12;
     exports.steps = 1;
@@ -1911,6 +1911,7 @@ Sequence.prototype.stop = function() {
 
         textColor = exports.MAIN_TEXT_COLOR;
         exports.write('Press space to play', 'center', 'center', 8, textColor);
+        exports.write('Seizure warning', 'center', exports.cy + 50, 3, textColor);
         exports.write('A game by @AmaanC and @mikedidthis', 'center', canvas.height - 40, 5, textColor);
         
         if (exports.allShapesDoneSpinning) {

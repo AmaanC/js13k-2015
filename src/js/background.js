@@ -4,7 +4,7 @@
     var ctx = exports.ctx;
 
     var minSize = exports.player.dist * 2;
-    var DIST_BETWEEN = 80;
+    var DIST_BETWEEN = 90;
 
     exports.NUM_SHAPES = 12;
     exports.steps = 1;
