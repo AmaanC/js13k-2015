@@ -227,9 +227,9 @@
     seqs[2] = new TinyMusic.Sequence(ac, audio.tempo, []);
 
     // Set volume
-    seqs[0].gain.gain.value = 0.2;
-    seqs[1].gain.gain.value = 0.4;
-    seqs[2].gain.gain.value = 0.6;
+    seqs[0].gain.gain.value = 0.15;
+    seqs[1].gain.gain.value = 0.35;
+    seqs[2].gain.gain.value = 0.3;
 
     // Set coolness
     seqs[0].smoothing = 0.5;
