@@ -510,11 +510,15 @@ Sequence.prototype.stop = function() {
     shield.createCustomWave([-0.8, 1, 0.8, 0.8, -0.8, -0.8, -1]);
 
     exports.sfxDamage = function() {
-        damage.play();
+        if (exports.musicEnabled) {
+            damage.play();
+        }
     };
 
     exports.sfxShield = function() {
-        shield.play();
+        if (exports.musicEnabled) {
+            shield.play();
+        }
     };
 
     //damage.play();
@@ -1483,6 +1487,7 @@ Sequence.prototype.stop = function() {
         resetNumCrossed();
         updateIndicator();
         if (exports.player.numShields > 0) {
+            exports.sfxShield();
             exports.player.numShields--;
             exports.player.score += SHIELD_LOST_SCORE;
             // Explode the block into pieces
@@ -1500,6 +1505,7 @@ Sequence.prototype.stop = function() {
             exports.shakeScreen(SHAKE_INTENSITY);
             return;
         }
+        exports.sfxDamage();
         exports.currentState = 'crushing';
         exports.player.color = exports.player.skins.flashColor;
         setTimeout(function() {

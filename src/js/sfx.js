@@ -23,11 +23,15 @@
     shield.createCustomWave([-0.8, 1, 0.8, 0.8, -0.8, -0.8, -1]);
 
     exports.sfxDamage = function() {
-        damage.play();
+        if (exports.musicEnabled) {
+            damage.play();
+        }
     };
 
     exports.sfxShield = function() {
-        shield.play();
+        if (exports.musicEnabled) {
+            shield.play();
+        }
     };
 
     //damage.play();

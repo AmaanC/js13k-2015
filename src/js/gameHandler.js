@@ -213,6 +213,7 @@
         resetNumCrossed();
         updateIndicator();
         if (exports.player.numShields > 0) {
+            exports.sfxShield();
             exports.player.numShields--;
             exports.player.score += SHIELD_LOST_SCORE;
             // Explode the block into pieces
@@ -230,6 +231,7 @@
             exports.shakeScreen(SHAKE_INTENSITY);
             return;
         }
+        exports.sfxDamage();
         exports.currentState = 'crushing';
         exports.player.color = exports.player.skins.flashColor;
         setTimeout(function() {
