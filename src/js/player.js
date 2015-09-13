@@ -38,7 +38,7 @@
     };
 
     var shieldDraw = function() {
-        ctx.strokeStyle = exports.SHIELD_COLOR;
+        ctx.strokeStyle = 'rgb(' + exports.SHIELD_COLOR + ')';
         for (var i = 1; i <= player.numShields; i++) {
             ctx.beginPath();
             ctx.arc(0, 0, shieldMinDist + i * DIST_BETWEEN_SHIELDS, -SHIELD_RANGE, SHIELD_RANGE, false);
