@@ -49,6 +49,11 @@
             }
             document.body.style.margin = 0;
         }
+        else {
+            canvas.width = CANVAS_WIDTH;
+            canvas.height = CANVAS_HEIGHT;
+            exports.ratio = 1;
+        }
         exports.smallerDimension = Math.min(canvas.width, canvas.height); // Used to determine where the enemies should wait
         exports.cx = canvas.width / 2;
         exports.cy = canvas.height / 2;
