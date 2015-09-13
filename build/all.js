@@ -164,7 +164,7 @@
             exports.ctx.globalCompositeOperation = 'source-over';
         }
         else {
-            exports.ctx.globalCompositeOperation = 'difference';
+            exports.ctx.globalCompositeOperation = 'xor';
         }
     };
 
