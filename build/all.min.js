@@ -640,6 +640,15 @@ Sequence.prototype.stop = function() {
     // Lead.
     patterns[2] = [];
     patterns[2][0] = [
+        '-  w',
+
+        '-  w',
+
+        '-  w',
+
+        '-  w',
+    ];
+    patterns[2][1] = [
         'G5  e',
         'G5  e',
         'G5  e',
@@ -683,9 +692,9 @@ Sequence.prototype.stop = function() {
     seqs[2] = new TinyMusic.Sequence(ac, audio.tempo, []);
 
     // Set volume
-    seqs[0].gain.gain.value = 0.5;
-    seqs[1].gain.gain.value = 0.4;
-    seqs[2].gain.gain.value = 0.8;
+    seqs[0].gain.gain.value = 0.3;
+    seqs[1].gain.gain.value = 0.1;
+    seqs[2].gain.gain.value = 0.5;
 
     // Set coolness
     seqs[0].smoothing = 0.5;
@@ -733,7 +742,6 @@ Sequence.prototype.stop = function() {
 
     // Adds loop to seq
     exports.audioAddLoop = function(seq, pattern, loop) {
-        console.log( seq, pattern, loop )
         seqs[seq].push.apply(seqs[seq], patterns[pattern][loop]);
     };
 
@@ -741,22 +749,6 @@ Sequence.prototype.stop = function() {
     exports.audioAddLoop(0,0,0);
     exports.audioAddLoop(1,1,0);
     exports.audioAddLoop(2,2,0);
-
-    // Add loop two
-    exports.audioAddLoop(0,0,1);
-    exports.audioAddLoop(1,1,1);
-    exports.audioAddLoop(2,2,1);
-
-    // Add loop three
-    //exports.audioAddLoop(2,2,2);
-
-    // Add loop four
-    //exports.audioAddLoop(2,2,3);
-
-    // Mess with all the things
-    //exports.audioAddLoop(0,2,1);
-    //exports.audioAddLoop(1,0,1);
-    //exports.audioAddLoop(2,1,0);
 
     exports.audioStart();
 
