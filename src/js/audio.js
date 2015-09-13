@@ -43,208 +43,113 @@
     // Bass
     patterns[0] = [];
     patterns[0][0] = [
-        'E1  e',
-        'F1  e',
-        'F1  e',
-        'F1  e',
-        'F1  e',
-        'F1  e',
-        'F1  e',
-        'F1  e',
+        'D5  s',
+        'D5  s',
+        'D5  e',
+        'D5  e',
+        'D5  s',
+        'D5  s',
+        'D5  s',
+        'D5  s',
+        'D5  e',
+        'D5  s',
+        'D5  s',
+        'D5  s',
+        'D5  s',
 
-        'G1  e',
-        'G1  e',
-        'G1  e',
-        'G1  e',
-        'G1  e',
-        'G1  e',
-        'G1  e',
-        'G1  e',
-
-        'A1  e',
-        'A1  e',
-        'A1  e',
-        'A1  e',
-        'A1  e',
-        'A1  e',
-        'A1  e',
-        'A1  e',
-
-        'B1  e',
-        'B1  e',
-        'B1  e',
-        'B1  e',
-        'B1  e',
-        'B1  e',
-        'B1  e',
-        'B1  e'
+        'D5  s',
+        'D5  s',
+        'D5  e',
+        'D5  e',
+        'D5  s',
+        'D5  s',
+        'D5  s',
+        'D5  s',
+        'D5  e',
+        'D5  s',
+        'D5  e',
+        '_   e'
     ];
     patterns[0][1] = [
-        'E1  e',
-        'F1  e',
-        'F1  e',
-        'F1  e',
-        'F1  e',
-        'F1  e',
-        'F1  e',
-        'F1  e',
+        'A4  s',
+        'A4  s',
+        'A4  e',
+        'A4  e',
+        'A4  s',
+        'A4  s',
+        'A4  s',
+        'A4  s',
+        'A4  e',
+        'A4  s',
+        'A4  s',
+        'A4  s',
+        'A4  s',
 
-        'G1  e',
-        'G1  e',
-        'G1  e',
-        'G1  e',
-        'G1  e',
-        'G1  e',
-        'G1  e',
-        'G1  e',
-
-        'A1  e',
-        'A1  e',
-        'A1  e',
-        'A1  e',
-        'A1  e',
-        'A1  e',
-        'A1  e',
-        'A1  e',
-
-        'B1  s',
-        'B1  s',
-        'B1  e',
-        'B1  e',
-        'B1  s',
-        'B1  s',
-        'B1  e',
-        'B1  e'
+        'A4  s',
+        'A4  s',
+        'A4  e',
+        'A4  e',
+        'A4  s',
+        'A4  s',
+        'A4  s',
+        'A4  s',
+        'A4  e',
+        'A4  s',
+        'A4  e',
+        '_4  s'
     ];
 
     // Harmony
     patterns[1] = [];
     patterns[1][0] = [
-        'G1  w',
+        'G4  w',
 
-        'Bb1 w',
+        'F4  w',
 
-        'B1  w',
+        'B4  w',
 
-        'C1  h',
-        'C1  q',
-        'B1  e',
-        'A1  e',
-
-    ];
-    patterns[1][1] = [
-        'G1  w',
-
-        'Bb1 w',
-
-        'B1  w',
-
-        'C1  w'
+        'F4  w',
     ];
 
     // Lead.
     patterns[2] = [];
     patterns[2][0] = [
-        '-   w',
+        'G5  e',
+        'G5  e',
+        'G5  e',
+        'B5  e',
+        'B5  e',
+        'A5  e',
+        'G5  e',
+        'G5  e',
 
-        '-   w',
+        'F5  e',
+        'F5  e',
+        'F5  e',
+        'F5  e',
+        'F5  e',
+        'F5  e',
+        'A5  e',
+        'B5  e',
 
-        '-   w',
+        'B5  e',
+        'B5  e',
+        'B5  e',
+        'D6  e',
+        'D6  e',
+        'A5  e',
+        'B5  e',
+        'B5  e',
 
-        '-   w',
-
-        '-   w',
-
-        '-   w',
-
-        '-   w',
-
-        '-   h',
-        'E3  e',
-        'E3  e',
-        'D3  s',
-        'D3  s',
-        'D3  e',
+        'F5  e',
+        'A5  e',
+        'A5  e',
+        'F5  e',
+        'F5  e',
+        'F5  e',
+        'F5  e',
+        'A5  e',
     ];
-    patterns[2][1] = [
-        'F2  h',
-        'F2  e',
-        'F2  e',
-        'F2  e',
-        'E1  e',
-
-        '-   h',
-        'F2  e',
-        'F2  e',
-        'F2  s',
-        'F2  s',
-        'E1  e',
-
-        'F2  h',
-        'F2  e',
-        'F2  e',
-        'F2  e',
-        'E1  e',
-
-        'F2  q',
-        'F2  q',
-        'E2  e',
-        'E2  e',
-        'D2  e',
-        'D2  e'
-    ];
-    patterns[2][2] = [
-        '-   w',
-
-        '-   w',
-
-        '-   w',
-
-        'F2  h',
-        'F2  e',
-        'F2  e',
-        'F2  e',
-        'E1  e',
-
-        'F2  q',
-        'F2  q',
-        'E2  e',
-        'E2  e',
-        'D2  e',
-        'D2  e'
-    ];
-    patterns[2][3] = [
-        'F2  e',
-        'F2  e',
-        'E2  e',
-        'E2  e',
-        'A1  e',
-        'A1  e',
-        'A1  e',
-        'A1  s',
-        'A1  s',
-
-        '-   h',
-        'F2  e',
-        'F2  e',
-        'F2  s',
-        'F2  s',
-        'E1  e',
-
-        'F2  h',
-        'F2  e',
-        'F2  e',
-        'F2  e',
-        'E1  e',
-
-        'F2  q',
-        'F2  q',
-        'E2  e',
-        'E2  e',
-        'D2  e',
-        'D2  e'
-    ];
-
     // Create sequences
     var seqs = [];
     seqs[0] = new TinyMusic.Sequence(ac, audio.tempo, []);
@@ -252,34 +157,22 @@
     seqs[2] = new TinyMusic.Sequence(ac, audio.tempo, []);
 
     // Set volume
-    seqs[0].gain.gain.value = 0.35;
-    seqs[1].gain.gain.value = 0.25;
-    seqs[2].gain.gain.value = 0.45;
+    seqs[0].gain.gain.value = 0.5;
+    seqs[1].gain.gain.value = 0.4;
+    seqs[2].gain.gain.value = 0.8;
 
     // Set coolness
     seqs[0].smoothing = 0.5;
-    seqs[1].smoothing = 0.4;
+    seqs[1].smoothing = 0.2;
     seqs[2].smoothing = 0.1;
     seqs[0].staccato = 0.4;
-    seqs[1].staccato = 0.1;
+    seqs[1].staccato = 0.3;
     seqs[2].staccato = 0.4;
 
     // Set wave - square, sine, sawtooth, triangle, custom
-    seqs[0].waveType = 'triangle';
-    seqs[1].createCustomWave([-1,1,-1,1,-1,1],[1,0,1,0,1,0]);
-    seqs[2].createCustomWave([-1,-0.9,-0.6,-0.3, 0, 0.3, 0.6, 0.9,1]);
-
-    seqs[0].mid.gain.value = -6;
-    seqs[0].mid.frequency.value = 500;
-    seqs[1].mid.frequency.value = 800;
-    seqs[1].mid.gain.value = 3;
-    seqs[2].mid.frequency.value = 1200;
-    seqs[2].mid.gain.value = 3;
-
-    seqs[0].treble.gain.value = -2;
-    seqs[0].treble.frequency.value = 1400;
-    seqs[0].bass.gain.value = 6;
-    seqs[0].bass.frequency.value = 80;
+    seqs[0].waveType = 'sine';
+    seqs[1].waveType = 'square';
+    seqs[2].waveType = 'square';
 
     // Start all sequence
     exports.audioStart = function() {
@@ -314,18 +207,19 @@
 
     // Adds loop to seq
     exports.audioAddLoop = function(seq, pattern, loop) {
+        console.log( seq, pattern, loop )
         seqs[seq].push.apply(seqs[seq], patterns[pattern][loop]);
     };
 
     // Add loop one
-    //exports.audioAddLoop(0,0,0);
-    //exports.audioAddLoop(1,1,0);
-    //exports.audioAddLoop(2,2,0);
+    exports.audioAddLoop(0,0,0);
+    exports.audioAddLoop(1,1,0);
+    exports.audioAddLoop(2,2,0);
 
     // Add loop two
-    //exports.audioAddLoop(0,0,1);
-    //exports.audioAddLoop(1,1,1);
-    //exports.audioAddLoop(2,2,1);
+    exports.audioAddLoop(0,0,1);
+    exports.audioAddLoop(1,1,1);
+    exports.audioAddLoop(2,2,1);
 
     // Add loop three
     //exports.audioAddLoop(2,2,2);
