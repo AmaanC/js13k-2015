@@ -52,6 +52,10 @@
         exports.smallerDimension = Math.min(canvas.width, canvas.height); // Used to determine where the enemies should wait
         exports.cx = canvas.width / 2;
         exports.cy = canvas.height / 2;
+
+        if (exports.initBackground) {
+            exports.initBackground();
+        }
     };
 
     var init = function() {
@@ -68,8 +72,6 @@
     var ctx = exports.ctx;
 
     var player = exports.player;
-    player.cx = exports.cx;
-    player.cy = exports.cy;
     player.time = 0;
     player.dist = 40;
     player.halfBase = 10;
@@ -114,8 +116,8 @@
     };
 
     exports.playerDraw = function() {
-        var cx = player.cx;
-        var cy = player.cy;
+        var cx = exports.cx;
+        var cy = exports.cy;
         var hb = player.halfBase;
         var hh = player.halfHeight;
         ctx.save();

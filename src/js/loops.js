@@ -52,6 +52,10 @@
         exports.smallerDimension = Math.min(canvas.width, canvas.height); // Used to determine where the enemies should wait
         exports.cx = canvas.width / 2;
         exports.cy = canvas.height / 2;
+
+        if (exports.initBackground) {
+            exports.initBackground();
+        }
     };
 
     var init = function() {
