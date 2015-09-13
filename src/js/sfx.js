@@ -30,7 +30,7 @@
         shield.play();
     };
 
-    damage.play();
-    shield.play();
+    //damage.play();
+    //shield.play();
 
 })(window.game);
