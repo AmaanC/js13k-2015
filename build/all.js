@@ -1881,6 +1881,7 @@ Sequence.prototype.stop = function() {
         for (var i = exports.NUM_SHAPES - 1; i >= 0; i--) {
             shapes[i].color = exports.shade(arr[0], -0.1*i/2);
             exports.INDICATOR_COLOR = arr[0];
+            exports.indicatorObj.color = arr[0];
         }
     };
 
