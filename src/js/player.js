@@ -15,7 +15,8 @@
     player.score = 0;
     var DIST_BETWEEN_SHIELDS = 20;
     var shieldMinDist = player.dist + 2 * player.halfHeight;
-    var SHIELD_RANGE = 0.4;
+    var SHIELD_WIDTH = 8;
+    var SHIELD_HEIGHT = 50;
 
     player.hidePlayer = function() {
         player.alpha = 0;
@@ -36,12 +37,9 @@
     };
 
     var shieldDraw = function() {
-        ctx.strokeStyle = 'rgb(' + exports.SHIELD_COLOR + ')';
+        ctx.fillStyle = 'rgb(' + exports.SHIELD_COLOR + ')';
         for (var i = 1; i <= player.numShields; i++) {
-            ctx.beginPath();
-            ctx.arc(0, 0, shieldMinDist + i * DIST_BETWEEN_SHIELDS, -SHIELD_RANGE, SHIELD_RANGE, false);
-            ctx.closePath();
-            ctx.stroke();
+            ctx.fillRect(shieldMinDist + i * DIST_BETWEEN_SHIELDS, -SHIELD_HEIGHT / 2, SHIELD_WIDTH, SHIELD_HEIGHT);
         }
     };
 

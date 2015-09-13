@@ -90,7 +90,8 @@
     player.score = 0;
     var DIST_BETWEEN_SHIELDS = 20;
     var shieldMinDist = player.dist + 2 * player.halfHeight;
-    var SHIELD_RANGE = 0.4;
+    var SHIELD_WIDTH = 8;
+    var SHIELD_HEIGHT = 50;
 
     player.hidePlayer = function() {
         player.alpha = 0;
@@ -111,12 +112,9 @@
     };
 
     var shieldDraw = function() {
-        ctx.strokeStyle = 'rgb(' + exports.SHIELD_COLOR + ')';
+        ctx.fillStyle = 'rgb(' + exports.SHIELD_COLOR + ')';
         for (var i = 1; i <= player.numShields; i++) {
-            ctx.beginPath();
-            ctx.arc(0, 0, shieldMinDist + i * DIST_BETWEEN_SHIELDS, -SHIELD_RANGE, SHIELD_RANGE, false);
-            ctx.closePath();
-            ctx.stroke();
+            ctx.fillRect(shieldMinDist + i * DIST_BETWEEN_SHIELDS, -SHIELD_HEIGHT / 2, SHIELD_WIDTH, SHIELD_HEIGHT);
         }
     };
 
@@ -1056,6 +1054,13 @@ Sequence.prototype.stop = function() {
             [,1,,,1],
             [1,1,,1,1],
             [1,1,,1,1],
+        ],
+        '!': [
+            [,1],
+            [,1],
+            [,1],
+            [,],
+            [,1],
         ]
     };
     var ctx = exports.ctx;
@@ -1841,9 +1846,10 @@ Sequence.prototype.stop = function() {
         exports.controlsDraw();
 
         textColor = exports.MAIN_TEXT_COLOR;
+        exports.write('Turnometry', 'center', 30, 8, textColor);
         exports.write('Press space to play', 'center', 'center', 8, textColor);
-        exports.write('Seizure warning', 'center', exports.cy + 50, 3, textColor);
-        exports.write('A game by @AmaanC and @mikedidthis', 'center', canvas.height - 40, 5, textColor);
+        exports.write('Seizure warning!', 'center', exports.cy + 50, 4, textColor);
+        exports.write('A game by @AmaanC and @mikedidthis', 'center', canvas.height - 40, 3, textColor);
         
         if (exports.allShapesDoneSpinning) {
             exports.triggerSpin(exports.sides);
