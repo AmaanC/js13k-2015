@@ -57,20 +57,20 @@
         'D5  s',
         'D5  s',
 
-        'D5  s',
-        'D5  s',
-        'D5  e',
-        'D5  e',
-        'D5  s',
-        'D5  s',
-        'D5  s',
-        'D5  s',
-        'D5  e',
-        'D5  s',
-        'D5  e',
-        '_   e'
-    ];
-    patterns[0][1] = [
+        'G5  s',
+        'G5  s',
+        'G5  e',
+        'G5  e',
+        'G5  s',
+        'G5  s',
+        'G5  s',
+        'G5  s',
+        'G5  e',
+        'G5  s',
+        'G5  s',
+        'G5  s',
+        'G5  s',
+
         'A4  s',
         'A4  s',
         'A4  e',
@@ -85,31 +85,84 @@
         'A4  s',
         'A4  s',
 
-        'A4  s',
-        'A4  s',
-        'A4  e',
-        'A4  e',
-        'A4  s',
-        'A4  s',
-        'A4  s',
-        'A4  s',
-        'A4  e',
-        'A4  s',
-        'A4  e',
-        '_4  s'
+        'C5  s',
+        'C5  s',
+        'C5  e',
+        'C5  e',
+        'C5  s',
+        'C5  s',
+        'C5  s',
+        'C5  s',
+        'C5  e',
+        'C5  s',
+        'C5  s',
+        'C5  s',
+        'C5  s',
     ];
+    patterns[0][1] = changeOctave(patterns[0][0], -1);
+    patterns[0][2] = patterns[0][0];
+    patterns[0][3] = changeOctave(patterns[0][0], 1);
+    patterns[0][4] = patterns[0][0];
+    patterns[0][5] = changeOctave(patterns[0][0], -2);
+    patterns[0][6] = changeOctave(patterns[0][0], 1);
+    patterns[0][7] = changeOctave(patterns[0][0], -2);
 
     // Harmony
     patterns[1] = [];
     patterns[1][0] = [
-        'G4  w',
+        '-  w',
 
-        'F4  w',
+        '-  w',
 
-        'B4  w',
+        '-  w',
 
-        'F4  w',
+        '-  w',
     ];
+    patterns[1][1] = [
+        'G4  q',
+        'G4  q',
+        'G4  q',
+        'G4  q',
+
+        'F4  q',
+        'F4  q',
+        'F4  q',
+        'F4  q',
+
+        'B4  q',
+        'B4  q',
+        'B4  q',
+        'B4  q',
+
+        'F4  q',
+        'F4  q',
+        'F4  q',
+        'F4  q'
+    ];
+    patterns[1][2] = patterns[1][0];
+    patterns[1][3] = [
+        'B5  q',
+        'B5  q',
+        'B5  q',
+        'B5  q',
+
+        'A5  q',
+        'A5  q',
+        'A5  q',
+        'A5  q',
+
+        'G5  q',
+        'G5  q',
+        'G5  q',
+        'G5  q',
+
+        'E5  h',
+        'A5  h'
+    ];
+    patterns[1][4] = patterns[1][0];
+    patterns[1][5] = changeOctave(patterns[1][1], -1);
+    patterns[1][6] = patterns[1][0];
+    patterns[1][7] = changeOctave(patterns[1][3], -1);
 
     // Lead.
     patterns[2] = [];
@@ -159,6 +212,7 @@
         'F5  e',
         'A5  e',
     ];
+
     // Create sequences
     var seqs = [];
     seqs[0] = new TinyMusic.Sequence(ac, audio.tempo, []);
@@ -166,21 +220,21 @@
     seqs[2] = new TinyMusic.Sequence(ac, audio.tempo, []);
 
     // Set volume
-    seqs[0].gain.gain.value = 0.3;
-    seqs[1].gain.gain.value = 0.1;
-    seqs[2].gain.gain.value = 0.5;
+    seqs[0].gain.gain.value = 0.2;
+    seqs[1].gain.gain.value = 0.4;
+    seqs[2].gain.gain.value = 0.6;
 
     // Set coolness
     seqs[0].smoothing = 0.5;
     seqs[1].smoothing = 0.2;
-    seqs[2].smoothing = 0.1;
+    seqs[2].smoothing = 0.8;
     seqs[0].staccato = 0.4;
-    seqs[1].staccato = 0.3;
-    seqs[2].staccato = 0.4;
+    seqs[1].staccato = 0.2;
+    seqs[2].staccato = 0.1;
 
     // Set wave - square, sine, sawtooth, triangle, custom
-    seqs[0].waveType = 'sine';
-    seqs[1].waveType = 'square';
+    seqs[0].waveType = 'sawtooth';
+    seqs[1].waveType = 'triangle';
     seqs[2].waveType = 'square';
 
     // Start all sequence
@@ -221,8 +275,8 @@
 
     // Add loop one
     exports.audioAddLoop(0,0,0);
-    exports.audioAddLoop(1,1,0);
-    exports.audioAddLoop(2,2,0);
+    exports.audioAddLoop(0,0,1);
+    exports.audioAddLoop(0,0,2);
 
     exports.audioStart();
 
