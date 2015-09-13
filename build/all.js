@@ -1160,6 +1160,13 @@ Sequence.prototype.stop = function() {
             [,1,,,1],
             [1,1,,1,1],
             [1,1,,1,1],
+        ],
+        '!': [
+            [,1],
+            [,1],
+            [,1],
+            [,],
+            [,1],
         ]
     };
     var ctx = exports.ctx;
@@ -1945,9 +1952,10 @@ Sequence.prototype.stop = function() {
         exports.controlsDraw();
 
         textColor = exports.MAIN_TEXT_COLOR;
+        exports.write('Turnometry', 'center', 30, 8, textColor);
         exports.write('Press space to play', 'center', 'center', 8, textColor);
-        exports.write('Seizure warning', 'center', exports.cy + 50, 3, textColor);
-        exports.write('A game by @AmaanC and @mikedidthis', 'center', canvas.height - 40, 5, textColor);
+        exports.write('Seizure warning!', 'center', exports.cy + 50, 4, textColor);
+        exports.write('A game by @AmaanC and @mikedidthis', 'center', canvas.height - 40, 3, textColor);
         
         if (exports.allShapesDoneSpinning) {
             exports.triggerSpin(exports.sides);
