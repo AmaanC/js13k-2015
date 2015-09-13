@@ -57,9 +57,9 @@
     var init = function() {
         drawLoop();
         logicLoop();
-        resize();
     };
 
+    resize();
     window.addEventListener('load', init, false);
     window.addEventListener('resize', resize);
     window.addEventListener('orientationchange', resize);
