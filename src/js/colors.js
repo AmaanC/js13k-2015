@@ -23,7 +23,7 @@
         return array;
     }
     // Used in player.js
-    // Shield needs to be 0,225,172
+    exports.SHIELD_COLOR = '0, 225, 172';
     exports.player.skins = {
         default: '255,255,255',
         flashColor: '255, 184, 253' // The color it flashes briefly when hit

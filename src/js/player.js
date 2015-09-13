@@ -17,7 +17,6 @@
     player.score = 0;
     var DIST_BETWEEN_SHIELDS = 20;
     var shieldMinDist = player.dist + 2 * player.halfHeight;
-    var SHIELD_COLOR = 'white';
     var SHIELD_RANGE = 0.4;
 
     player.hidePlayer = function() {
@@ -39,7 +38,7 @@
     };
 
     var shieldDraw = function() {
-        ctx.strokeStyle = SHIELD_COLOR;
+        ctx.strokeStyle = exports.SHIELD_COLOR;
         for (var i = 1; i <= player.numShields; i++) {
             ctx.beginPath();
             ctx.arc(0, 0, shieldMinDist + i * DIST_BETWEEN_SHIELDS, -SHIELD_RANGE, SHIELD_RANGE, false);
