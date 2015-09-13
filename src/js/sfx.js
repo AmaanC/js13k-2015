@@ -12,15 +12,15 @@
     damage.gain.gain.value = 1;
     damage.smoothing = 0.3;
     damage.staccato = 0.3;
-    damage.createCustomWave([-0.8, 1, 0.8, 0.8, -0.8, -0.8, -1]);
+    damage.waveType = 'square';
 
-    var shield = new TinyMusic.Sequence( ac, tempo, ['C4 s','E4 s'] );
+    var shield = new TinyMusic.Sequence( ac, tempo, ['C3 s','C3 e'] );
 
     shield.loop = false;
     shield.gain.gain.value = 0.8;
     shield.smoothing = 0.3;
     shield.staccato = 0.3;
-    shield.createCustomWave([-0.8, 1, 0.8, 0.8, -0.8, -0.8, -1]);
+    shield.waveType = 'sine';
 
     exports.sfxDamage = function() {
         if (exports.musicEnabled) {
